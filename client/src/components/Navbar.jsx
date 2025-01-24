@@ -1,11 +1,38 @@
-import { useState } from 'react'
-import { Link, Links, NavLink } from 'react-router-dom'
+import { useState,useEffect } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { MdLockOutline } from 'react-icons/md';
 
 export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [user, setUser] = useState(null);
 
+    useEffect(() => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const parseJwt = (token) => {
+        try {
+          return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+          return null;
+        }
+      };
+      if (token) {
+        try {
+          const decodedToken = parseJwt(token);
+          setUser({ name: decodedToken.name }); // Adjust based on your JWT payload
+        } catch (error) {
+          console.error('Invalid token:', error);
+          setUser(null);
+        }
+      }
+    }, []);
+  
+    const handleLogout = () => {
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      setUser(null);
+      window.location.href = '/login';
+    };
     // Function to close the mobile menu when a link is clicked
     const handleLinkClick = () => {
         setMobileMenuOpen(false)
@@ -94,18 +121,35 @@ export function Navbar() {
                             Contact
                         </NavLink>
                         {/* Buttons */}
-                        <NavLink
-                            to="/login"
-                            onClick={handleLinkClick}  // Close menu when clicked
-                            className="flex p-1 text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300">
-                            <MdLockOutline className='w-6 h-6 mr-1' /> Log in
-                        </NavLink>
-                        <NavLink
-                            to="/signup"
-                            onClick={handleLinkClick}  // Close menu when clicked
-                            className="bg-steelBlue text-white px-4 py-3 rounded-md hover:bg-steelBlue-dark hover:scale-105 transition-all duration-300">
-                            Sign Up for Free
-                        </NavLink>
+                        {user ? (
+                            <>
+                                {/* Show user's name and Logout button if logged in */}
+                                <button
+                                    onClick={handleLogout}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-300"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                {/* Show Login and Signup buttons if not logged in */}
+                                <NavLink
+                                    to="/login"
+                                    onClick={handleLinkClick}
+                                    className="flex p-1 text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300"
+                                >
+                                    <MdLockOutline className="w-6 h-6 mr-1" /> Log in
+                                </NavLink>
+                                <NavLink
+                                    to="/signup"
+                                    onClick={handleLinkClick}
+                                    className="bg-steelBlue text-white px-4 py-3 rounded-md hover:bg-steelBlue-dark hover:scale-105 transition-all duration-300"
+                                >
+                                    Sign Up for Free
+                                </NavLink>
+                            </>
+                        )}
                     </div>
                 </div>
 

@@ -15,6 +15,8 @@ import CoursesPage from './pages/CoursesPage.jsx'
 import BlogPage from './pages/BlogPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import SignupPage from './pages/SignupPage.jsx'
+import ForgotPassword from './components/ForgotPassword.jsx'
+import ResetPassword from './components/ResetPassword.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -29,6 +31,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="courses" element={<CoursesPage />} />
           <Route path="blogs" element={<BlogPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
         </Route>

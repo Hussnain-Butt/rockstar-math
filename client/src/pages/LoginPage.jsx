@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import axiosInstance from '../utils/axiosInstance'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 function LoginPage() {
   // State to toggle password visibility
   const [showPassword, setShowPassword] = useState(false)
@@ -105,9 +105,9 @@ function LoginPage() {
                 Remember Me
               </label>
             </div>
-            <a href="#" className="text-sm text-blue-500">
+            <Link  to="/forgot-password" className="text-sm text-blue-500">
               Forgot Password?
-            </a>
+            </Link>
           </div>
 
           <button type="submit" className="w-full bg-steelBlue text-white py-2 rounded hover:opacity-85 transition-all duration-500 ">

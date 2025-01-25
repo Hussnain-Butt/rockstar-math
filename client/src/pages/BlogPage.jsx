@@ -65,75 +65,142 @@ function BlogPage() {
         <>
             <BlogBanner />
 
-            <div className="flex flex-col md:flex-row px-10 md:px-32 py-10 md:py-20 gap-10 md:gap-20 justify-between">
-                <div className="md:w-2/3 text-xl md:text-3xl text-gray-500 font-bold">
-                    <h2>
-                        A passion for making math understandable and helping my students reach their potential is at the core of everything we do at Calcworkshop.
-                    </h2>
-                </div>
-                <div className="md:w-1/3">
-                    <img src="/images/blog2.png" alt="" className="w-full h-auto" />
-                </div>
-            </div>
+            <div className="flex flex-col md:flex-row px-8 md:px-32 py-12 md:py-20 gap-12 md:gap-20 items-center bg-gray-50">
+    {/* Left Text Section */}
+    <div className="md:w-2/3 text-lg md:text-2xl text-gray-600 font-medium leading-relaxed">
+        <h2>
+            A passion for making math <span className="text-yellow-500">understandable</span> and helping my students 
+            reach their <span className="text-yellow-500">potential</span> is at the core of everything we do at Calcworkshop.
+        </h2>
+    </div>
 
+    {/* Right Image Section */}
+    <div className="md:w-1/3">
+        <div className="relative overflow-hidden rounded-lg shadow-lg">
+            <img src="/images/blog2.png" alt="Blog" className="w-full h-auto object-cover" />
+            {/* Yellow Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-yellow-400 via-transparent to-transparent opacity-30"></div>
+        </div>
+    </div>
+</div>
+
+
+<div
+    className="relative bg-cover bg-center bg-no-repeat py-20 px-6 sm:px-8 text-lightGray font-sans"
+    style={{
+        backgroundImage: `url(/images/blog3.png)`,
+    }}
+>
+    {/* Overlay */}
+    <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+
+    {/* Content */}
+    <div className="relative max-w-4xl mx-auto text-center text-gray-200">
+        {/* Icon */}
+        <div className="flex justify-center mb-6">
+            <FaQuoteLeft className="text-6xl sm:text-7xl text-yellow-400" />
+        </div>
+
+        {/* Text */}
+        <p className="text-xl sm:text-2xl leading-relaxed font-medium">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+            placerat scelerisque tortor ornare ornare. Quisque placerat
+            scelerisque felis vitae tortor augue. Velit nascetur Consequat
+            faucibus porttitor enim et.
+        </p>
+    </div>
+</div>
+
+
+<div className="py-10 bg-gray-50">
+    {/* Section Title */}
+    <h2 className="text-gray-800 text-3xl font-bold text-center mb-10">
+        <span className="border-b-4 border-yellow-500 pb-1">Our Blogs</span>
+    </h2>
+
+    {/* Blog Cards */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-12 xl:px-20">
+        {blogs.map((item, index) => (
             <div
-                className="relative bg-cover bg-center bg-no-repeat py-16 sm:py-20 px-6 sm:px-8 text-lightGray font-sans"
-                style={{
-                    backgroundImage: `url(/images/blog3.png)`,
-                }}
+                key={index}
+                className="flex flex-col bg-white shadow-lg border border-gray-200 rounded-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-300"
+                onClick={() => handleOpenModal(item)}
             >
-                <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                <div className="flex flex-col gap-5 relative max-w-4xl text-gray-300 mx-auto text-center">
-                    <div className="flex w-full justify-center items-center">
-                        <FaQuoteLeft className='text-7xl' />
-                    </div>
-                    <p className="text-lg sm:text-2xl leading-relaxed">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque placerat scelerisque tortor ornare ornare. Quisque placerat scelerisque felis vitae tortor augue. Velit nascetur Consequat faucibus porttitor enim et.
+                {/* Image Section */}
+                <div className="h-56 overflow-hidden rounded-t-lg relative">
+                    <img
+                        src={item.image}
+                        alt="Blog image"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-yellow-500 bg-opacity-20 hover:bg-opacity-40 transition-all duration-300"></div>
+                </div>
+                {/* Content Section */}
+                <div className="p-6">
+                    <h6 className="mb-3 text-gray-800 text-xl font-semibold hover:text-yellow-500 transition-colors duration-300">
+                        {item.title}
+                    </h6>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                        {item.description}
                     </p>
                 </div>
             </div>
+        ))}
+    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-y-10 gap-x-5 py-5 xl:px-20 2xl:px-36 place-items-center">
-                <h2 className='text-steelGray text-2xl font-bold text-center col-span-full'>Our Blogs</h2>
-                {blogs.map((item, index) => (
-                    <div key={index}
-                        className="flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-full md:w-96 cursor-pointer hover:shadow-lg transform transition-transform duration-300 ease-in-out"
-                        onClick={() => handleOpenModal(item)}>
-                        <div className="h-56 m-2.5 overflow-hidden rounded-md">
-                            <img src={item.image} alt="card-image" className="w-full h-full object-cover" />
-                        </div>
-                        <div className="p-4">
-                            <h6 className="mb-2 text-slate-800 text-xl font-semibold">
-                                {item.title}
-                            </h6>
-                            <p className="text-slate-600 leading-normal font-light">
-                                {item.description}
-                            </p>
-                        </div>
+    {/* Modal for Blog Details */}
+    {modalOpen && selectedBlog && (
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+            onClick={handleBackdropClick}
+        >
+            <div className="relative bg-white rounded-lg w-[90vw] md:w-[70vw] lg:w-[60vw] overflow-hidden shadow-lg">
+                {/* Close Button */}
+                <button
+                    onClick={handleCloseModal}
+                    className="absolute top-4 right-4 bg-yellow-500 text-white p-2 rounded-full shadow-md hover:bg-yellow-600 transition-all focus:outline-none"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+
+                {/* Modal Content */}
+                <div className="flex flex-col lg:flex-row">
+                    {/* Image */}
+                    <div className="lg:w-1/2 h-64 lg:h-auto bg-gray-100">
+                        <img
+                            src={selectedBlog.image}
+                            alt={selectedBlog.title}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
-                ))}
-            </div>
 
-            {modalOpen && selectedBlog && (
-                <div className="fixed inset-0 z-50 overflow-hidden flex items-center justify-center bg-black bg-opacity-75" onClick={handleBackdropClick}>
-                    <div className={`relative bg-white rounded-lg w-[90vw] mx-4 md:mx-0 ${modalOpen ? 'fade-in' : 'fade-out'}`}>
-                        <button onClick={handleCloseModal} className="absolute top-4 right-4 bg-steelBlue p-2 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                        <div className="flex divide-x divide-gray-200">
-                            <div className="w-1/2 p-6">
-                                <img src={selectedBlog.image} alt={selectedBlog.title} className="w-full h-auto rounded-md mb-4" />
-                            </div>
-                            <div className="w-1/2 p-6">
-                                <h3 className="text-xl font-semibold mb-2">{selectedBlog.title}</h3>
-                                <p>{selectedBlog.content}</p>
-                            </div>
-                        </div>
+                    {/* Text */}
+                    <div className="lg:w-1/2 p-6">
+                        <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                            {selectedBlog.title}
+                        </h3>
+                        <p className="text-gray-600">{selectedBlog.content}</p>
                     </div>
                 </div>
-            )}
+            </div>
+        </div>
+    )}
+</div>
+
+
 
             <style jsx>{`
                 .fade-in {

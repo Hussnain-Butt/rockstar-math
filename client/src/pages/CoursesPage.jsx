@@ -70,77 +70,90 @@ function CoursesPage() {
 
     return (
         <>
-            <div className="flex flex-col items-center gap-2">
-                <h1 className="font-bold text-4xl">Introduction to Algebra</h1>
-                <h2 className="font-medium text-5xl">Fundamentals Made Easy</h2>
-                <p className="text-2xl">Learn algebraic essentials—Sharpen problem-solving skills—Empower your math journey.</p>
-            </div>
+          <div className="py-16 bg-gray-50">
+    {/* Hero Section */}
+    <div className="text-center max-w-4xl mx-auto mb-12">
+        <h1 className="text-5xl font-extrabold text-gray-800 leading-tight">
+            Introduction to Physics
+        </h1>
+        <h2 className="text-4xl font-semibold text-yellow-500 mt-4">
+            Physics Made Easy
+        </h2>
+        <p className="mt-6 text-lg md:text-xl text-gray-600 leading-relaxed">
+            Learn physics essentials — Simplify complex topics — Empower your learning journey.
+        </p>
+    </div>
 
-            <div className="flex flex-col gap-10 px-20 py-20">
-                {courses.map((course, index) => (
+    {/* Courses Section */}
+    <div className="flex flex-col gap-16 px-5 xl:px-20">
+        {courses.map((course, index) => (
+            <div
+                key={index}
+                className={`flex flex-col md:flex-row items-center gap-10 ${
+                    index % 2 !== 0 ? "md:flex-row-reverse" : ""
+                }`}
+            >
+                {/* Content Section */}
+                <div className="flex-1 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between h-full">
+                    <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                        {course.courseName}
+                    </h2>
+                    <ul className="list-disc pl-5 text-lg text-gray-700 space-y-3">
+                        {course.points.map((point, i) => (
+                            <li key={i}>{point}</li>
+                        ))}
+                    </ul>
+                    <button className="mt-6 bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
+                        See More
+                    </button>
+                </div>
+
+                {/* Video Section */}
+                <div className="flex-1 relative shadow-lg rounded-lg overflow-hidden h-[330px]">
+                    <img
+                        src={course.thumbnailUrl}
+                        alt="Thumbnail"
+                        className="w-full h-full object-cover"
+                    />
                     <div
-                        key={index}
-                        className={`flex flex-col gap-20 md:flex-row ${index % 2 !== 0 ? "md:flex-row-reverse justify-between" : ""} items-center gap-6`}
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-500 p-4 rounded-full cursor-pointer shadow-lg hover:scale-110 transition-transform"
+                        onClick={() => openModal(course.videoUrl)}
                     >
-                        {/* Thumbnail Section */}
-                        <div className={`${index % 2 === 0 ? "self-end" : "self-start"} sm:w-3/5 md:w-4/12 relative`}>
-                            <div className="absolute left-0 -top-1 w-full h-full bg-gray-900 opacity-35 rounded-xl md:rounded-3xl"></div>
-                            <img
-                                src={course.thumbnailUrl}
-                                alt="Thumbnail"
-                                className="w-full h-full border border-gray-300 rounded-xl mb-2"
-                            />
-
-                            <div
-                                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center p-4 rounded-full bg-opacity-60 bg-gray-700 transition-all ease-in-out duration-300 hover:bg-deepBlue hover:scale-105 hover:cursor-pointer"
-                                onClick={() => openModal(course.videoUrl)}
-                            >
-                                <IoMdPlay className="text-white text-5xl transition-transform transform duration-300 hover:text-steelBlue" />
-                            </div>
-                        </div>
-
-                        {/* Course Details */}
-                        <div className="w-full md:w-1/2">
-                            <h2 className="text-4xl font-semibold text-steelBlue mb-4">
-                                {course.courseName}
-                            </h2>
-                            <ul className="list-disc list-inside text-2xl ml-5 text-black mb-4">
-                                {course.points.map((point, i) => (
-                                    <li key={i}>{point}</li>
-                                ))}
-                            </ul>
-                            <button className="bg-steelBlue text-white px-4 py-3 rounded-md transition duration-300 hover:opacity-90">
-                                See More
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {isModalOpen && (
-                <div
-                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-85 z-40"
-                    onClick={closeModalOnBackdrop}
-                >
-                    <div className="rounded-2xl mx-5 shadow-lg max-w-5xl w-full relative">
-                        <video
-                            src={currentVideo}
-                            controls
-                            autoPlay
-                            className="w-full h-auto rounded-lg"
-                        />
+                        <IoMdPlay className="text-white text-4xl" />
                     </div>
                 </div>
-            )}
+            </div>
+        ))}
+    </div>
 
-            {isModalOpen && (
-                <button
-                    onClick={closeModal}
-                    className="fixed top-4 right-4 text-white bg-steelBlue opacity-80 rounded-full p-3 cursor-pointer transition duration-300 hover:opacity-100 hover:scale-110 hover:shadow-lg z-50"
-                >
-                    <IoMdClose className="text-2xl" />
-                </button>
-            )}
+    {/* Modal Section */}
+    {isModalOpen && (
+        <div
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40"
+            onClick={closeModalOnBackdrop}
+        >
+            <div className="rounded-xl max-w-4xl w-full relative bg-white shadow-lg">
+                <video
+                    src={currentVideo}
+                    controls
+                    autoPlay
+                    className="w-full h-auto rounded-lg"
+                />
+            </div>
+        </div>
+    )}
+
+    {isModalOpen && (
+        <button
+            onClick={closeModal}
+            className="fixed top-4 right-4 bg-yellow-500 text-white p-3 rounded-full shadow-lg hover:bg-yellow-600 transition-all z-50"
+        >
+            <IoMdClose className="text-xl" />
+        </button>
+    )}
+</div>
+
+
         </>
     );
 }

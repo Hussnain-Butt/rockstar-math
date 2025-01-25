@@ -10,100 +10,98 @@ function FAQQuestion() {
         );
     };
     return (
-        <div className="bg-white text-gray-800">
-            <div className="max-w-2xl mx-auto py-16 px-4">
-                <h1 className="text-3xl font-semibold text-center">
-                    Frequently asked questions
-                </h1>
-                <p className="text-center text-gray-500 mt-2">
-                    Everything you need to know about the product and billing.
-                </p>
-                <div className="mt-8">
-                    {[
-                        {
-                            question: "Who are these video lessons for?",
-                            answer:
-                                "Every student holds the potential for success. With tailored support and resources, that potential becomes reality.",
-                        },
-                        {
-                            question:
-                                "What makes Rockstarmath different? How do I know it will help me?",
-                            answer:
-                                "Rockstarmath offers personalized support and resources to ensure your success.",
-                        },
-                        {
-                            question: "Will Rockstarmath follow my coursework?",
-                            answer:
-                                "Yes, Rockstarmath is designed to align with your coursework and help you succeed.",
-                        },
-                        {
-                            question:
-                                "What makes Rockstarmath different? How do I know it will help me?",
-                            answer:
-                                "Rockstarmath provides unique resources and support tailored to your needs.",
-                        },
-                        {
-                            question: "How do the Monthly and Yearly membership plans work?",
-                            answer:
-                                "Membership plans offer flexible options to suit your needs, with both monthly and yearly subscriptions available.",
-                        },
-                        {
-                            question: "Why should I trust you?",
-                            answer:
-                                "We have a proven track record of helping students succeed with our tailored resources and support.",
-                        },
-                    ].map((faq, index) => (
-                        <div className="border-b py-4" key={index}>
-                            <div
-                                className="flex justify-between items-center cursor-pointer"
-                                onClick={() => toggleFAQ(index)}
-                            >
-                                <h2 className="text-lg font-medium">{faq.question}</h2>
-                                <span className="text-steelBlue">
-                                    {openFAQs[index] ? <FaMinus /> : <FaPlus />}
-                                </span>
-                            </div>
-                            <div
-                                className={`transition-all ease-in-out duration-500 overflow-hidden ${openFAQs[index] ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-                                    }`}
-                            >
-                                <p className="text-gray-500 mt-2">{faq.answer}</p>
-                            </div>
+        <div className="bg-gray-50 text-gray-800">
+        <div className="max-w-3xl mx-auto py-16 px-6 lg:px-8">
+            {/* Section Header */}
+            <h1 className="text-4xl font-bold text-center mb-4">
+                Frequently Asked Questions
+            </h1>
+            <p className="text-center text-lg text-gray-600 mb-8">
+                Everything you need to know about the product and billing.
+            </p>
+    
+            {/* FAQ Items */}
+            <div className="space-y-6">
+                {[
+                    {
+                        question: "Who are these video lessons for?",
+                        answer:
+                            "Every student holds the potential for success. With tailored support and resources, that potential becomes reality.",
+                    },
+                    {
+                        question: "What makes Rockstarmath different? How do I know it will help me?",
+                        answer:
+                            "Rockstarmath offers personalized support and resources to ensure your success.",
+                    },
+                    {
+                        question: "Will Rockstarmath follow my coursework?",
+                        answer:
+                            "Yes, Rockstarmath is designed to align with your coursework and help you succeed.",
+                    },
+                    {
+                        question: "How do the Monthly and Yearly membership plans work?",
+                        answer:
+                            "Membership plans offer flexible options to suit your needs, with both monthly and yearly subscriptions available.",
+                    },
+                    {
+                        question: "Why should I trust you?",
+                        answer:
+                            "We have a proven track record of helping students succeed with our tailored resources and support.",
+                    },
+                ].map((faq, index) => (
+                    <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
+                        <div
+                            className="flex justify-between items-center cursor-pointer"
+                            onClick={() => toggleFAQ(index)}
+                        >
+                            <h2 className="text-lg font-medium">{faq.question}</h2>
+                            <span className="text-yellow-500 text-xl">
+                                {openFAQs[index] ? <FaMinus /> : <FaPlus />}
+                            </span>
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="container mx-auto mb-12">
-                <div className="bg-gray-200 rounded-lg p-8 mx-auto text-center">
-                    <div className="flex justify-center mb-4">
-                        <img
-                            alt="Person 1"
-                            className="w-10 h-10 rounded-full border-2 border-white -ml-2"
-                            src="https://storage.googleapis.com/a1aa/image/6YV3NyPh7CoXA1ggon2VmkCL6ESFNzTcyBkKM4VhwqByDO7E.jpg"
-                        />
-                        <img
-                            alt="Person 2"
-                            className="w-10 h-10 rounded-full border-2 border-white -ml-2"
-                            src="https://storage.googleapis.com/a1aa/image/OnOz9rQF836NERIeS4lJaU4eDhHLkuFULkfsLNo2Tier8gzOB.jpg"
-                        />
-                        <img
-                            alt="Person 3"
-                            className="w-10 h-10 rounded-full border-2 border-white -ml-2"
-                            src="https://storage.googleapis.com/a1aa/image/Pbd2hfruRDXmRiEF3XtGyx3JnvgcjO24We4Jrzpt2zGPP4sTA.jpg"
-                        />
+                        <div
+                            className={`mt-3 text-gray-600 text-sm transition-all duration-300 ease-in-out overflow-hidden ${
+                                openFAQs[index] ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+                            }`}
+                        >
+                            <p>{faq.answer}</p>
+                        </div>
                     </div>
-                    <h2 className="text-xl font-semibold mb-2">Still have questions?</h2>
-                    <p className="text-gray-600 mb-6">
-                        Can’t find the answer you’re looking for? Please chat to our
-                        friendly team.
-                    </p>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300">
-                        Get in Touch
-                    </button>
-                </div>
+                ))}
             </div>
-        </div>)
+        </div>
+    
+        {/* Additional CTA Section */}
+        <div className="bg-gray-100 mt-12 py-8 px-6 lg:px-12 rounded-lg">
+            <div className="max-w-xl mx-auto text-center">
+                <div className="flex justify-center mb-6">
+                    <img
+                        alt="Person 1"
+                        className="w-12 h-12 rounded-full border-2 border-white -ml-2"
+                        src="https://via.placeholder.com/150"
+                    />
+                    <img
+                        alt="Person 2"
+                        className="w-12 h-12 rounded-full border-2 border-white -ml-2"
+                        src="https://via.placeholder.com/150"
+                    />
+                    <img
+                        alt="Person 3"
+                        className="w-12 h-12 rounded-full border-2 border-white -ml-2"
+                        src="https://via.placeholder.com/150"
+                    />
+                </div>
+                <h2 className="text-2xl font-semibold mb-2">Still have questions?</h2>
+                <p className="text-gray-600 mb-4">
+                    Can’t find the answer you’re looking for? Please chat to our friendly team.
+                </p>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full shadow-md transition duration-300">
+                    Get in Touch
+                </button>
+            </div>
+        </div>
+    </div>
+    )
 }
 
 export default FAQQuestion

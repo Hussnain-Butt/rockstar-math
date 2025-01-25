@@ -26,27 +26,47 @@ const Calendar = () => {
     ];
 
     return (
-        <div className="calendar-container p-4 mx-8 lg:mx-20">
-            <span className="font-bold text-3xl">Calendar</span>
-            <div className="overflow-x-auto mt-10">
-                <table className="table-auto w-full border border-black rounded-lg overflow-hidden">
-                    <thead className="bg-transparent">
+        <div className="calendar-container p-6 lg:px-20 lg:py-12  text-deepBlue">
+            {/* Header */}
+            <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-deepBlue">Calendar</h2>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto shadow-lg rounded-lg">
+                <table className="table-auto w-full border-black  rounded-lg">
+                    <thead className="bg-deepBlue-light text-deepBlue border-b border-yellow-400">
                         <tr>
-                            <th className="border border-black text-2xl px-8 py-6 text-center font-bold">Time (PST)</th>
-                            <th className="border border-black text-2xl px-8 py-6 text-center font-bold">Sunday</th>
-                            <th className="border border-black text-2xl px-8 py-6 text-center font-bold">Monday</th>
-                            <th className="border border-black text-2xl px-8 py-6 text-center font-bold">Tuesday</th>
-                            <th className="border border-black text-2xl px-8 py-6 text-center font-bold">Wednesday</th>
+                            <th className="text-xl font-bold px-6 py-4 text-center">Time (PST)</th>
+                            <th className="text-xl font-bold px-6 py-4 text-center">Sunday</th>
+                            <th className="text-xl font-bold px-6 py-4 text-center">Monday</th>
+                            <th className="text-xl font-bold px-6 py-4 text-center">Tuesday</th>
+                            <th className="text-xl font-bold px-6 py-4 text-center">Wednesday</th>
                         </tr>
                     </thead>
                     <tbody>
                         {schedule.map((item, index) => (
-                            <tr key={index}>
-                                <td className="border border-black px-10 py-8 text-center">{item.time}</td>
-                                <td className="border border-black px-10 py-8 text-center">{item.sunday}</td>
-                                <td className="border border-black px-10 py-8 text-center">{item.monday}</td>
-                                <td className="border border-black px-10 py-8 text-center">{item.tuesday}</td>
-                                <td className="border border-black px-10 py-8 text-center">{item.wednesday}</td>
+                            <tr
+                                key={index}
+                                className={`${
+                                    index % 2 === 0 ? "bg-deepBlue-dark" : ""
+                                } hover:border-l-4 hover:border-yellow-400 transition-all`}
+                            >
+                                <td className="text-lg px-6 py-4 text-center border-b border-yellow-400">
+                                    {item.time}
+                                </td>
+                                <td className="text-lg px-6 py-4 text-center border-b border-yellow-400">
+                                    {item.sunday}
+                                </td>
+                                <td className="text-lg px-6 py-4 text-center border-b border-yellow-400">
+                                    {item.monday}
+                                </td>
+                                <td className="text-lg px-6 py-4 text-center border-b border-yellow-400">
+                                    {item.tuesday}
+                                </td>
+                                <td className="text-lg px-6 py-4 text-center border-b border-yellow-400">
+                                    {item.wednesday}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

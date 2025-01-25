@@ -55,37 +55,38 @@ function StudentFeedback() {
     }, [isMd, reviews.length]);
 
     return (
-        <div className="w-full py-10 px-2 lg:px-28">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-4xl font-bold">Students Feedback</h1>
-            </div>
+        <div className="w-full py-10 px-2 lg:px-28 bg-gray-50">
+    <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold text-deepblue">Students Feedback</h1>
+    </div>
 
-            <div className="flex gap-6 overflow-hidden">
-                {visibleReviews.map((index) => {
-                    const review = reviews[index];
-                    return (
-                        <div
-                            key={index}
-                            className="flex flex-col gap-5 items-start bg-gray-100 border border-gray-200 rounded-xl p-8 shadow-lg transition-transform transform hover:scale-105"
-                            style={{ minWidth: isMd ? "400px" : "100%" }}
-                        >
-                            <div className="flex gap-5 items-center">
-                                <img
-                                    src={review.img}
-                                    alt="Profile"
-                                    className="w-24 h-24 rounded-full mb-4 border border-gray-400"
-                                />
-                                <div className="flex flex-col">
-                                    <h2 className="text-xl font-semibold mb-1">{review.name}</h2>
-                                    <p className="text-sm text-gray-500 mb-2">{review.class}</p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 leading-relaxed">"{review.review}"</p>
+    <div className="flex gap-6 overflow-hidden">
+        {visibleReviews.map((index) => {
+            const review = reviews[index];
+            return (
+                <div
+                    key={index}
+                    className="flex flex-col gap-5 items-start bg-white border border-gray-200 rounded-xl p-8 shadow-lg transition-transform transform hover:scale-105"
+                    style={{ minWidth: isMd ? "400px" : "100%" }}
+                >
+                    <div className="flex gap-5 items-center">
+                        <img
+                            src={review.img}
+                            alt="Profile"
+                            className="w-24 h-24 rounded-full border-4 border-yellow-400"
+                        />
+                        <div className="flex flex-col">
+                            <h2 className="text-xl font-semibold text-deepblue mb-1">{review.name}</h2>
+                            <p className="text-sm text-gray-500">{review.class}</p>
                         </div>
-                    );
-                })}
-            </div>
-        </div>
+                    </div>
+                    <p className="text-gray-600 leading-relaxed">"{review.review}"</p>
+                </div>
+            );
+        })}
+    </div>
+</div>
+
     );
 }
 

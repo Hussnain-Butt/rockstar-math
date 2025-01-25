@@ -1,176 +1,126 @@
-import { useState, useEffect } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { MdLockOutline } from 'react-icons/md'
-import { IoMdLogOut } from 'react-icons/io'
-
+import { useState, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MdLockOutline } from "react-icons/md";
+import { useAuth } from "../context/AuthContext";
 export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [user, setUser] = useState(null)
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const { users, logout,updateCounter  } = useAuth();
+  console.log('Navbar user:', users);
 
   useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    console.log("Navbar re-rendered due to user or updateCounter change.");
+    console.log("Current user:", users);
+    console.log("Update Counter:", updateCounter);
+  }, [user, updateCounter]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+
     const parseJwt = (token) => {
       try {
-        return JSON.parse(atob(token.split('.')[1]))
+        return JSON.parse(atob(token.split(".")[1])); // Decode JWT
       } catch (e) {
-        return null
+        return null;
       }
-    }
+    };
+
     if (token) {
       try {
-        const decodedToken = parseJwt(token)
-        setUser({ name: decodedToken.name }) // Adjust based on your JWT payload
+        const decodedToken = parseJwt(token);
+        if (decodedToken) {
+          setUser({ name: decodedToken.name }); // Adjust based on your JWT payload
+        }
       } catch (error) {
-        console.error('Invalid token:', error)
-        setUser(null)
+        console.error("Invalid token:", error);
+        setUser(null);
       }
     }
-  }, [])
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    sessionStorage.removeItem('token')
-    setUser(null)
-    window.location.href = '/login'
-  }
-  // Function to close the mobile menu when a link is clicked
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    setUser(null); // Reset user state
+    window.location.href = "/login"; // Redirect to login page
+  };
+
   const handleLinkClick = () => {
-    setMobileMenuOpen(false)
-  }
+    setMobileMenuOpen(false);
+  };
 
   return (
-    <header className="bg-white lg:px-16">
+    <header className="bg-white lg:px-16 shadow-md">
       <nav
         aria-label="Global"
-        className="mx-auto flex items-center justify-between px-4 lg:px-0 py-3"
+        className="mx-auto max-w-7xl flex items-center justify-between px-4 lg:px-0 py-3"
       >
+        {/* Logo */}
         <div className="flex items-center justify-between lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
-            <img alt="logo" src="/images/logo.png" className="h-auto w-[245px]" />
+            <img alt="logo" src="/images/logo.png" className="h-auto w-[200px]" />
           </a>
-          {/* Links + Login and Sign Up on larger screens */}
-          <div className="hidden xl:flex lg:gap-x-5 lg:items-center text-lg">
+        </div>
+
+        {/* Links + Login and Sign Up Buttons */}
+        <div className="hidden xl:flex lg:gap-x-6 lg:items-center text-lg">
+          {/* Navigation Links */}
+          {[
+            { to: "/", label: "Home" },
+            { to: "/reviews", label: "Reviews" },
+            { to: "/courses", label: "Courses" },
+            { to: "/calendar", label: "Calendar" },
+            { to: "/faqs", label: "FAQs" },
+            { to: "/blogs", label: "Blogs" },
+            { to: "/about", label: "About" },
+            { to: "/contact", label: "Contact" },
+          ].map((link, index) => (
             <NavLink
-              to="/"
-              onClick={handleLinkClick} // Close menu when clicked
+              key={index}
+              to={link.to}
+              onClick={handleLinkClick}
               className={({ isActive }) =>
                 isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
+                  ? "text-yellow-500 font-medium"
+                  : "text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
               }
             >
-              Home
+              {link.label}
             </NavLink>
-            <NavLink
-              to="/reviews"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              Reviews
-            </NavLink>
-            <NavLink
-              to="/courses"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              Courses
-            </NavLink>
-            <NavLink
-              to="/calendar"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              Calendar
-            </NavLink>
-            <NavLink
-              to="/faqs"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              FAQs
-            </NavLink>
-            <NavLink
-              to="/blogs"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              Blogs
-            </NavLink>
-            <NavLink
-              to="/about"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              About
-            </NavLink>
-            <NavLink
-              to="/contact"
-              onClick={handleLinkClick} // Close menu when clicked
-              className={({ isActive }) =>
-                isActive
-                  ? 'text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }
-            >
-              Contact
-            </NavLink>
-            {/* Buttons */}
-            {user ? (
-              <>
-                {/* Show user's name and Logout button if logged in */}
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-all duration-300"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                {/* Show Login and Signup buttons if not logged in */}
-                <NavLink
-                  to="/login"
-                  onClick={handleLinkClick}
-                  className="flex p-1 text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300"
-                >
-                  <MdLockOutline className="w-6 h-6 mr-1" /> Log in
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  onClick={handleLinkClick}
-                  className="bg-steelBlue text-white px-4 py-3 rounded-md hover:bg-steelBlue-dark hover:scale-105 transition-all duration-300"
-                >
-                  Sign Up for Free
-                </NavLink>
-              </>
-            )}
-          </div>
+          ))}
+
+          {/* User State-Based Buttons */}
+          {user ? (
+            <>
+              
+              <button
+                onClick={handleLogout}
+                className="flex items-center px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-sm transition-all duration-300"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                onClick={handleLinkClick}
+                className="flex items-center text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
+              >
+                <MdLockOutline className="w-6 h-6 mr-1" /> Log in
+              </NavLink>
+              <NavLink
+                to="/signup"
+                onClick={handleLinkClick}
+                className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-300"
+              >
+                Sign Up for Free
+              </NavLink>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -189,13 +139,13 @@ export function Navbar() {
       {/* Mobile Menu */}
       <div
         className={`fixed inset-0 z-10 bg-gray-500 bg-opacity-75 transition-opacity ${
-          mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={() => setMobileMenuOpen(false)}
       />
       <div
         className={`fixed inset-y-0 left-0 z-20 w-[280px] overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10 transform transition-all ease-in-out duration-300 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between">
@@ -212,136 +162,51 @@ export function Navbar() {
           </button>
         </div>
         <div className="flex flex-col mt-6 space-y-4">
-          <NavLink
-            to="/"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/reviews"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Reviews
-          </NavLink>
-          <NavLink
-            to="/courses"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Courses
-          </NavLink>
-          <NavLink
-            to="/calendar"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Calendar
-          </NavLink>
-          <NavLink
-            to="/faqs"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            FAQs
-          </NavLink>
-          <NavLink
-            to="/blogs"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Blogs
-          </NavLink>
-          <NavLink
-            to="/about"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            About
-          </NavLink>
-          <NavLink
-            to="/contact"
-            onClick={handleLinkClick} // Close menu when clicked
-            className={({ isActive }) =>
-              `px-3 py-2 text-sm rounded-md ${
-                isActive
-                  ? 'bg-gray-100 text-steelBlue'
-                  : 'text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300'
-              }`
-            }
-          >
-            Contact
-          </NavLink>
-          {user ? (
-            <>
-              {/* Show user's name and Logout button if logged in */}
-              <span className="text-steelGray">Welcome, {user.name}!</span>
-              <button
-                onClick={handleLogout}
-                className="flex items-center px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm transition-all duration-200 focus:outline-none focus:ring focus:ring-blue-300"
-              >
-                <IoMdLogOut className="w-5 h-5 mr-2" />
-                Logout
-              </button>
-            </>
+          {[
+            { to: "/", label: "Home" },
+            { to: "/reviews", label: "Reviews" },
+            { to: "/courses", label: "Courses" },
+            { to: "/calendar", label: "Calendar" },
+            { to: "/faqs", label: "FAQs" },
+            { to: "/blogs", label: "Blogs" },
+            { to: "/about", label: "About" },
+            { to: "/contact", label: "Contact" },
+          ].map((link, index) => (
+            <NavLink
+              key={index}
+              to={link.to}
+              onClick={handleLinkClick}
+              className={({ isActive }) =>
+                `px-3 py-2 text-sm rounded-md ${
+                  isActive
+                    ? "bg-yellow-500 text-white"
+                    : "text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
+                }`
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          {users ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-sm transition-all duration-300"
+            >
+              Logout
+            </button>
           ) : (
             <>
-              {/* Show Login and Signup buttons if not logged in */}
               <NavLink
                 to="/login"
                 onClick={handleLinkClick}
-                className="flex p-1 text-steelGray hover:text-[#8B8000] hover:scale-105 transition-all duration-300"
+                className="text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
               >
-                <MdLockOutline className="w-6 h-6 mr-1" /> Log in
+                Log in
               </NavLink>
               <NavLink
                 to="/signup"
                 onClick={handleLinkClick}
-                className="bg-steelBlue text-white px-4 py-3 rounded-md hover:bg-steelBlue-dark hover:scale-105 transition-all duration-300"
+                className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-300"
               >
                 Sign Up for Free
               </NavLink>
@@ -350,7 +215,7 @@ export function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;

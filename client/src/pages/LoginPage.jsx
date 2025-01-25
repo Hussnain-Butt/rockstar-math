@@ -1,62 +1,73 @@
-import React, { useState } from 'react'
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
-import axiosInstance from '../utils/axiosInstance'
-import { toast } from 'react-toastify'
-import { Link, Links, NavLink, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import axiosInstance from '../utils/axiosInstance';
+import { toast } from 'react-toastify';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import Auth Context for global state management
+
 function LoginPage() {
   // State to toggle password visibility
-  const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({ email: '', password: '', rememberMe: false })
-  const navigate = useNavigate()
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '', rememberMe: false });
+
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Access login function from Auth Context
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const response = await axiosInstance.post('/auth/login', {
         email: formData.email,
         password: formData.password,
-      })
+      });
 
-      const { token } = response.data
+      const { token, user } = response.data; // Get token and user data from response
 
       // Store token in localStorage or sessionStorage based on Remember Me
       if (formData.rememberMe) {
-        localStorage.setItem('token', token)
+        localStorage.setItem('token', token);
       } else {
-        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('token', token);
       }
 
-      toast.success('Login successful! Redirecting...')
+      // Update the global authentication state with user data
+      login(user);
+
+      toast.success('Login successful! Redirecting...');
 
       // Redirect to the dashboard
       setTimeout(() => {
-        navigate('/')
-      }, 2000)
+        window.location.href = "/";
+      }, 1000);
     } catch (error) {
-      toast.error(error.response.data.message || 'Invalid credentials')
+      toast.error(error.response?.data?.message || 'Invalid credentials');
     }
-  }
+  };
 
   return (
     <div className="flex">
+      {/* Left Side (Image Section) */}
       <div className="hidden w-1/2 bg-white xl:flex">
         <img src="/images/login.png" alt="Logo" className="w-full" />
       </div>
+
+      {/* Right Side (Form Section) */}
       <div className="w-full lg:w-1/2 bg-white flex flex-col items-center mt-10 px-10 md:px-20 lg:px-48">
         <img src="/images/logo.png" alt="Logo" className="w-[280px] h-auto" />
         <h1 className="text-5xl font-bold text-black mb-2">Login</h1>
         <p className="text-gray-600 mb-6">Welcome back! Please log in to access your account.</p>
         <form className="w-full" onSubmit={handleSubmit}>
-          <div className="mb-4 w-full ">
+          {/* Email Input */}
+          <div className="mb-4 w-full">
             <label className="block text-sm font-bold text-black mb-2" htmlFor="email">
               Email
             </label>
@@ -71,6 +82,7 @@ function LoginPage() {
             />
           </div>
 
+          {/* Password Input */}
           <div className="mb-4 w-full relative">
             <label className="block text-sm font-bold text-gray-700 mb-2" htmlFor="password">
               Password
@@ -92,8 +104,9 @@ function LoginPage() {
             </div>
           </div>
 
+          {/* Remember Me and Forgot Password */}
           <div className="flex justify-between w-full mb-4">
-            <div className="flex items-center ">
+            <div className="flex items-center">
               <input
                 type="checkbox"
                 name="rememberMe"
@@ -105,15 +118,21 @@ function LoginPage() {
                 Remember Me
               </label>
             </div>
-            <Link  to="/forgot-password" className="text-sm text-blue-500">
+            <Link to="/forgot-password" className="text-sm text-blue-500">
               Forgot Password?
             </Link>
           </div>
 
-          <button type="submit" className="w-full bg-steelBlue text-white py-2 rounded hover:opacity-85 transition-all duration-500 ">
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full bg-steelBlue text-white py-2 rounded hover:opacity-85 transition-all duration-500"
+          >
             Login
           </button>
         </form>
+
+        {/* Sign Up Link */}
         <p className="mt-4 text-sm text-gray-600">
           Don't have an account?{' '}
           <NavLink to="/signup" className="text-blue-500">
@@ -122,7 +141,7 @@ function LoginPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

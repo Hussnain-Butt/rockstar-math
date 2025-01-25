@@ -8,13 +8,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
-  sessionsRemaining: { type: Number, default: 0 },
-  sessionHistory: [
-    {
-      sessionDate: { type: Date },
-      status: { type: String }, // "completed", "upcoming"
-    },
-  ],
+ 
 });
 
 // Password hashing

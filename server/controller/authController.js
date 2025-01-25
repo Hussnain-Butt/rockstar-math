@@ -28,10 +28,33 @@ exports.signup = async (req, res) => {
      // Send confirmation email
      const subject = 'Welcome to Rockstar Math!';
      const message = `
-       <h1>Welcome to Rockstar Math</h1>
-       <p>You have successfully created an account with Rockstar Math.</p>
-       <p>Enjoy exploring our platform!</p>
-     `;
+     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px;">
+       <div style="text-align: center; padding: 10px;">
+         <img src="https://scontent.flhe5-1.fna.fbcdn.net/v/t39.30808-6/442503438_957788876133590_2909592720330641516_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=_dgNhmagikUQ7kNvgF7yFq6&_nc_oc=Adhr6WCD8Nl5hiM9AQ1natQbVg_toEMzMqVnjaMr__V4XoY-MX0a4LKwhYr5eJigaBgxjmT1aETfgLzr7M-ieaVR&_nc_zt=23&_nc_ht=scontent.flhe5-1.fna&_nc_gid=A4Uh5Hdlx5SDIa1YcpDnRa3&oh=00_AYDj2m22g0-YYSOi9qqOvw0EWXp14czCwIw4M6zGGPB0cQ&oe=679A2D99" alt="Rockstar Math" style="height: 50px; margin-bottom: 20px;" />
+       </div>
+       <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+         <h1 style="color: #333333; text-align: center;">Welcome to Rockstar Math!</h1>
+         <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+           Congratulations! You have successfully created an account with <strong>Rockstar Math</strong>.
+         </p>
+         <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+           Explore step-by-step math courses, enhance your skills, and achieve results like never before.
+         </p>
+         <div style="text-align: center; margin: 20px 0;">
+           <a href="https://your-platform-url.com/login" target="_blank" style="display: inline-block; padding: 12px 20px; color: #ffffff; background-color: #ffc107; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
+             Start Exploring Now
+           </a>
+         </div>
+         <p style="color: #555555; font-size: 14px; line-height: 1.6; text-align: center;">
+           If you have any questions, feel free to <a href="https://your-platform-url.com/contact" style="color: #007bff; text-decoration: none;">contact us</a>.
+         </p>
+       </div>
+       <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #999999;">
+         © 2025 Rockstar Math. All rights reserved.
+       </div>
+     </div>
+   `;
+   
  
      await sendEmail(email, subject, 'Welcome to Rockstar Math!', message);
 
@@ -112,10 +135,34 @@ exports.forgotPassword = async (req, res) => {
     // Send email
     const subject = 'Password Reset Request';
     const message = `
-      <p>You requested a password reset. Click the link below to reset your password:</p>
-      <a href="${resetUrl}">${resetUrl}</a>
-      <p>If you did not request this, please ignore this email.</p>
-    `;
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 10px;">
+      <div style="text-align: center; padding: 10px;">
+        <img src="https://scontent.flhe5-1.fna.fbcdn.net/v/t39.30808-6/442503438_957788876133590_2909592720330641516_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=_dgNhmagikUQ7kNvgF7yFq6&_nc_oc=Adhr6WCD8Nl5hiM9AQ1natQbVg_toEMzMqVnjaMr__V4XoY-MX0a4LKwhYr5eJigaBgxjmT1aETfgLzr7M-ieaVR&_nc_zt=23&_nc_ht=scontent.flhe5-1.fna&_nc_gid=A4Uh5Hdlx5SDIa1YcpDnRa3&oh=00_AYDj2m22g0-YYSOi9qqOvw0EWXp14czCwIw4M6zGGPB0cQ&oe=679A2D99" alt="Rockstar Math" style="height: 50px; margin-bottom: 20px;" alt="Rockstar Math" style="height: 50px; margin-bottom: 20px;" />
+      </div>
+      <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #333333; text-align: center;">Password Reset Request</h2>
+        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+          You requested a password reset. Please click the button below to reset your password:
+        </p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${resetUrl}" target="_blank" style="display: inline-block; padding: 12px 20px; color: #ffffff; background-color: #ffc107; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: bold;">
+            Reset Password
+          </a>
+        </div>
+        <p style="color: #555555; font-size: 14px; line-height: 1.6;">
+          Or copy and paste this link into your browser: <br />
+          <a href="${resetUrl}" style="color: #007bff; text-decoration: none;">${resetUrl}</a>
+        </p>
+        <p style="color: #555555; font-size: 14px; line-height: 1.6;">
+          If you did not request this, please ignore this email or contact us if you have any concerns.
+        </p>
+      </div>
+      <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #999999;">
+        © 2025 Rockstar Math. All rights reserved.
+      </div>
+    </div>
+  `;
+  
 
     await sendEmail(user.email, subject, 'Reset Your Password', message);
 

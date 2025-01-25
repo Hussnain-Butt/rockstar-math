@@ -31,7 +31,7 @@ function SignupPage() {
       // Redirect to login page after 2 seconds
       setTimeout(() => {
         navigate('/login');
-      }, 2000);
+      }, 1000);
     } catch (error) {
       toast.error(error.response.data.message || 'Something went wrong'); // Show error toast
     }

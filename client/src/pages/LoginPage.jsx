@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 import axiosInstance from '../utils/axiosInstance'
 import { toast } from 'react-toastify'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Links, NavLink, useNavigate } from 'react-router-dom'
 function LoginPage() {
   // State to toggle password visibility
   const [showPassword, setShowPassword] = useState(false)
@@ -116,9 +116,9 @@ function LoginPage() {
         </form>
         <p className="mt-4 text-sm text-gray-600">
           Don't have an account?{' '}
-          <a href="#" className="text-blue-500">
+          <NavLink to="/signup" className="text-blue-500">
             Sign up now
-          </a>
+          </NavLink>
         </p>
       </div>
     </div>

@@ -107,7 +107,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save(); // Save token and expiration to the database
 
     // Create reset URL
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`
 
     // Send email
     const subject = 'Password Reset Request';
@@ -127,18 +127,19 @@ exports.forgotPassword = async (req, res) => {
 };
 
 // Reset Password Controller
+
 exports.resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
+  const { token } = req.params; // Token from the URL
+  const { password } = req.body; // New password from the request body
 
   try {
     // Hash the token to match the database entry
     const resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    // Find user by token and ensure the token is not expired
+    // Find the user by the token and ensure it hasn't expired
     const user = await User.findOne({
       resetPasswordToken,
-      resetPasswordExpires: { $gt: Date.now() }, // Check token expiration
+      resetPasswordExpires: { $gt: Date.now() }, // Token expiration check
     });
 
     if (!user) {
@@ -146,9 +147,10 @@ exports.resetPassword = async (req, res) => {
     }
 
     // Update the user's password
-    user.password = password;
+    user.password = password; // Ensure password hashing is handled in the user model
     user.resetPasswordToken = undefined; // Clear the token
-    user.resetPasswordExpires = undefined; // Clear the expiration
+    user.resetPasswordExpires = undefined; // Clear the expiration time
+
     await user.save();
 
     res.status(200).json({ message: 'Password reset successful' });
@@ -157,3 +159,5 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
+

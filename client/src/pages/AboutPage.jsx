@@ -33,20 +33,19 @@ function AboutPage() {
             <AboutBanner />
             <div className="bg-gray-50 py-12 px-6 md:px-12">
     {/* Section Container */}
-    <div className="max-w-4xl mx-auto text-center">
+    <div className="max-w-6xl mx-auto text-left">
         {/* Title */}
         <h2 className="text-3xl font-bold text-gray-800">
             <span className="relative inline-block">
-                <span className="absolute inset-0 bg-yellow-500 opacity-20 transform -skew-x-6 rounded-md"></span>
+                <span className="absolute inset-0 transform -skew-x-6 rounded-md"></span>
                 <span className="relative z-10">The Way Learning Math Should Be…</span>
             </span>
         </h2>
         {/* Description */}
         <p className="mt-6 text-gray-600 text-lg leading-relaxed">
-            I started Calcworkshop 10 years ago with a simple but powerful idea: give students of all ages the easiest to follow and most understandable math courses imaginable. After attending too many college and graduate math classes that left me dazed and confused by unexplained theorems and missing steps, I knew there had to be a better way.
+            I started RockstarMath 10 years ago with a simple but powerful idea: give students of all ages the easiest to follow and most understandable math courses imaginable. After attending too many college and graduate math classes that left me dazed and confused by unexplained theorems and missing steps, I knew there had to be a better way.
         </p>
         {/* Highlighted Line */}
-        <div className="mt-8 h-1 mx-auto bg-yellow-500 w-20 rounded-full"></div>
     </div>
 </div>
 
@@ -55,7 +54,6 @@ function AboutPage() {
     {/* Section Title */}
     <h2 className="text-3xl font-bold text-black text-center relative inline-block">
         <span className="relative z-10">That’s why I…</span>
-        <span className="absolute inset-x-0 -bottom-1 h-1 bg-yellow-500 w-20 mx-auto rounded-full"></span>
     </h2>
 
     {/* Cards Container */}
@@ -72,12 +70,12 @@ function AboutPage() {
                         alt="card-image"
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-yellow-500 opacity-10"></div>
+                    <div className="absolute inset-0 bg-deepBlue opacity-10"></div>
                 </div>
 
                 {/* Text Section */}
                 <div className="p-5">
-                    <h6 className="mb-2 text-gray-800 text-xl font-semibold hover:text-yellow-500 transition duration-300">
+                    <h6 className="mb-2 text-gray-800 text-xl font-semibold hover:text-debg-deepBlue transition duration-300">
                         {item.title}
                     </h6>
                     <p className="text-gray-600 leading-relaxed font-light">
@@ -96,7 +94,7 @@ function AboutPage() {
                 </div>
                 <div className="w-full md:w-1/2 self-start lg:mt-20">
                     <p className="text-steelGray font-bold text-2xl leading-relaxed">
-                        A passion for making math understandable and helping my students reach their potential is at the core of everything we do at Calcworkshop.
+                        A passion for making math understandable and helping my students reach their potential is at the core of everything we do at RockstarMath.
                     </p>
                 </div>
             </div>
@@ -104,8 +102,8 @@ function AboutPage() {
             <div className="flex flex-col items-center bg-gray-50 py-14">
     {/* Section Title */}
     <h2 className="text-gray-800 text-center text-3xl font-bold relative">
-        A few vital statistics about Jenn
-        <span className="block mt-2 w-20 h-1 bg-yellow-500 mx-auto rounded-full"></span>
+        A few vital statistics about Amy
+        
     </h2>
 
     {/* Stats Grid */}
@@ -113,10 +111,10 @@ function AboutPage() {
         {stats.map((stat, index) => (
             <div
                 key={index}
-                className="flex flex-col items-center text-center bg-white shadow-md border border-gray-200 rounded-lg py-8 px-6 hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col items-center text-center  py-8 px-6  transition-shadow duration-300"
             >
                 {/* Number Circle */}
-                <span className="p-10 font-bold border text-4xl border-yellow-500 text-yellow-500 rounded-full w-24 h-24 flex items-center justify-center">
+                <span className="p-10 font-bold border text-4xl border-debg-deepBlue text-debg-deepBlue rounded-full w-24 h-24 flex items-center justify-center">
                     {stat.number}
                 </span>
                 {/* Description */}
@@ -141,7 +139,7 @@ function AboutPage() {
             <div className="flex flex-col items-center py-14 bg-gray-50">
     {/* Title Section */}
     <h2 className="text-gray-800 text-center text-3xl font-bold">
-        Join over <span className="text-yellow-500">32,000</span> other students achieving success in their math courses
+        Join over <span className="text-debg-deepBlue">32,000</span> other students achieving success in their math courses
     </h2>
     <p className="text-gray-600 text-center text-xl max-w-4xl mt-4 leading-relaxed">
         Whether you’re learning it for the first time or simply want a refresher, you’ll find all the tools you need to reach the top of your class with RockstarMath.
@@ -152,10 +150,10 @@ function AboutPage() {
         {additionalInfo.map((info, index) => (
             <div
                 key={index}
-                className="flex flex-col items-center bg-white shadow-lg border border-gray-200 rounded-lg p-6 hover:shadow-xl transform transition-all duration-300"
+                className="flex flex-col items-center   rounded-lg p-6  transform transition-all duration-300"
             >
                 {/* Icon Wrapper */}
-                <div className="p-6 rounded-full bg-yellow-500 text-white flex items-center justify-center w-20 h-20 shadow-md mb-4">
+                <div className="p-6 rounded-full bg-deepBlue text-white flex items-center justify-center w-20 h-20 shadow-md mb-4">
                     {info.icon}
                 </div>
                 {/* Text Description */}
@@ -170,7 +168,7 @@ function AboutPage() {
 <div className="flex items-center justify-center py-20">
     <NavLink
         to="/signup"
-        className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:from-yellow-500 hover:to-yellow-700 hover:scale-105 transition-all duration-300 transform focus:ring-4 focus:ring-yellow-300 focus:outline-none">
+        className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-lg font-semibold px-6 py-3 rounded-full shadow-lg hover:from-debg-deepBlue hover:to-yellow-700 hover:scale-105 transition-all duration-300 transform focus:ring-4 focus:ring-yellow-300 focus:outline-none">
         Join RockstarMath Today
     </NavLink>
 </div>

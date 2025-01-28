@@ -42,13 +42,13 @@ function RelatedCourses() {
             rel="noopener noreferrer"
             className="flex items-center gap-4 p-4 rounded-lg shadow-md bg-white border border-gray-200 transition-transform hover:shadow-lg hover:scale-105"
           >
-            <div className="p-3 bg-gray-100 rounded-full text-yellow-500 text-4xl">
+            <div className="p-3 bg-gray-100 rounded-full text-deepBlue text-4xl">
               {course.Icon && <course.Icon />}
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-medium text-gray-800">{course.title}</h3>
             </div>
-            <div className="text-yellow-500 text-3xl">
+            <div className="text-deepBlue text-3xl">
               <LuArrowUpRight />
             </div>
           </a>

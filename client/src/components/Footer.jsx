@@ -14,7 +14,7 @@ const Footer = () => {
               Call:{" "}
               <a
                 href="tel:+15104104963"
-                className="hover:underline hover:text-yellow-500 transition"
+                className="hover:underline hover:text-sky-600 transition"
               >
                 (510) 410-4963
               </a>
@@ -24,7 +24,7 @@ const Footer = () => {
               Email:{" "}
               <a
                 href="mailto:rockstarmathtutoring@gmail.com"
-                className="hover:underline hover:text-yellow-500 transition"
+                className="hover:underline hover:text-sky-600 transition"
               >
                 rockstarmathtutoring@gmail.com
               </a>
@@ -35,7 +35,7 @@ const Footer = () => {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-yellow-500 transition text-xl"
+              className="text-gray-600 hover:text-sky-600 transition text-xl"
             >
               <FaFacebook />
             </a>
@@ -43,7 +43,7 @@ const Footer = () => {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-yellow-500 transition text-xl"
+              className="text-gray-600 hover:text-sky-600 transition text-xl"
             >
               <FaInstagram />
             </a>
@@ -51,7 +51,7 @@ const Footer = () => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-yellow-500 transition text-xl"
+              className="text-gray-600 hover:text-sky-600 transition text-xl"
             >
               <FaLinkedin />
             </a>
@@ -67,7 +67,7 @@ const Footer = () => {
                 <li key={link}>
                   <a
                     href="/"
-                    className="hover:text-yellow-500 hover:underline transition"
+                    className="hover:text-sky-600 hover:underline transition"
                   >
                     {link}
                   </a>
@@ -86,7 +86,7 @@ const Footer = () => {
                 <li key={category}>
                   <a
                     href="/#"
-                    className="hover:text-yellow-500 hover:underline transition"
+                    className="hover:text-sky-600 hover:underline transition"
                   >
                     {category}
                   </a>

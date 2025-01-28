@@ -73,13 +73,13 @@ function CoursesPage() {
           <div className="py-16 bg-gray-50">
     {/* Hero Section */}
     <div className="text-center max-w-4xl mx-auto mb-12">
-        <h1 className="text-5xl font-extrabold text-gray-800 leading-tight">
+        <h1 className="text-2xl font-extrabold text-deepBlue leading-tight">
             Introduction to Physics
         </h1>
-        <h2 className="text-4xl font-semibold text-yellow-500 mt-4">
+        <h2 className="text-5xl font-semibold text-debg-deepBlue mt-4">
             Physics Made Easy
         </h2>
-        <p className="mt-6 text-lg md:text-xl text-gray-600 leading-relaxed">
+        <p className="mt-6 text-lg md:text-xl text-deepBlue leading-relaxed">
             Learn physics essentials — Simplify complex topics — Empower your learning journey.
         </p>
     </div>
@@ -94,32 +94,32 @@ function CoursesPage() {
                 }`}
             >
                 {/* Content Section */}
-                <div className="flex-1 bg-white p-6 rounded-lg shadow-lg flex flex-col justify-between h-full">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-6">
+                <div className="flex-1  p-6 rounded-lg  flex flex-col justify-between h-full">
+                    <h2 className="text-3xl font-bold text-deepBlue mb-6">
                         {course.courseName}
                     </h2>
-                    <ul className="list-disc pl-5 text-lg text-gray-700 space-y-3">
+                    <ul className="list-disc pl-5 text-lg text-deepBlue space-y-3">
                         {course.points.map((point, i) => (
                             <li key={i}>{point}</li>
                         ))}
                     </ul>
-                    <button className="mt-6 bg-yellow-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
+                    <button className="max-w-48 mt-6 bg-deepBlue text-white px-6 py-3 rounded-lg shadow-md hover:bg-sky-600 transition duration-300">
                         See More
                     </button>
                 </div>
 
                 {/* Video Section */}
-                <div className="flex-1 relative shadow-lg rounded-lg overflow-hidden h-[330px]">
+                <div className="flex-1 relative  rounded-lg overflow-hidden h-[330px]">
                     <img
                         src={course.thumbnailUrl}
                         alt="Thumbnail"
                         className="w-full h-full object-cover"
                     />
                     <div
-                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-500 p-4 rounded-full cursor-pointer shadow-lg hover:scale-110 transition-transform"
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-deepBlue p-4 rounded-full cursor-pointer  hover:scale-110 transition-transform"
                         onClick={() => openModal(course.videoUrl)}
                     >
-                        <IoMdPlay className="text-white text-4xl" />
+                        <IoMdPlay className="text-white text-md" />
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@ function CoursesPage() {
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-40"
             onClick={closeModalOnBackdrop}
         >
-            <div className="rounded-xl max-w-4xl w-full relative bg-white shadow-lg">
+            <div className="rounded-xl max-w-4xl w-full relative  ">
                 <video
                     src={currentVideo}
                     controls
@@ -146,7 +146,7 @@ function CoursesPage() {
     {isModalOpen && (
         <button
             onClick={closeModal}
-            className="fixed top-4 right-4 bg-yellow-500 text-white p-3 rounded-full shadow-lg hover:bg-yellow-600 transition-all z-50"
+            className="fixed top-4 right-4 bg-deepBlue text-white p-3 rounded-full  hover:bg-sky-600 transition-all z-50"
         >
             <IoMdClose className="text-xl" />
         </button>

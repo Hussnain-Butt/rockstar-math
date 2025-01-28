@@ -36,7 +36,7 @@ exports.submitForm = async (req, res) => {
         Best regards,  
         The Rockstar Math Team`,
             html: `
-                <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+                <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #00008B;">
                     <h2 style="color: #FFBF00;">Thank You for Contacting Rockstar Math!</h2>
                     <p>Dear <strong>${fullName}</strong>,</p>
                     <p>We’ve received your message and will get back to you within 24 hours.</p>

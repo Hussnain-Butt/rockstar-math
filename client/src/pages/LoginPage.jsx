@@ -57,7 +57,7 @@ function LoginPage() {
     <div className="flex">
       {/* Left Side (Image Section) */}
       <div className="hidden w-1/2 bg-white xl:flex">
-        <img src="/images/login.png" alt="Logo" className="w-full" />
+        <img src="/images/login.jpg" alt="Logo" className="w-full" />
       </div>
 
       {/* Right Side (Form Section) */}
@@ -126,7 +126,7 @@ function LoginPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-steelBlue text-white py-2 rounded hover:opacity-85 transition-all duration-500"
+            className="w-full bg-deepBlue text-white py-2 rounded hover:bg-sky-600 transition-all duration-500"
           >
             Login
           </button>

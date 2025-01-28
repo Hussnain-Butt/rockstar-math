@@ -7,6 +7,12 @@ export default defineConfig({
   server: {
     host: true,
   },
+  resolve: {
+    alias: {
+      '@stripe/stripe-js': '/node_modules/@stripe/stripe-js',
+      '@paypal/react-paypal-js': '/node_modules/@paypal/react-paypal-js',
+    },
+  },
   optimizeDeps: {
     include: ['jwt-decode'], // Explicitly include jwt-decode
   },

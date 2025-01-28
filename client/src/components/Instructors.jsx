@@ -5,21 +5,23 @@ function Instructors() {
     const instructors = [
         {
             img: "/images/teacher5.webp", // Replace with actual image URL
-            name: "John Doe",
-            position: "Mathematics Instructor",
-            description: "John has over 10 years of experience teaching advanced mathematics.",
+            name: "Amy G.",
+ position: "Entrepreneur",
+            description: "Amy is currently working on launching a dating app and starting a micro-school. She also ran a tutoring business while in graduate school.",
         },
         {
-            img: "/images/teacher5.webp", // Replace with actual image URL
-            name: "Jane Smith",
-            position: "Physics Instructor",
-            description: "Jane specializes in simplifying complex physics concepts for students.",
+            img: "/images/teacher5.png", // Replace with actual image URL
+            name: "Amy G.",
+            position: "Educator",
+            description: "Amy has been a math tutor for over 20 years and has also served as a teacher for colleges, universities and private high schools."
+           
         },
         {
-            img: "/images/teacher5.webp", // Replace with actual image URL
-            name: "Mark Johnson",
-            position: "Chemistry Instructor",
-            description: "Mark is passionate about hands-on experiments and chemistry fundamentals.",
+            img: "/images/teacher4.png", // Replace with actual image URL
+            name: "Amy G.",
+            position: "Researcher",
+            description: "Amy worked as a research scientist for Georgia Tech University Research Institute's Air and Space Sensor Division."
+           
         },
     ];
 

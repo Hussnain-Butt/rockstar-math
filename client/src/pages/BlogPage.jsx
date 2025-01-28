@@ -69,9 +69,12 @@ function BlogPage() {
     {/* Left Text Section */}
     <div className="md:w-2/3 text-lg md:text-2xl text-gray-600 font-medium leading-relaxed">
         <h2>
-            A passion for making math <span className="text-yellow-500">understandable</span> and helping my students 
-            reach their <span className="text-yellow-500">potential</span> is at the core of everything we do at Calcworkshop.
+            A passion for making math <span className="text-deebg-deepBlue">understandable</span> and helping my students 
+            reach their <span className="text-deebg-deepBlue">potential</span> is at the core of everything we do at RockstarMath.
         </h2>
+        <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-[16px] px-6 py-2 rounded-full shadow-md transition duration-300">
+                    See More
+                </button>
     </div>
 
     {/* Right Image Section */}
@@ -79,7 +82,7 @@ function BlogPage() {
         <div className="relative overflow-hidden rounded-lg shadow-lg">
             <img src="/images/blog2.png" alt="Blog" className="w-full h-auto object-cover" />
             {/* Yellow Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-yellow-400 via-transparent to-transparent opacity-30"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-sky-600 via-transparent to-transparent opacity-30"></div>
         </div>
     </div>
 </div>
@@ -98,15 +101,17 @@ function BlogPage() {
     <div className="relative max-w-4xl mx-auto text-center text-gray-200">
         {/* Icon */}
         <div className="flex justify-center mb-6">
-            <FaQuoteLeft className="text-6xl sm:text-7xl text-yellow-400" />
+            <FaQuoteLeft className="text-6xl sm:text-7xl text-white" />
         </div>
 
         {/* Text */}
-        <p className="text-xl sm:text-2xl leading-relaxed font-medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-            placerat scelerisque tortor ornare ornare. Quisque placerat
-            scelerisque felis vitae tortor augue. Velit nascetur Consequat
-            faucibus porttitor enim et.
+        <p className="text-lg sm:text-1xl leading-relaxed font-medium">
+        RockstarMath is all about transforming challenges into achievements. We take pride in simplifying math and helping students discover their true potential through guided learning.
+        </p>
+        <br />
+        <hr />
+        <p className="text-lg sm:text-1xl leading-relaxed font-medium mt-5">
+        Rockstar-Math
         </p>
     </div>
 </div>
@@ -115,7 +120,7 @@ function BlogPage() {
 <div className="py-10 bg-gray-50">
     {/* Section Title */}
     <h2 className="text-gray-800 text-3xl font-bold text-center mb-10">
-        <span className="border-b-4 border-yellow-500 pb-1">Our Blogs</span>
+        <span className="border-b-4 border-deebg-deepBlue pb-1">Our Blogs</span>
     </h2>
 
     {/* Blog Cards */}
@@ -133,11 +138,11 @@ function BlogPage() {
                         alt="Blog image"
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-yellow-500 bg-opacity-20 hover:bg-opacity-40 transition-all duration-300"></div>
+                    <div className="absolute inset-0 bg-deepBlue bg-opacity-20 hover:bg-opacity-40 transition-all duration-300"></div>
                 </div>
                 {/* Content Section */}
                 <div className="p-6">
-                    <h6 className="mb-3 text-gray-800 text-xl font-semibold hover:text-yellow-500 transition-colors duration-300">
+                    <h6 className="mb-3 text-gray-800 text-xl font-semibold hover:text-deepBlue  transition-colors duration-300">
                         {item.title}
                     </h6>
                     <p className="text-gray-600 text-sm leading-relaxed">
@@ -158,7 +163,7 @@ function BlogPage() {
                 {/* Close Button */}
                 <button
                     onClick={handleCloseModal}
-                    className="absolute top-4 right-4 bg-yellow-500 text-white p-2 rounded-full shadow-md hover:bg-yellow-600 transition-all focus:outline-none"
+                    className="absolute top-4 right-4 bg-deepBlue text-white p-2 rounded-full shadow-md hover:bg-sky-600 transition-all focus:outline-none"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -202,34 +207,7 @@ function BlogPage() {
 
 
 
-            <style jsx>{`
-                .fade-in {
-                    animation: fadeIn 500ms ease-in-out;
-                }
-                .fade-out {
-                    animation: fadeOut 500ms ease-in-out;
-                }
-                @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-                @keyframes fadeOut {
-                    from {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                    to {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                }
-            `}</style>
+         
         </>
     );
 }

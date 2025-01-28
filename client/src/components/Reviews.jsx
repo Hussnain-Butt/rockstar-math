@@ -84,61 +84,104 @@ function Reviews() {
     {/* Header Section */}
     <div className="text-center py-8 bg-gray-50">
     {/* Main Heading */}
-    <h1 className="text-4xl font-extrabold text-gray-800 leading-tight">
-        900+ Reviews on <span className="text-yellow-400">Shopper Approved</span> | 150+ Reviews on <span className="text-blue-500">Facebook</span>
+    <h1 className="text-3xl font-extrabold text-black leading-tight">
+        900+ Reviews on Shopper Approved 150+ Reviews on Facebook
     </h1>
     {/* Subheading */}
-    <p className="mt-4 text-xl text-gray-600 font-medium">
-        Average <span className="text-yellow-400">5-Star</span> Rating
+    <p className="mt-4 text-xl text-black font-medium">
+        Average <span className="text-black">5-Star</span> Rating
     </p>
 </div>
 
     {/* Reviews Section */}
     <div className="flex flex-wrap gap-8 justify-center px-5 xl:px-20">
-        {reviews.map((review, index) => (
-            <div
-                key={index}
-                className="w-full md:w-1/2 lg:w-1/3 bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105"
-            >
-                {/* Image Section */}
-                <div className="relative">
-                    <img
-                        src={review.thumbnailUrl}
-                        alt="Review thumbnail"
-                        className="w-full h-48 object-cover"
-                    />
-                    <div
-                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-yellow-400 p-4 rounded-full shadow-md cursor-pointer transition-transform group-hover:scale-110"
-                        onClick={() => openModal(review.videoUrl)}
-                    >
-                        <IoMdPlay className="text-white text-4xl" />
-                    </div>
-                </div>
+  {reviews.map((review, index) => (
+    <div
+      key={index}
+      className=" py-11 w-full flex flex-col md:flex-row items-center rounded-xl  overflow-hidden transition-transform transform hover:scale-105"
+    >
+      {/* Text Content */}
+      <div className="p-6 md:w-2/3">
+        {/* Date */}
+        <div className="text-sm text-gray-400">{review.date}</div>
 
-                {/* Text Content */}
-                <div className="p-6">
-                    <div className="text-sm text-gray-400">{review.date}</div>
-                    <div className="flex items-center gap-2 my-2">
-                        {Array.from({ length: review.stars }).map((_, i) => (
-                            <IoMdStar key={i} className="text-yellow-400" />
-                        ))}
-                    </div>
-                    <div className="flex items-center gap-4 mb-4">
-                        <img
-                            src={review.profilePic}
-                            alt={`${review.name}'s profile`}
-                            className="w-14 h-14 rounded-full border-2 border-yellow-400"
-                        />
-                        <div>
-                            <h2 className="text-lg font-semibold text-gray-800">{review.name}</h2>
-                            <p className="text-sm text-gray-500">{review.position}</p>
-                        </div>
-                    </div>
-                    <p className="text-gray-600 text-sm leading-relaxed">{review.details}</p>
-                </div>
-            </div>
-        ))}
+        {/* Star Rating */}
+        <div className="flex items-center gap-1 my-2">
+          {Array.from({ length: review.stars }).map((_, i) => (
+            <IoMdStar key={i} className="text-yellow-500" />
+          ))}
+        </div>
+
+        {/* Profile Info */}
+        <div className="flex items-center gap-4 mb-4">
+          <img
+            src={review.profilePic}
+            alt={`${review.name}'s profile`}
+            className="w-14 h-14 rounded-full border-2 border-blue-500"
+          />
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">{review.name}</h2>
+            <p className="text-sm text-gray-500">{review.position}</p>
+          </div>
+        </div>
+
+        {/* Review Details */}
+        <p className="text-gray-700 text-base leading-relaxed">
+          {review.details}
+        </p>
+      </div>
+
+      {/* Thumbnail with Play Button */}
+      <div className="relative group md:w-1/3">
+        <img
+          src={review.thumbnailUrl}
+          alt="Review thumbnail"
+          className="w-full h-fit object-cover"
+        />
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-500 p-4 rounded-full shadow-md cursor-pointer transition-transform group-hover:scale-110"
+          onClick={() => openModal(review.videoUrl)}
+        >
+          <IoMdPlay className="text-white text-md" />
+        </div>
+      </div>
     </div>
+  ))}
+</div>
+<div className="flex flex-wrap gap-8 justify-start px-5 xl:px-20 bg-slate-200 py-20">
+
+{textOnlyReviews.map((review,index)=>(
+<div className="p-6 md:w-2/3" key={index}>
+        {/* Date */}
+        <div className="text-sm text-gray-400">{review.date}</div>
+
+        {/* Star Rating */}
+        <div className="flex items-center gap-1 my-2">
+          {Array.from({ length: review.stars }).map((_, i) => (
+            <IoMdStar key={i} className="text-yellow-500" />
+          ))}
+        </div>
+
+        {/* Profile Info */}
+        <div className="flex items-center gap-4 mb-4">
+          <img
+            src={review.profilePic}
+            alt={`${review.name}'s profile`}
+            className="w-14 h-14 rounded-full border-2 border-blue-500"
+          />
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">{review.name}</h2>
+            <p className="text-sm text-gray-500">{review.position}</p>
+          </div>
+        </div>
+
+        {/* Review Details */}
+        <p className="text-gray-700 text-base leading-relaxed">
+          {review.details}
+        </p>
+      </div>
+))}
+      </div>
 
     {/* Modal for Video Playback */}
     {isModalOpen && (
@@ -165,7 +208,6 @@ function Reviews() {
         </button>
     )}
 </div>
-
 
     );
 }

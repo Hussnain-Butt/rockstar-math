@@ -33,7 +33,7 @@ function JoinOurCommunity() {
             <img
                 src="/images/classroom.png"
                 alt="Join Our Learning Community"
-                className="w-full max-w-xs sm:max-w-sm object-cover h-auto rounded-2xl border-4 border-yellow-400"
+                className="w-full max-w-xs sm:max-w-sm object-cover h-auto rounded-2xl border-4 border-deepBlue"
             />
         </div>
 
@@ -70,10 +70,10 @@ function JoinOurCommunity() {
                          type="email"
                          value={email}
                          onChange={(e) => setEmail(e.target.value)}
-                        className="border border-yellow-400 w-full max-w-md px-4 py-2 rounded-full text-gray-700 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+                        className="border border-deepBlue w-full max-w-md px-4 py-2 rounded-full text-gray-700 focus:ring-2 focus:ring-dborder-deepBlue focus:outline-none"
                         placeholder="Enter your email"
                     />
-                    <button type="submit" className="bg-yellow-400 text-white px-6 py-2 rounded-full hover:bg-yellow-500 transition-all duration-300 text-sm w-full sm:w-auto">
+                    <button type="submit" className="bg-deepBlue border-deepBlue text-white px-6 py-2 rounded-full hover:bg-sky-600 transition-all duration-300 text-sm w-full sm:w-auto">
                         Sign Up for Free
                     </button>
                     </form>

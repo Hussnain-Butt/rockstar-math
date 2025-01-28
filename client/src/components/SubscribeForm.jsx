@@ -39,12 +39,12 @@ function SubscribeForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-deepBlue"
                 required
             />
             <button
                 type="submit"
-                className="bg-yellow-400 text-white px-4 py-2 rounded-lg hover:bg-yellow-500 transition-all duration-300"
+                className="bg-deepBlue text-white px-4 py-2 rounded-lg hover:bg-sky-600 transition-all duration-300"
             >
                 Subscribe
             </button>

@@ -15,7 +15,7 @@ function Milestones() {
                 <div className="flex flex-col lg:flex-row lg:justify-between items-center gap-12">
                     {/* Grid Section */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 w-full lg:w-1/2">
-                        <div className="milestone-item p-6 rounded-lg shadow-md bg-white flex items-center gap-6 hover:shadow-lg transition-shadow">
+                        <div className="milestone-item p-6  flex items-center gap-6 hover:shadow-lg transition-shadow">
                             <img
                                 src="/images/mortarBoardGreen.png"
                                 alt="Instructors Icon"
@@ -26,7 +26,7 @@ function Milestones() {
                                 <p className="text-gray-600">Instructors</p>
                             </div>
                         </div>
-                        <div className="milestone-item p-6 rounded-lg shadow-md bg-white flex items-center gap-6 hover:shadow-lg transition-shadow">
+                        <div className="milestone-item p-6  flex items-center gap-6 hover:shadow-lg transition-shadow">
                             <img
                                 src="/images/video.png"
                                 alt="Videos Icon"
@@ -37,7 +37,7 @@ function Milestones() {
                                 <p className="text-gray-600">Videos</p>
                             </div>
                         </div>
-                        <div className="milestone-item p-6 rounded-lg shadow-md bg-white flex items-center gap-6 hover:shadow-lg transition-shadow">
+                        <div className="milestone-item p-6  flex items-center gap-6 hover:shadow-lg transition-shadow">
                             <img
                                 src="/images/mortarBoardRed.png"
                                 alt="Graduated Students Icon"
@@ -48,7 +48,7 @@ function Milestones() {
                                 <p className="text-gray-600">Graduated Students</p>
                             </div>
                         </div>
-                        <div className="milestone-item p-6 rounded-lg shadow-md bg-white flex items-center gap-6 hover:shadow-lg transition-shadow">
+                        <div className="milestone-item p-6  flex items-center gap-6 hover:shadow-lg transition-shadow">
                             <img
                                 src="/images/students.png"
                                 alt="Students Enrolled Icon"

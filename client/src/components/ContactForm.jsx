@@ -39,8 +39,7 @@ function ContactForm() {
       <div className="flex flex-col lg:flex-row max-w-6xl mx-auto p-8 gap-6 items-center bg-gray-50">
         {/* Image Section */}
         <div className="lg:w-1/2 flex justify-center relative">
-          <div className="absolute bg-yellow-400 w-32 h-32 rounded-full -top-6 -left-6"></div>
-          <div className="absolute bg-yellow-400 w-32 h-32 rounded-full -bottom-6 -right-6"></div>
+          
           <img
             src="/images/girlImage.png"
             alt="Sample"
@@ -50,7 +49,7 @@ function ContactForm() {
 
         {/* Contact Form Section */}
         <form onSubmit={handleSubmit} className="lg:w-1/2 flex flex-col p-8 bg-white shadow-md rounded-lg">
-          <h2 className="text-4xl font-bold text-yellow-500 mb-6">Let’s Collaborate Now!</h2>
+          <h2 className="text-4xl font-bold text-deepBlue mb-6">Let’s Collaborate Now!</h2>
 
           {/* Full Name Input */}
           <label htmlFor="fullName" className="text-gray-600 text-sm mb-2">
@@ -62,7 +61,7 @@ function ContactForm() {
            value={formData.fullName}
            onChange={handleChange}
            required
-            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
+            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deetext-deepBlue mb-4"
           />
 
           {/* Email Input */}
@@ -76,7 +75,7 @@ function ContactForm() {
              value={formData.email}
              onChange={handleChange}
              required
-            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
+            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deetext-deepBlue mb-4"
           />
 
           {/* Phone Number Input */}
@@ -89,7 +88,7 @@ function ContactForm() {
             placeholder="Enter your phone number"
             value={formData.phoneNumber}
             onChange={handleChange}
-            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
+            className="w-full rounded-full border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deetext-deepBlue mb-4"
           />
 
           {/* Message Textarea */}
@@ -102,14 +101,14 @@ function ContactForm() {
            value={formData.message}
            onChange={handleChange}
            required
-            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4"
+            className="w-full rounded-lg border border-gray-300 p-3 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deetext-deepBlue mb-4"
             rows="4"
           ></textarea>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-all duration-300"
+            className="bg-deepBlue text-deepBlue hover:bg-sky-600 text-white py-2 px-4 rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-deetext-deepBlue focus:ring-offset-2 transition-all duration-300"
           >
             Submit
           </button>

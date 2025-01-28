@@ -41,7 +41,7 @@ function SignupPage() {
     <>
       <div className="flex">
         <div className="hidden w-1/2 bg-white xl:flex">
-          <img src="/images/login.png" alt="Signup Illustration" className="w-full" />
+          <img src="/images/login.jpg" alt="Signup Illustration" className="w-full" />
         </div>
         <div className="w-full lg:w-1/2 bg-white flex flex-col items-center mt-10 px-10 md:px-20 lg:px-48">
           <img src="/images/logo.png" alt="Logo" className="w-[280px] h-auto" />
@@ -121,7 +121,7 @@ function SignupPage() {
               </div>
             </div>
 
-            <button type="submit" className="w-full bg-steelBlue text-white py-2 rounded hover:opacity-85 transition-all duration-500">
+            <button type="submit" className="w-full bg-deepBlue text-white py-2 rounded hover:bg-sky-600 transition-all duration-500">
               Sign Up
             </button>
           </form>

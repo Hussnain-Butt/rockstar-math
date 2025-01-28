@@ -1,219 +1,178 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { MdLockOutline } from "react-icons/md";
+import { FaChevronDown } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
+
 export function Navbar() {
-
+  const { users, logout, updateCounter } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const { users, logout,updateCounter  } = useAuth();
-  console.log('Navbar user:', users);
 
   useEffect(() => {
-    console.log("Navbar re-rendered due to user or updateCounter change.");
-    console.log("Current user:", users);
-    console.log("Update Counter:", updateCounter);
-  }, [user, updateCounter]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-    const parseJwt = (token) => {
-      try {
-        return JSON.parse(atob(token.split(".")[1])); // Decode JWT
-      } catch (e) {
-        return null;
-      }
-    };
-
-    if (token) {
-      try {
-        const decodedToken = parseJwt(token);
-        if (decodedToken) {
-          setUser({ name: decodedToken.name }); // Adjust based on your JWT payload
-        }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        setUser(null);
-      }
-    }
-  }, []);
+    setUser(users);
+  }, [users, updateCounter]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-    setUser(null); // Reset user state
-    window.location.href = "/login"; // Redirect to login page
+    logout();
+    setMobileMenuOpen(false);
+    setDropdownOpen(false);
   };
 
   const handleLinkClick = () => {
     setMobileMenuOpen(false);
+    setDropdownOpen(false);
   };
 
   return (
-    <header className="bg-white lg:px-16 shadow-md">
-      <nav
-        aria-label="Global"
-        className="mx-auto max-w-7xl flex items-center justify-between px-4 lg:px-0 py-3"
-      >
+    <header className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
+      <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
         {/* Logo */}
-        <div className="flex items-center justify-between lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img alt="logo" src="/images/logo.png" className="h-auto w-[200px]" />
-          </a>
-        </div>
-
-        {/* Links + Login and Sign Up Buttons */}
-        <div className="hidden xl:flex lg:gap-x-6 lg:items-center text-lg">
-          {/* Navigation Links */}
-          {[
-            { to: "/", label: "Home" },
-            { to: "/reviews", label: "Reviews" },
-            { to: "/courses", label: "Courses" },
-            { to: "/calendar", label: "Calendar" },
-            { to: "/faqs", label: "FAQs" },
-            { to: "/blogs", label: "Blogs" },
-            { to: "/about", label: "About" },
-            { to: "/contact", label: "Contact" },
-          ].map((link, index) => (
-            <NavLink
-              key={index}
-              to={link.to}
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-yellow-500 font-medium"
-                  : "text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
-
-          {/* User State-Based Buttons */}
-          {user ? (
-            <>
-              
-              <button
-                onClick={handleLogout}
-                className="flex items-center px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-sm transition-all duration-300"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <NavLink
-                to="/login"
-                onClick={handleLinkClick}
-                className="flex items-center text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
-              >
-                <MdLockOutline className="w-6 h-6 mr-1" /> Log in
-              </NavLink>
-              <NavLink
-                to="/signup"
-                onClick={handleLinkClick}
-                className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-300"
-              >
-                Sign Up for Free
-              </NavLink>
-            </>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="flex xl:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon aria-hidden="true" className="h-6 w-6" />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <div
-        className={`fixed inset-0 z-10 bg-gray-500 bg-opacity-75 transition-opacity ${
-          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setMobileMenuOpen(false)}
-      />
-      <div
-        className={`fixed inset-y-0 left-0 z-20 w-[280px] overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10 transform transition-all ease-in-out duration-300 ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <NavLink to="/" className="-m-1.5 p-1.5">
-            <img alt="logo" src="/images/logo.png" className="h-8 w-auto" />
+        <div className="flex items-center justify-between w-full lg:w-auto">
+          <NavLink to="/" className="flex items-center text-2xl font-bold text-deepBlue">
+            <img src="/images/logo.png" alt="Logo" className="h-10 w-auto mr-2" />
           </NavLink>
           <button
-            type="button"
-            onClick={() => setMobileMenuOpen(false)}
-            className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            className="lg:hidden text-gray-700"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <span className="sr-only">Close menu</span>
-            <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+            {mobileMenuOpen ? (
+              <XMarkIcon className="h-6 w-6" />
+            ) : (
+              <Bars3Icon className="h-6 w-6" />
+            )}
           </button>
         </div>
-        <div className="flex flex-col mt-6 space-y-4">
-          {[
-            { to: "/", label: "Home" },
-            { to: "/reviews", label: "Reviews" },
-            { to: "/courses", label: "Courses" },
-            { to: "/calendar", label: "Calendar" },
-            { to: "/faqs", label: "FAQs" },
-            { to: "/blogs", label: "Blogs" },
-            { to: "/about", label: "About" },
-            { to: "/contact", label: "Contact" },
-          ].map((link, index) => (
-            <NavLink
-              key={index}
-              to={link.to}
-              onClick={handleLinkClick}
-              className={({ isActive }) =>
-                `px-3 py-2 text-sm rounded-md ${
-                  isActive
-                    ? "bg-yellow-500 text-white"
-                    : "text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
-                }`
-              }
+
+        {/* Desktop Menu */}
+        <div className="hidden lg:flex items-center space-x-6">
+          <NavLink to="/" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+            Home
+          </NavLink>
+          <NavLink to="/about" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+            About
+          </NavLink>
+          <NavLink to="/courses" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+            Courses
+          </NavLink>
+
+          {/* Dropdown Menu */}
+          <div className="relative">
+            <button
+              className="flex items-center text-gray-700 hover:text-sky-600 transition-all"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              {link.label}
-            </NavLink>
-          ))}
-          {users ? (
+              Pages <FaChevronDown className="ml-1" />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute left-0 mt-2 w-44 bg-white shadow-lg rounded-md overflow-hidden">
+                <NavLink to="/reviews" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  Reviews
+                </NavLink>
+                <NavLink to="/calendar" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  Calendar
+                </NavLink>
+                <NavLink to="/faqs" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  FAQs
+                </NavLink>
+                <NavLink to="/blogs" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  Blogs
+                </NavLink>
+              </div>
+            )}
+          </div>
+
+          <NavLink to="/services" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+            Services
+          </NavLink>
+          <NavLink to="/cart" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+            Cart
+          </NavLink>
+
+          {/* Auth Buttons */}
+          {user ? (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-sm transition-all duration-300"
+              className="px-4 py-2 bg-deepBlue text-white rounded-lg hover:bg-sky-600 transition-all"
             >
               Logout
             </button>
           ) : (
             <>
-              <NavLink
-                to="/login"
-                onClick={handleLinkClick}
-                className="text-gray-700 hover:text-yellow-500 hover:scale-105 transition-all duration-300"
-              >
-                Log in
+              <NavLink to="/login" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-sky-600 transition-all">
+                <MdLockOutline className="w-6 h-6 mr-1" /> Log in
               </NavLink>
-              <NavLink
-                to="/signup"
-                onClick={handleLinkClick}
-                className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600 transition-all duration-300"
-              >
-                Sign Up for Free
+              <NavLink to="/signup" onClick={handleLinkClick} className="bg-deepBlue text-white px-4 py-2 rounded-lg hover:bg-sky-600 transition-all">
+                Sign Up
               </NavLink>
             </>
           )}
         </div>
-      </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="absolute top-16 left-0 w-full bg-white shadow-md lg:hidden">
+            <div className="flex flex-col space-y-4 p-4">
+              <NavLink to="/" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                Home
+              </NavLink>
+              <NavLink to="/about" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                About
+              </NavLink>
+              <NavLink to="/courses" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                Courses
+              </NavLink>
+
+              {/* Mobile Dropdown Menu */}
+              <div className="relative">
+                <button className="flex items-center text-gray-700 hover:text-sky-600 transition-all" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                  Pages <FaChevronDown />
+                </button>
+                {dropdownOpen && (
+                  <div className="flex flex-col space-y-2 pl-4">
+                    <NavLink to="/reviews" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                      Reviews
+                    </NavLink>
+                    <NavLink to="/calendar" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                      Calendar
+                    </NavLink>
+                    <NavLink to="/faqs" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                      FAQs
+                    </NavLink>
+                    <NavLink to="/blogs" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                      Blogs
+                    </NavLink>
+                  </div>
+                )}
+              </div>
+
+              <NavLink to="/services" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                Services
+              </NavLink>
+              <NavLink to="/cart" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                Cart
+              </NavLink>
+
+              {user ? (
+                <button onClick={handleLogout} className="px-4 py-2 bg-deepBlue text-white rounded-lg hover:bg-sky-600 transition-all">
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <NavLink to="/login" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
+                    Log in
+                  </NavLink>
+                  <NavLink to="/signup" onClick={handleLinkClick} className="bg-deepBlue text-white px-4 py-2 rounded-lg hover:bg-sky-600 transition-all">
+                    Sign Up
+                  </NavLink>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   );
 }

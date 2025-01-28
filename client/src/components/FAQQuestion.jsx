@@ -21,7 +21,7 @@ function FAQQuestion() {
             </p>
     
             {/* FAQ Items */}
-            <div className="space-y-6">
+            <div className="space-y-2">
                 {[
                     {
                         question: "Who are these video lessons for?",
@@ -49,15 +49,17 @@ function FAQQuestion() {
                             "We have a proven track record of helping students succeed with our tailored resources and support.",
                     },
                 ].map((faq, index) => (
-                    <div key={index} className="border rounded-lg p-4 bg-white shadow-sm">
+                    <div key={index} className="border-b  p-4  ">
                         <div
                             className="flex justify-between items-center cursor-pointer"
                             onClick={() => toggleFAQ(index)}
                         >
                             <h2 className="text-lg font-medium">{faq.question}</h2>
-                            <span className="text-yellow-500 text-xl">
+                           <div className='border border-sky-600 p-1 rounded-full'>
+                           <span className="text-sky-600 text-md">
                                 {openFAQs[index] ? <FaMinus /> : <FaPlus />}
                             </span>
+                           </div>
                         </div>
                         <div
                             className={`mt-3 text-gray-600 text-sm transition-all duration-300 ease-in-out overflow-hidden ${
@@ -72,23 +74,23 @@ function FAQQuestion() {
         </div>
     
         {/* Additional CTA Section */}
-        <div className="bg-gray-100 mt-12 py-8 px-6 lg:px-12 rounded-lg">
+        <div className="bg-gray-100 mt-12 py-16 px-6 lg:px-12 rounded-lg">
             <div className="max-w-xl mx-auto text-center">
                 <div className="flex justify-center mb-6">
                     <img
                         alt="Person 1"
                         className="w-12 h-12 rounded-full border-2 border-white -ml-2"
-                        src="https://via.placeholder.com/150"
+                        src="/images/p2.png"
                     />
                     <img
                         alt="Person 2"
                         className="w-12 h-12 rounded-full border-2 border-white -ml-2"
-                        src="https://via.placeholder.com/150"
+                        src="/images/p1.png"
                     />
                     <img
                         alt="Person 3"
                         className="w-12 h-12 rounded-full border-2 border-white -ml-2"
-                        src="https://via.placeholder.com/150"
+                        src="/images/p3.png"
                     />
                 </div>
                 <h2 className="text-2xl font-semibold mb-2">Still have questions?</h2>

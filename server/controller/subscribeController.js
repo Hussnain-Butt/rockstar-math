@@ -35,8 +35,8 @@ exports.subscribe = async (req, res) => {
             to: email,
             subject: "Welcome to Our Learning Community!",
             html: `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden;">
-                <div style="background-color: #f9c74f; padding: 20px; text-align: center; color: #fff;">
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #00008B; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; overflow: hidden;">
+                <div style="background-color: #00008B; padding: 20px; text-align: center; color: #fff;">
                     <h1 style="margin: 0; font-size: 24px;">Welcome to Our Learning Community!</h1>
                 </div>
                 <div style="padding: 20px;">
@@ -48,7 +48,7 @@ exports.subscribe = async (req, res) => {
                         As a valued member, you'll get access to exclusive courses, webinars, personalized learning recommendations, and much more!
                     </p>
                     <div style="text-align: center; margin: 20px 0;">
-                        <a href="https://yourwebsite.com" style="display: inline-block; background-color: #f9c74f; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">Visit Our Platform</a>
+                        <a href="https://yourwebsite.com" style="display: inline-block; background-color: #00008B; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">Visit Our Platform</a>
                     </div>
                     <p style="font-size: 16px; color: #555;">
                         Stay tuned for more updates. If you have any questions, feel free to reach out to us.

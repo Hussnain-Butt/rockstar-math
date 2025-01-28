@@ -111,14 +111,14 @@ function PopTopic() {
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-lg font-semibold text-gray-800">{topic.title}</h3>
                             <div className="flex items-center">
-                                <span className="text-yellow-500 font-bold">{topic.rating}</span>
-                                <IoMdStar className="text-yellow-500 ml-1" />
+                                <span className="text-debg-deepBlue font-bold">{topic.rating}</span>
+                                <IoMdStar className="text-debg-deepBlue ml-1" />
                             </div>
                         </div>
 
                         <p className="text-sm text-gray-600 mb-4">{topic.description}</p>
 
-                        <button className="py-2 px-4 bg-yellow-500 text-white rounded-lg font-semibold transition hover:bg-yellow-600">
+                        <button className="py-2 px-4 bg-deepBlue text-white rounded-lg font-semibold transition hover:bg-sky-600">
                             Start Learning
                         </button>
                     </div>
@@ -139,7 +139,7 @@ function PopTopic() {
             {isModalOpen && (
                 <button
                     onClick={closeModal}
-                    className="fixed top-4 right-4 bg-yellow-500 text-white p-3 rounded-full shadow-lg hover:bg-yellow-600 transition"
+                    className="fixed top-4 right-4 bg-deepBlue text-white p-3 rounded-full shadow-lg hover:bg-darkTeal transition"
                 >
                     <IoMdClose className="text-xl" />
                 </button>

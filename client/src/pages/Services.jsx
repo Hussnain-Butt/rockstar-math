@@ -2,6 +2,7 @@ import React from 'react'
 import { useAuth } from '../context/AuthContext' // Use the custom hook
 import { useCart } from "../context/CartContext";
 import { FaInfoCircle, FaClock, FaCalendarAlt, FaShoppingCart, FaCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const services = [
@@ -16,6 +17,7 @@ const services = [
 
 const Services = () => {
   const { users } = useAuth() // Access user state
+  const navigate = useNavigate()
   console.log('Current User:', users) // Debugging output
   const { addToCart } = useCart(); // Using the cart context
 
@@ -23,10 +25,11 @@ const Services = () => {
     addToCart(service);
     toast.success(`${service.name} added to cart!`);
   };
+
   return (
     
    <>
-    <div className='bg-deepBlue py-6 text-white'>
+    <div className='bg-deepBlue py-6 text-white mt-16'>
     <h1 className="text-2xl font-bold text-center">Rockstar Math Tutoring Services</h1>
     <p className="text-center text-white">Learn, Excel, Achieve!</p>
     </div>
@@ -64,17 +67,12 @@ const Services = () => {
             {/* Buttons Section */}
             <div className="mt-4">
               {!users ? (
-                <button className=" text-deepBlue w-full py-3 rounded-xl hover:bg-gray-700 transition-all duration-300 shadow-lg">
+                <button className="bg-deepBlue text-white w-full py-3 rounded-xl hover:bg-sky-600 transition-all duration-300 shadow-lg">
                   Sign Up
                 </button>
               ) : (
                 <div className="flex flex-col gap-3">
-                  <button
-                    className="flex items-center justify-center gap-2 bg-deepBlue text-white w-full py-3 rounded-xl hover:from-green-600 hover:to-green-800 transition-all duration-300 shadow-lg"
-                    onClick={() => handleCheckout(service)}
-                  >
-                    <FaCheck /> Checkout
-                  </button>
+                 
                   <button
                     className="flex items-center justify-center gap-2 bg-deepBlue text-white w-full py-3 rounded-xl hover:from-yellow-600 hover:to-yellow-800 transition-all duration-300 shadow-lg"
                     onClick={() => handleAddToCart(service)}

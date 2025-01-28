@@ -46,7 +46,7 @@ function LoginPage() {
 
       // Redirect to the dashboard
       setTimeout(() => {
-        window.location.href = "/";
+        navigate("/")
       }, 1000);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Invalid credentials');

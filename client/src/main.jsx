@@ -21,6 +21,7 @@ import Footer from './components/Footer.jsx'
 import Services from './pages/Services.jsx'
 import { CartProvider } from "./context/CartContext";
 import CartPage from './pages/CartPage.jsx'
+import CheckoutPage from './pages/CheckoutPage.jsx'
 
 createRoot(document.getElementById('root')).render(
 <AuthProvider>
@@ -43,6 +44,9 @@ createRoot(document.getElementById('root')).render(
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
       <Route path="cart" element={<CartPage />} />
+      <Route path="checkout" element={<CheckoutPage />} />
+
+
 
     </Routes>
     <Footer />

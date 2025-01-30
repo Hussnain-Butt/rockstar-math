@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js"; // PayPal SDK
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import PaymentForm from "../components/PaymentForm";
+
+// Initialize Stripe with your publishable key
+const stripePromise = loadStripe("pk_live_51QKwhUE4sPC5ms3x7cYIFoYqx3lULz1hFA9EoRobabZVPwdDm8KbDNlHOZMizb2YftdwRSyxRfyi93ovv5Rev7i300CpaQEtU2");
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,103 +16,39 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
-    if (storedCart.length === 0) {
-      navigate("/cart");
+    if (!storedCart || storedCart.length === 0) {
+      navigate("/cart"); // Redirect if cart is empty
     } else {
       setCartItems(storedCart);
     }
   }, [navigate]);
 
-  const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
+  const subtotal = cartItems.reduce((total, item) => total + Number(item.price || 0), 0);
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
 
-  const handleCompletePayment = () => {
-    setShowPaymentForm(true);
-  };
-
-  const handlePaymentSubmit = (e) => {
-    e.preventDefault();
+  // ✅ Function to handle successful payment
+  const handlePaymentSuccess = () => {
     setShowSuccessPopup(true);
 
     setTimeout(() => {
       setShowSuccessPopup(false);
-      navigate("/");
+      navigate("/dashboard"); // 🚀 Redirect to Dashboard
     }, 3000);
   };
-
 
   return (
     <div className="container mx-auto p-6 py-16">
       <h1 className="text-4xl font-extrabold text-gray-900 mb-6 text-center">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-        
         {/* Left Side: Payment Form */}
         {showPaymentForm ? (
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-300">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment Details</h2>
-
-            <form className="space-y-4" onSubmit={handlePaymentSubmit}>
-              <div>
-                <label className="text-gray-700 font-medium">Full Name</label>
-                <input 
-                  type="text" 
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="Enter your full name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="text-gray-700 font-medium">Email</label>
-                <input 
-                  type="email" 
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="text-gray-700 font-medium">Card Details</label>
-                <input 
-                  type="text" 
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  placeholder="1234 5678 9012 3456"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-gray-700 font-medium">Expiry Date</label>
-                  <input 
-                    type="text" 
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                    placeholder="MM/YY"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-700 font-medium">CVV</label>
-                  <input 
-                    type="text" 
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                    placeholder="123"
-                    required
-                  />
-                </div>
-              </div>
-
-              <button 
-                type="submit"
-                className="w-full px-6 py-3 mt-4 text-lg font-semibold text-white bg-green-600 hover:bg-green-700 transition-all duration-300 rounded-lg shadow-lg flex items-center justify-center gap-2"
-              >
-                <FaCreditCard /> Pay ${total.toFixed(2)} USD
-              </button>
-            </form>
+            <Elements stripe={stripePromise}>
+              <PaymentForm totalAmount={total} onSuccess={handlePaymentSuccess} />
+            </Elements>
           </div>
         ) : (
           <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-300">
@@ -119,7 +60,7 @@ const CheckoutPage = () => {
                 <div>
                   <h3 className="text-xl font-semibold">{item.name}</h3>
                   <p className="text-gray-500 text-sm">{item.details}</p>
-                  <p className="text-green-600 font-bold text-lg">${item.price}.00 USD</p>
+                  <p className="text-green-600 font-bold text-lg">${Number(item.price || 0).toFixed(2)} USD</p>
                 </div>
               </div>
             ))}
@@ -146,37 +87,12 @@ const CheckoutPage = () => {
           </div>
 
           {!showPaymentForm && (
-            <>
-              <button 
-                onClick={handleCompletePayment}
-                className="w-full px-6 py-3 mt-4 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-lg flex items-center justify-center gap-2"
-              >
-                <FaCreditCard /> Complete Payment
-              </button>
-
-              {/* PayPal Button */}
-              <div className="mt-4">
-               {/* PayPal Button */}
-          <PayPalScriptProvider options={{ "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID }}
-          >
-            <div className="mt-4">
-              <PayPalButtons
-                style={{ layout: "horizontal", color: "gold", shape: "pill", label: "paypal" }}
-                createOrder={(data, actions) => {
-                  return actions.order.create({
-                    purchase_units: [{ amount: { value: totalAmount.toFixed(2) } }]
-                  });
-                }}
-                onApprove={(data, actions) => {
-                  return actions.order.capture().then(() => {
-                    alert("Payment Successful!");
-                  });
-                }}
-              />
-            </div>
-          </PayPalScriptProvider>
-              </div>
-            </>
+            <button 
+              onClick={() => setShowPaymentForm(true)}
+              className="w-full px-6 py-3 mt-4 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-lg flex items-center justify-center gap-2"
+            >
+              <FaCreditCard /> Pay with Card
+            </button>
           )}
         </div>
       </div>
@@ -187,7 +103,7 @@ const CheckoutPage = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <FaCheckCircle className="text-green-500 text-5xl mx-auto mb-2" />
             <h2 className="text-xl font-semibold text-gray-900">Payment Successful</h2>
-            <p className="text-gray-600">Redirecting to homepage...</p>
+            <p className="text-gray-600">Redirecting to Dashboard...</p>
           </div>
         </div>
       )}

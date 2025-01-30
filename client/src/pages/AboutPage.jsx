@@ -11,14 +11,14 @@ function AboutPage() {
     ];
 
     const stats = [
-        { number: 15, text: "Years of experience as a certified calculus teacher" },
-        { number: 1, text: "MA in Education from University of Virginia" },
-        { number: 5, text: "Awards received for outstanding teaching" },
-        { number: 50, text: "Average number of questions Jenn answers by email from her students." },
-        { number: 10, text: "Years married to husband and business partner, Brian" },
-        { number: 4, text: "Years studying mathematics and playing soccer at Virginia Tech" },
-        { number: 2, text: "Cats at home amusing Jenn on a daily basis" },
-        { number: 20, text: "Countries Jenn’s students currently span" }
+        { number: 2, text: "math degrees." },
+        { number: 2, text: "Kids" },
+        { number: 20 +"+", text: "Years of experience tutoring" },
+        { number: 30 +"+", text: "Years Skateboarding" },
+        { number: 1, text: "Patient Pending" },
+        { number: 2, text: "Years of Homeschooling" },
+        { number: 7, text: "Years College Professor" },
+        { number: 1, text: "Cat" }
     ];
 
     const additionalInfo = [

@@ -1,6 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import "./index.css";  // Make sure your global styles are included
+import "tailwindcss/tailwind.css"; // If using Tailwind
+
 import './index.css'
 import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
@@ -22,6 +25,7 @@ import Services from './pages/Services.jsx'
 import { CartProvider } from "./context/CartContext";
 import CartPage from './pages/CartPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
+import RegisterBeforeCheckout from './pages/RegisterBeforeCheckout.jsx'
 
 createRoot(document.getElementById('root')).render(
 <AuthProvider>
@@ -43,6 +47,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="reset-password/:token" element={<ResetPassword />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
+      <Route path="/register-before-checkout" element={<RegisterBeforeCheckout />} />
       <Route path="cart" element={<CartPage />} />
       <Route path="checkout" element={<CheckoutPage />} />
 

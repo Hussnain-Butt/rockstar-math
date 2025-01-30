@@ -43,7 +43,7 @@ function SignupPage() {
         <div className="hidden w-1/2 bg-white xl:flex">
           <img src="/images/login.jpg" alt="Signup Illustration" className="w-full" />
         </div>
-        <div className="w-full lg:w-1/2 bg-white flex flex-col items-center mt-10 px-10 md:px-20 lg:px-48">
+        <div className="w-full lg:w-1/2 bg-white flex flex-col items-center mt-36 mb-36 px-10 md:px-20 lg:px-48">
           <img src="/images/logo.png" alt="Logo" className="w-[280px] h-auto" />
           <h1 className="text-5xl font-bold text-black mb-2">Sign Up</h1>
           <p className="text-gray-600 mb-6">Create an account to get started!</p>

@@ -93,9 +93,7 @@ const CartPage = () => {
               <p className="text-3xl font-bold text-gray-900">
                 ${Number(cartItems.reduce((total, item) => total + Number(item.price || 0), 0)).toFixed(2)} USD
               </p>
-              <p className="text-gray-400 text-sm line-through">
-                ${Number(cartItems.reduce((total, item) => total + Number(item.price || 0) * 1.2, 0)).toFixed(2)} USD
-              </p>
+          
 
               <button
                 onClick={handleProceedToCheckout}

@@ -9,40 +9,35 @@ function BlogPage() {
     const blogs = [
         {
             image: "/images/about1.png",
-            title: "Take a step-by-step approach",
-            description: "No more feeling lost in class. When you’re taught every step and how each one builds on the other, you’re never left scratching your head in confusion.",
-            content: "Detailed content for step-by-step approach."
+            title: "Make Math a Daily Habit",
+            description: "Incorporate 15 minutes of math practice into your child’s routine—just like brushing their teeth. Daily engagement reinforces existing skills and ensures consistency. Use flashcards for quick drills, play math-related games, or explore fun apps designed for math practice. Short, focused sessions work wonders in building long-term retention.",
+            // content: "Detailed content for step-by-step approach."
         },
         {
             image: "/images/about2.png",
-            title: "Empower students to realize their",
-            description: "Memorization only gets you so far. You’ll learn the why and the how behind calculus so you can problem solve on your own.",
-            content: "Detailed content for empowering students."
+            title: "Review Old Skills Regularly",
+            description: "It's common for children to forget concepts they learned months ago if they aren't revisited. Set aside time to review past lessons—whether it's multiplication, decimals, or word problems. Revisiting older material keeps these skills sharp and prevents gaps that can arise over time.",
+            // content: "Detailed content for empowering students."
         },
         {
             image: "/images/about3.png",
-            title: "Make the journey fun",
-            description: "Learning math doesn’t have to be scary or stressful. You’ll enjoy your classes when you’re able to piece.",
-            content: "Detailed content for making the journey fun."
+            title: "Leverage Real-Life Math Opportunities",
+            description: "Math is everywhere! Involve your children in activities like cooking (measuring ingredients), budgeting (managing an allowance), or grocery shopping (calculating discounts). These real-world applications make math engaging and help children understand its practical importance.",
+            // content: "Detailed content for making the journey fun."
         },
         {
             image: "/images/about1.png",
-            title: "Customized Learning Paths",
-            description: "Tailor the learning experience to fit each student's unique needs.",
-            content: "Detailed content for customized learning paths."
+            title: "Join STEM Enrichment Programs",
+            description: "Many schools and community centers offer math clubs, robotics teams, and STEM workshops. These programs make math exciting and give children opportunities to work collaboratively, apply concepts, and explore advanced topics in a supportive environment.",
+            // content: "Detailed content for customized learning paths."
         },
         {
             image: "/images/about2.png",
-            title: "Innovative Teaching Methods",
-            description: "Discover new methods that engage students and promote active learning.",
-            content: "Detailed content for innovative teaching methods."
+            title: "Celebrate Progress",
+            description: "Acknowledge and celebrate milestones—whether it’s mastering multiplication tables or solving their first algebra equation. Positive reinforcement boosts confidence and keeps children motivated to tackle new challenges. Parents don’t need to be math experts to support their children. You can be a math enthusiast! Talk about how much math changes the world and opens doors in life! ! The key is fostering curiosity, building routines, and creating an environment where math is seen as a challenge to embrace, not a subject to fear. A solid foundation today paves the way for limitless opportunities tomorrow.",
+            // content: "Detailed content for innovative teaching methods."
         },
-        {
-            image: "/images/about3.png",
-            title: "The Importance of Practice",
-            description: "Learn why consistent practice is key to mastering any subject.",
-            content: "Detailed content for the importance of practice."
-        },
+      
     ];
 
     const handleOpenModal = (blog) => {

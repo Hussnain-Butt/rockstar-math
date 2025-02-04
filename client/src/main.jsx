@@ -26,6 +26,13 @@ import { CartProvider } from "./context/CartContext";
 import CartPage from './pages/CartPage.jsx'
 import CheckoutPage from './pages/CheckoutPage.jsx'
 import RegisterBeforeCheckout from './pages/RegisterBeforeCheckout.jsx'
+import Dashboard from './pages/Dashboard.jsx';
+import DashboardLayout from './pages/DashboardLayout.jsx';
+import MyClasses from './pages/MyClasses.jsx';
+import Schedule from './pages/Schedule.jsx';
+import Message from './pages/Messages.jsx';
+import Newsletter from './pages/Newsletter.jsx';
+import SubscriptionPage from './pages/SubscriptionPage.jsx';
 
 createRoot(document.getElementById('root')).render(
 <AuthProvider>
@@ -48,11 +55,17 @@ createRoot(document.getElementById('root')).render(
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
       <Route path="/register-before-checkout" element={<RegisterBeforeCheckout />} />
+      <Route path="/subscription" element={<SubscriptionPage />} />
+
       <Route path="cart" element={<CartPage />} />
       <Route path="checkout" element={<CheckoutPage />} />
-
-
-
+      <Route path="/newsletter" element={<Newsletter />} />
+       {/* Dashboard Routes Wrapped in Layout */}
+       <Route path="/dashboard/*" element={<DashboardLayout />}>
+          <Route  index element={<Dashboard />} />
+          <Route path="courses" element={<MyClasses />} />
+          <Route path="schedule" element={<Schedule />} />
+        </Route>
     </Routes>
     <Footer />
   </BrowserRouter>

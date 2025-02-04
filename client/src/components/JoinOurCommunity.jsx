@@ -40,10 +40,10 @@ function JoinOurCommunity() {
         {/* Second Div with Text and Form */}
         <div className="col-span-12 lg:col-span-8 flex flex-col mt-5">
             <h2 className="text-2xl lg:text-4xl font-bold leading-tight text-gray-800 text-left">
-                Join Our Learning Community
+            Join a Tutoring Group
             </h2>
             <p className="mt-5 text-gray-600 text-left">
-                Stay ahead in your learning journey! Sign up to access exclusive courses, personalized recommendations, and special offers designed just for you.
+            Stay on top of math class by meeting with a high quality tutor on a weekly basis.  Do what the top students are doing and get support and stay on your path! 
             </p>
 
             {/* Subheading */}
@@ -53,9 +53,9 @@ function JoinOurCommunity() {
 
             {/* Bullet Points */}
             <ul className="list-disc list-inside mt-4 text-gray-600 space-y-2 text-start">
-                <li>Get notified about upcoming courses and webinars.</li>
-                <li>Unlock access to special discounts and premium content.</li>
-                <li>Receive personalized learning recommendations based on your interests.</li>
+                <li>Accountability. You have a team on your side</li>
+                <li>Confidence: Ask all the questions you need to</li>
+                <li>Support: Access to discounted private sessions</li>
             </ul>
 
             {/* Input Field and Button */}
@@ -74,7 +74,7 @@ function JoinOurCommunity() {
                         placeholder="Enter your email"
                     />
                     <button type="submit" className="bg-deepBlue border-deepBlue text-white px-6 py-2 rounded-full hover:bg-sky-600 transition-all duration-300 text-sm w-full sm:w-auto">
-                        Sign Up for Free
+                    Sign-Up today
                     </button>
                     </form>
                     {message && <p className="text-green-500 mt-4">{message}</p>} {/* Success message */}

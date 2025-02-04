@@ -87,8 +87,7 @@ exports.login = async (req, res) => {
       token,
       user: {
         email: user.email,
-        sessionsRemaining: user.sessionsRemaining,
-        sessionHistory: user.sessionHistory,
+      
       },
     });
   } catch (error) {

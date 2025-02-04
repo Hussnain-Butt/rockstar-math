@@ -80,6 +80,9 @@ export function Navbar() {
                 <NavLink to="/blogs" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                   Blogs
                 </NavLink>
+                <NavLink to="/checkout" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  Checkout
+                </NavLink>
               </div>
             )}
           </div>
@@ -93,12 +96,20 @@ export function Navbar() {
 
           {/* Auth Buttons */}
           {user ? (
+           <>
+           <NavLink to="/subscription" onClick={handleLinkClick} className="block  py-2 text-gray-700  hover:text-sky-600">
+                  Subscription
+                </NavLink>
+            <NavLink to="/dashboard" onClick={handleLinkClick} className="block  py-2 text-gray-700  hover:text-sky-600">
+                  Go To Dashboard
+                </NavLink>
             <button
               onClick={handleLogout}
               className="px-4 py-2 bg-deepBlue text-white rounded-lg hover:bg-sky-600 transition-all"
             >
               Logout
             </button>
+           </>
           ) : (
             <>
               <NavLink to="/login" onClick={handleLinkClick} className="flex items-center text-gray-700 hover:text-sky-600 transition-all">

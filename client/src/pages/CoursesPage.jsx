@@ -70,7 +70,7 @@ function CoursesPage() {
 
     return (
         <>
-          <div className="py-16 bg-gray-50">
+          <div className="py-32 bg-gray-50">
     {/* Hero Section */}
     <div className="text-center max-w-4xl mx-auto mb-12">
         <h1 className="text-2xl font-extrabold text-deepBlue leading-tight">

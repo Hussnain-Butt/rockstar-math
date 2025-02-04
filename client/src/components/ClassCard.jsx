@@ -1,0 +1,26 @@
+import React from "react";
+
+const ClassCard = ({ classData }) => {
+  return (
+    <div className="relative bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+      {/* Background Image */}
+      <img
+        src={classData.image}
+        alt={classData.title}
+        className="w-full h-52 object-cover"
+      />
+
+
+      {/* Title & Description */}
+      <div className="p-4">
+        <h4 className="text-lg font-semibold">{classData.title}</h4>
+        <p className="text-gray-500 text-sm mt-2">{classData.description}</p>
+        <a href="#" className="text-blue-500 mt-2 inline-flex items-center gap-1">
+          Read More <span>→</span>
+        </a>
+      </div>
+    </div>
+  );
+};
+
+export default ClassCard;

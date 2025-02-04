@@ -3,6 +3,8 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaCreditCard } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PaymentForm = ({ totalAmount }) => {
     const stripe = useStripe();
@@ -12,6 +14,16 @@ const PaymentForm = ({ totalAmount }) => {
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(null);
     
+    const handlePaymentSuccess = () => {
+        toast.success("Payment Successful! Redirecting to Dashboard...", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        setTimeout(() => {
+          navigate("/dashboard"); // ✅ Remove the trailing slash
+        }, 2000);
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setProcessing(true);
@@ -35,8 +47,7 @@ const PaymentForm = ({ totalAmount }) => {
                 setProcessing(false);
             } else {
                 if (result.paymentIntent.status === "succeeded") {
-                    alert("Payment Successful!");
-                    navigate("/");
+                    handlePaymentSuccess()
                 }
             }
         } catch (error) {

@@ -6,7 +6,7 @@ exports.submitForm = async (req, res) => {
 
     // Validation (Example)
     if (!fullName || !email || !message) {
-        return res.status(400).json({ message: 'All fields are required!' });
+        return res.status(400).json({ message: 'All fields are required!'});
     }
 
     try {

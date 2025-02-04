@@ -62,7 +62,7 @@ const Footer = () => {
         <div>
           <h3 className="text-xl font-bold text-gray-900 mb-4">Explore</h3>
           <ul className="space-y-2 text-sm">
-            {["Home", "Reviews", "Courses", "Calendar", "FAQs", "Blogs", "About", "Contact", "Log in"].map(
+            {["Home", "Reviews", "Courses", "Services", "Calendar", "FAQs", "Blogs", "About", "Contact", "Log in"].map(
               (link) => (
                 <li key={link}>
                   <a

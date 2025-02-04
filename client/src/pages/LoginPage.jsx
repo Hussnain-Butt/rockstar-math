@@ -29,16 +29,20 @@ function LoginPage() {
         email: formData.email,
         password: formData.password,
       });
-
+      console.log("Server Response:", response.data); // ✅ Check if token is present
       const { token, user } = response.data; // Get token and user data from response
-
-      // Store token in localStorage or sessionStorage based on Remember Me
-      if (formData.rememberMe) {
-        localStorage.setItem('token', token);
-      } else {
-        sessionStorage.setItem('token', token);
+      if (!token) {
+        console.error("JWT Token is missing in the response!");
+        return;
       }
-
+       // Store token in localStorage or sessionStorage
+       if (formData.rememberMe) {
+        localStorage.setItem("token", token);
+      } else {
+        sessionStorage.setItem("token", token);
+      }
+  
+      console.log("JWT Token Stored:", token);
       // Update the global authentication state with user data
       login(user);
 

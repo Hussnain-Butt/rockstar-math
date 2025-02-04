@@ -29,9 +29,10 @@ function SubscribeForm() {
 
     return (
         <div className="p-6 max-w-sm mx-auto ">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Subscribe</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Join Group tutoring
+        </h2>
         <p className="text-gray-600 mb-4">
-            Become a member today and get access to videos, study groups, and discounts!
+        Make your commitment to success today and get access to videos, study groups and discounts.
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input

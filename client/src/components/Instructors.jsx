@@ -28,7 +28,7 @@ function Instructors() {
     return (
         <div className="w-full py-12 px-4 md:px-10 lg:px-20 bg-gray-50">
             <div className="text-center mb-10">
-                <h1 className="text-4xl font-bold text-gray-900">Meet Your Instructors</h1>
+                <h1 className="text-4xl font-bold text-gray-900">Meet Your Instructor</h1>
                 <p className="text-gray-600 mt-2">
                     Learn from the best in their fields and gain valuable knowledge.
                 </p>

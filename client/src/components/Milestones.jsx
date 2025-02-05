@@ -1,7 +1,9 @@
 import React from "react";
+import AnimatedSection from "./AnimatedSection";
 
 function Milestones() {
     return (
+        <AnimatedSection direction="bottom">
         <div className="w-full py-14 px-6 lg:px-20 ">
             <div className="w-full max-w-7xl mx-auto">
                 {/* Header */}
@@ -73,6 +75,7 @@ function Milestones() {
                 </div>
             </div>
         </div>
+        </AnimatedSection>
     );
 }
 

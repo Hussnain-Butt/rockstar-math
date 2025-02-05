@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ClassCard from '../components/ClassCard'
 import { Link } from 'react-router-dom'
+import AnimatedSection from '../components/AnimatedSection'
 
 const MyClasses = () => {
   const [currentClasses, setCurrentClasses] = useState([])
@@ -50,6 +51,7 @@ const MyClasses = () => {
   }, [])
   return (
     <section>
+      <AnimatedSection direction='right'>
       <h3 className="text-xl font-semibold text-gray-800 mb-4">Here are your current classes:</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentClasses.map((cls) => (
@@ -59,6 +61,7 @@ const MyClasses = () => {
       <div className='flex justify-center items-center py-16'>
       <Link to={'/services'} className='bg-deepBlue py-3 px-8 text-white rounded-full hover:bg-sky-600'>Purchase More Courses</Link>
       </div>
+      </AnimatedSection>
     </section>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AnimatedSection from "./AnimatedSection";
 
 const Calendar = () => {
   // 🛠 Event Data
@@ -9,10 +10,19 @@ const Calendar = () => {
     Thursday: ["Private Tutoring - 5 PM"],
   };
 
+  // 🛠 Define Different Background Colors for Each Day
+  const bgColors = {
+    Monday: "bg-blue-500 hover:bg-blue-600 text-white",
+    Tuesday: "bg-red-500 hover:bg-red-600 text-white",
+    Wednesday: "bg-blue-500 hover:bg-blue-600 text-white",
+    Thursday: "bg-green-500 hover:bg-green-600 text-white",
+  };
+
   // 🛠 State for Tooltip Visibility
   const [hoveredDay, setHoveredDay] = useState(null);
 
   return (
+    <AnimatedSection direction="top">
     <div className="max-w-3xl mx-auto p-8 text-center rounded-lg py-28">
       <h2 className="text-3xl font-extrabold text-gray-800 mb-16">
         📅 Interactive Calendar
@@ -23,7 +33,7 @@ const Calendar = () => {
         {Object.keys(eventData).map((day) => (
           <div
             key={day}
-            className="relative bg-gradient-to-r from-gray-50 to-gray-100 text-gray-800 font-semibold px-6 py-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-200"
+            className={`relative px-6 py-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-200 font-semibold ${bgColors[day]}`}
             onMouseEnter={() => setHoveredDay(day)}
             onMouseLeave={() => setHoveredDay(null)}
           >
@@ -60,6 +70,7 @@ const Calendar = () => {
         </div>
       </div>
     </div>
+    </AnimatedSection>
   );
 };
 

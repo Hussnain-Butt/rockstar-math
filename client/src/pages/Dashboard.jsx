@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from '../components/Sidebar'
 import ClassCard from '../components/ClassCard.jsx'
 import Header from '../components/Header.jsx'
+import AnimatedSection from "../components/AnimatedSection.jsx";
 
 const Dashboard = () => {
   const user = { name: 'Jayla' }
@@ -40,9 +41,10 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-auto">
-      <div className="flex-grow p-6 bg-gray-100 ">
+      <div className="flex-grow  bg-gray-100 ">
+      <AnimatedSection direction="right">
       
-        <div className="py-10">
+        <div >
       <section>
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Here are your current classes:</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -61,6 +63,7 @@ const Dashboard = () => {
         </div>
       </section>
     </div>
+    </AnimatedSection>
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
 import React from 'react';
+import AnimatedSection from '../AnimatedSection';
 
 function ReviewsBanner() {
     return (
 <div
-  className="bg-cover bg-center py-40 relative"
+  className="bg-cover bg-center py-32 relative"
   style={{ backgroundImage: `url(/images/about2.png)` }}
 >
   {/* Overlay */}
@@ -11,6 +12,7 @@ function ReviewsBanner() {
 
   {/* Content */}
   <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <AnimatedSection direction='right'>
     <div className="flex flex-col items-center justify-center text-center">
       {/* Heading */}
       <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
@@ -24,6 +26,7 @@ function ReviewsBanner() {
         some common themes found in student feedback:
       </p>
     </div>
+    </AnimatedSection>
   </div>
 </div>
 

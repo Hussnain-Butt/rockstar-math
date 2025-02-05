@@ -1,5 +1,5 @@
 import React from 'react'
-
+import 'animate.css';
 const CalenderSection = () => {
   const schedule = [
     {
@@ -27,7 +27,7 @@ const CalenderSection = () => {
   ];
 
   return (
-    <div className="max-w-full px-20 py-16">
+    <div className="max-w-full px-20 py-16 animate__animated animate__bounceInLeft">
     <h2 className="text-3xl font-bold mb-6 text-center">Calendar</h2>
     <div className="overflow-x-auto">
       <table className="w-full border-collapse border rounded-lg">

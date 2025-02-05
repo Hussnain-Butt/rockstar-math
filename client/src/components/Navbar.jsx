@@ -4,7 +4,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { MdLockOutline } from "react-icons/md";
 import { FaChevronDown } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-
+import 'animate.css';
 export function Navbar() {
   const { users, logout, updateCounter } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -27,11 +27,11 @@ export function Navbar() {
   };
 
   return (
-    <header className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
-      <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3">
+    <header className="bg-white shadow-md fixed w-full top-0 left-0 z-50 ">
+      <nav className="mx-auto max-w-7xl flex items-center justify-between px-6 py-3 animate__animated animate__fadeInRight">
         {/* Logo */}
         <div className="flex items-center justify-between w-full lg:w-auto">
-          <NavLink to="/" className="flex items-center text-2xl font-bold text-deepBlue">
+          <NavLink to="/" className="animate__animated animate__backInLeft items-center text-2xl font-bold text-deepBlue">
             <img src="/images/logo.png" alt="Logo" className="h-10 w-auto mr-2" />
           </NavLink>
           <button

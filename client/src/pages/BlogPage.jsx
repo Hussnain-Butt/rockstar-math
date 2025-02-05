@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BlogBanner from '../components/banners/BlogBanner';
 import { FaQuoteLeft } from "react-icons/fa";
+import AnimatedSection from '../components/AnimatedSection';
 
 function BlogPage() {
     const [modalOpen, setModalOpen] = useState(false);
@@ -63,6 +64,7 @@ function BlogPage() {
             <div className="flex flex-col md:flex-row px-8 md:px-32 py-12 md:py-20 gap-12 md:gap-20 items-center bg-gray-50">
     {/* Left Text Section */}
     <div className="md:w-2/3 text-lg md:text-2xl text-gray-600 font-medium leading-relaxed">
+    <AnimatedSection direction='bottom'>
         <h2>
             A passion for making math <span className="text-deebg-deepBlue">understandable</span> and helping my students 
             reach their <span className="text-deebg-deepBlue">potential</span> is at the core of everything we do at RockstarMath.
@@ -70,8 +72,8 @@ function BlogPage() {
         <button className="mt-4 bg-blue-500 hover:bg-blue-600 text-white text-[16px] px-6 py-2 rounded-full shadow-md transition duration-300">
                     See More
                 </button>
+    </AnimatedSection>
     </div>
-
     {/* Right Image Section */}
     <div className="md:w-1/3">
         <div className="relative overflow-hidden rounded-lg shadow-lg">
@@ -92,6 +94,7 @@ function BlogPage() {
     {/* Overlay */}
     <div className="absolute inset-0 bg-black bg-opacity-60"></div>
 
+    <AnimatedSection direction='right'>
     {/* Content */}
     <div className="relative max-w-4xl mx-auto text-center text-gray-200">
         {/* Icon */}
@@ -109,9 +112,11 @@ function BlogPage() {
         Rockstar-Math
         </p>
     </div>
+    </AnimatedSection>
 </div>
 
 
+<AnimatedSection direction='top'>
 <div className="py-10 bg-gray-50">
     {/* Section Title */}
     <h2 className="text-gray-800 text-3xl font-bold text-center mb-10">
@@ -199,7 +204,7 @@ function BlogPage() {
         </div>
     )}
 </div>
-
+</AnimatedSection>
 
 
          

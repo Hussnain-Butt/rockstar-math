@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import AnimatedSection from '../AnimatedSection';
 
 function CalendarBanner() {
     return (
-        <div className="bg-blue-50 text-gray-800 font-sans py-16">
+        <div className="bg-blue-50 text-gray-800 font-sans py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <AnimatedSection direction='right'>
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
                 {/* Left Section: Text */}
                 <div className="lg:w-1/2 text-center lg:text-left">
@@ -31,6 +33,7 @@ function CalendarBanner() {
                     />
                 </div>
             </div>
+            </AnimatedSection>
         </div>
     </div>
     

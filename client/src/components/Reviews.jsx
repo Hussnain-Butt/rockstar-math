@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IoMdStar, IoMdPlay, IoMdClose } from 'react-icons/io';
+import AnimatedSection from './AnimatedSection';
 
 function Reviews() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -94,6 +95,7 @@ function Reviews() {
 </div>
 
     {/* Reviews Section */}
+    <AnimatedSection direction='bottom'>
     <div className="flex flex-wrap gap-8 justify-center px-5 xl:px-20">
   {reviews.map((review, index) => (
     <div
@@ -148,6 +150,7 @@ function Reviews() {
     </div>
   ))}
 </div>
+</AnimatedSection>
 <div className="flex flex-wrap gap-8 justify-start px-5 xl:px-20 bg-slate-200 py-20">
 
 {textOnlyReviews.map((review,index)=>(

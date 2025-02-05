@@ -8,6 +8,7 @@ import Calendar from '../components/Calendar'
 import StudentFeedback from '../components/StudentFeedback'
 import JoinOurCommunity from '../components/JoinOurCommunity'
 import Newsletter from './Newsletter'
+import 'animate.css';
 
 function HomePage() {
     const [showPopup, setShowPopup] = useState(false);

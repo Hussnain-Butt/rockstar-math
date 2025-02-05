@@ -2,6 +2,7 @@ import React from 'react'
 import AboutBanner from '../components/banners/AboutBanner'
 import { FaVideo, FaCommentDots, FaLaptop, FaEnvelope } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
+import AnimatedSection from '../components/AnimatedSection'
 
 function AboutPage() {
   const aboutItems = [
@@ -68,7 +69,7 @@ function AboutPage() {
           {/* Highlighted Line */}
         </div>
       </div>
-
+<AnimatedSection direction='left'>
       <div className="flex flex-col justify-center items-center py-10 bg-gray-50">
         {/* Section Title */}
         <h2 className="text-3xl font-bold text-black text-center relative inline-block">
@@ -99,6 +100,7 @@ function AboutPage() {
           ))}
         </div>
       </div>
+      </AnimatedSection>
 
       <div className="flex flex-col md:flex-row items-center justify-center py-12 bg-gray-50 md:px-12 px-4">
         <div className="w-full md:w-1/3 mb-6 md:mb-0 pr-0 md:pr-8">

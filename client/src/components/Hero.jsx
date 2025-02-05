@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
+import 'animate.css';
 
 function Hero() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -46,9 +47,9 @@ function Hero() {
       {/* ✅ Toast Container */}
       <Toaster position="top-right" />
 
-      <div className="flex flex-col lg:flex-row items-center md:px-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 w-full py-20 overflow-x-hidden relative">
+      <div className="flex flex-col lg:flex-row items-center md:px-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-500 w-full py-20 pt-32 overflow-x-hidden relative">
         {/* Text Section */}
-        <div className="flex flex-col text-center lg:text-left lg:w-1/2 space-y-6">
+        <div className="flex flex-col text-center lg:text-left lg:w-1/2 space-y-6 animate__animated animate__fadeInRight">
           <span className="font-bold text-yellow-300 text-lg tracking-wide uppercase">
             Start to Success
           </span>
@@ -83,7 +84,7 @@ function Hero() {
         {/* Image Section */}
         <div className="flex justify-center lg:justify-end mt-10 lg:mt-0 lg:w-1/2 relative">
           <div className="relative w-[300px] md:w-[400px] xl:w-[500px]">
-            <img src="/images/hero.png" alt="girl with book" className="w-full z-10" />
+            <img src="/images/hero.png" alt="girl with book" className="w-full z-10 animate__bounceIn" />
           </div>
         </div>
       </div>
@@ -91,7 +92,7 @@ function Hero() {
       {/* ✅ Consultation Popup Form */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 mt-14 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 animate__animated animate__fadeInRight">
             <h2 className="text-xl font-bold text-gray-800">Request a Free Consultation</h2>
             <p className="text-gray-600 text-sm mt-2">
               Enter your email and we’ll contact you soon.

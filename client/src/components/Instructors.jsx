@@ -1,4 +1,5 @@
 import React from "react";
+import AnimatedSection from "./AnimatedSection";
 
 function Instructors() {
     // Sample data for instructors
@@ -26,6 +27,8 @@ function Instructors() {
     ];
 
     return (
+        <>
+        <AnimatedSection direction="right">
         <div className="w-full py-12 px-4 md:px-10 lg:px-20 bg-gray-50">
             <div className="text-center mb-10">
                 <h1 className="text-4xl font-bold text-gray-900">Meet Your Instructor</h1>
@@ -58,7 +61,8 @@ function Instructors() {
                 ))}
             </div>
         </div>
-    );
+        </AnimatedSection>
+        </>);
 }
 
 export default Instructors;

@@ -1,4 +1,5 @@
 import React from 'react';
+import AnimatedSection from '../AnimatedSection';
 
 function AboutBanner() {
     return (
@@ -12,6 +13,7 @@ function AboutBanner() {
             <div className="absolute inset-0 bg-black bg-opacity-30"></div>
 
             {/* Content */}
+            <AnimatedSection direction='right'>
             <div className="relative max-w-4xl mx-auto text-center">
                 <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold mb-4">Learning from an expert...</h3>
                 <p className="text-lg sm:text-xl leading-relaxed">
@@ -19,6 +21,7 @@ function AboutBanner() {
 
                 </p>
             </div>
+            </AnimatedSection>
         </div>
     );
 }

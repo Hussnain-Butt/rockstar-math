@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { IoMdStar, IoMdClose, IoMdPlay } from "react-icons/io";
+import 'animate.css';
+import AnimatedSection from "./AnimatedSection";
 
 function PopTopic() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,13 +84,15 @@ function PopTopic() {
     };
 
     return (
-        <div className="w-full py-12 px-4 lg:px-16 bg-gray-50">
-            <div className="text-center mb-10">
+        <>
+        <AnimatedSection direction="bottom">
+        <div className="w-full py-12 px-4 lg:px-16 bg-gray-50  ">
+            <div className="text-center mb-10 animate__animated animate__fadeIn">
                 <h1 className="text-4xl font-bold text-gray-900">Most Popular <a className=" italic text-blue-600 underline capitalize" href="https://www.youtube.com/@RockstarMathTutoring/videos">videos</a></h1>
                 <p className="text-gray-600 mt-2">Explore our top-rated <a className=" italic text-blue-600 underline" href="https://www.youtube.com/@RockstarMathTutoring/videos">videos</a> to start your learning journey.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate__animated animate__fadeInUp">
                 {topics.map((topic, index) => (
                     <div
                         key={index}
@@ -144,7 +148,10 @@ function PopTopic() {
                     <IoMdClose className="text-xl" />
                 </button>
             )}
+
         </div>
+        </AnimatedSection>
+</>
     );
 }
 

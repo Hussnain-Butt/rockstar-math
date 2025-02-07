@@ -80,9 +80,10 @@ export function Navbar() {
                 <NavLink to="/blogs" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                   Blogs
                 </NavLink>
-                <NavLink to="/checkout" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                  Checkout
+                <NavLink to="/contact" onClick={handleLinkClick} className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  Contact
                 </NavLink>
+              
               </div>
             )}
           </div>

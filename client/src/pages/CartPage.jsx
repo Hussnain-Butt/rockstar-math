@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useCart } from "../context/CartContext";
 import { FaTrashAlt, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+
+// Lazy Load Components
+const CartSummary = lazy(() => import("../components/CartSummary"));
 
 const CartPage = () => {
   const { cart, removeFromCart } = useCart();
@@ -87,21 +90,10 @@ const CartPage = () => {
               ))}
             </div>
 
-            {/* Checkout Summary Sidebar */}
-            <div className="bg-white p-6 rounded-xl shadow-md border border-gray-300 max-h-60">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Subtotal:</h2>
-              <p className="text-3xl font-bold text-gray-900">
-                ${Number(cartItems.reduce((total, item) => total + Number(item.price || 0), 0)).toFixed(2)} USD
-              </p>
-          
-
-              <button
-                onClick={handleProceedToCheckout}
-                className="w-full px-6 py-3 mt-4 text-lg font-semibold text-white bg-deepBlue hover:bg-sky-600 transition-all duration-300 rounded-lg shadow-lg"
-              >
-                Checkout Now
-              </button>
-            </div>
+            {/* Checkout Summary Sidebar - Lazy Loaded */}
+            <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Summary...</div>}>
+              <CartSummary cartItems={cartItems} handleProceedToCheckout={handleProceedToCheckout} />
+            </Suspense>
           </div>
         </>
       )}

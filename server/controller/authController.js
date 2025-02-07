@@ -2,6 +2,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/emailSender');
 const crypto = require('crypto');
+const { use } = require('../routes/authRoutes');
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -10,7 +11,7 @@ const generateToken = (id) => {
 // @desc    Register a new user
 // @route   POST /api/auth/signup
 exports.signup = async (req, res) => {
-  const { email, phoneNumber, password, confirmPassword } = req.body;
+  const {fullName, email, phoneNumber, password, confirmPassword, } = req.body;
 
   if (password !== confirmPassword) {
     return res.status(400).json({ message: 'Passwords do not match' });
@@ -22,7 +23,7 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const newUser = new User({ email, phoneNumber, password });
+    const newUser = new User({ email, phoneNumber, password,fullName });
     await newUser.save();
 
      // Send confirmation email
@@ -86,7 +87,9 @@ exports.login = async (req, res) => {
       message: 'Login successful',
       token,
       user: {
+        _id: user._id, 
         email: user.email,
+        fullName:user.fullName,
       
       },
     });
@@ -95,26 +98,41 @@ exports.login = async (req, res) => {
   }
 };
 
-// @desc    Get user session details
-// @route   GET /api/auth/sessions
-exports.getSessionDetails = async (req, res) => {
-  const { id } = req.user;
-
+// ✅ Save Purchased Class for User
+exports.addPurchasedClass = async (req, res) => {
   try {
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    const { userId, classData } = req.body;
+    
+    if (!userId || !classData) {
+      return res.status(400).json({ message: "User ID and class data are required" });
     }
 
-    res.status(200).json({
-      sessionsRemaining: user.sessionsRemaining,
-      sessionHistory: user.sessionHistory,
-    });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.purchasedClasses.push(classData);
+    await user.save();
+
+    res.status(200).json({ message: "Class added to user account", purchasedClasses: user.purchasedClasses });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: "Error adding class", error: error.message });
   }
 };
 
+// ✅ Get User Purchased Classes
+exports.getPurchasedClasses = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ purchasedClasses: user.purchasedClasses || [] });
+  } catch (error) {
+    console.error("Error fetching purchased classes:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
 

@@ -9,6 +9,7 @@ function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const [formData, setFormData] = useState({
+    fullName:'',
     email: '',
     phoneNumber: '',
     password: '',
@@ -49,6 +50,20 @@ function SignupPage() {
           <p className="text-gray-600 mb-6">Create an account to get started!</p>
 
           <form className="w-full" onSubmit={handleSubmit}>
+            <div className="mb-4 w-full">
+              <label className="block text-sm font-bold text-black mb-2" htmlFor="email">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Your Full Name"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border border-gray-300 bg-gray2 rounded-lg outline-none"
+              />
+            </div>
             <div className="mb-4 w-full">
               <label className="block text-sm font-bold text-black mb-2" htmlFor="email">
                 Email

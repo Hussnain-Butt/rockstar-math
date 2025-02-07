@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCreditCard } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import PaymentForm from "../components/PaymentForm";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Initialize Stripe
-const stripePromise = loadStripe("pk_test_51QKwhUE4sPC5ms3xgJZhmKyxW9B8Jg9NQHlCoxMzIjWqyIvRNmW8o3tNS4Hrg3guNIEe4hrn5i9dKpvZmXpeVkyp000FmIT2yn");
+// Lazy Load Components
+const PaymentForm = lazy(() => import("../components/PaymentForm"));
+
+// ✅ Load Stripe Public Key
+const stripePromise = loadStripe("pk_live_51QKwhUE4sPC5ms3x7cYIFoYqx3lULz1hFA9EoRobabZVPwdDm8KbDNlHOZMizb2YftdwRSyxRfyi93ovv5Rev7i300CpaQEtU2");
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [paymentIntentId, setPaymentIntentId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,19 +31,69 @@ const CheckoutPage = () => {
   const subtotal = cartItems.reduce((total, item) => total + Number(item.price || 0), 0);
   const total = subtotal;
 
-  // ✅ Handle Successful Payment with Toast Notification
-  const handlePaymentSuccess = () => {
-   alert("Payment Successfull")
-    setTimeout(() => {
-      navigate("/dashboard"); // ✅ Remove the trailing slash
-    }, 2000);
+  // ✅ Prevent $0.00 Payments
+  const handleZeroAmount = () => {
+    toast.error("Cannot process a payment of $0.00!");
+  };
+
+  // ✅ Create Stripe Payment Intent
+  const createPaymentIntent = async () => {
+    if (total <= 0) {
+      handleZeroAmount();
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/stripe/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: total }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create payment intent");
+      }
+
+      const { clientSecret, id } = await response.json();
+      setPaymentIntentId(id);
+      return clientSecret;
+    } catch (error) {
+      toast.error(`Payment Error: ${error.message}`);
+      return null;
+    }
+  };
+
+  // ✅ Handle Payment Success (Stripe & PayPal)
+  const handlePaymentSuccess = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user || !user.id) {
+        toast.error("User not logged in!");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/api/users/purchase", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, classData: cartItems }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save purchased class");
+
+      toast.success("Payment Successful! Class added to dashboard.");
+      setTimeout(() => navigate("/dashboard"), 2000);
+    } catch (error) {
+      console.error("Error saving purchased class:", error);
+      toast.error("Error saving purchased class.");
+    }
   };
 
   return (
-    <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-32 mt-24 z-10">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32">
       <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        {/* Review Order */}
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Review Your Order</h2>
           <div className="border-b border-gray-300 mb-4"></div>
@@ -56,6 +109,7 @@ const CheckoutPage = () => {
           ))}
         </div>
 
+        {/* Order Summary */}
         <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">Order Summary</h2>
           <div className="border-b border-gray-300 my-4"></div>
@@ -73,21 +127,31 @@ const CheckoutPage = () => {
 
           {!showPaymentForm && (
             <>
-              <button 
-                onClick={() => setShowPaymentForm(true)}
+              {/* Stripe Payment Button */}
+              <button
+                onClick={() => {
+                  if (total > 0) {
+                    setShowPaymentForm(true);
+                    createPaymentIntent();
+                  } else {
+                    handleZeroAmount();
+                  }
+                }}
                 className="w-full px-6 py-3 mt-5 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-md flex items-center justify-center gap-2"
               >
-                <FaCreditCard /> Pay with Card
+                <FaCreditCard /> Pay ${total.toFixed(2)} USD
               </button>
 
-              <div className="mt-6 z-10">
+              {/* PayPal Payment Integration */}
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">Or Pay with PayPal</h2>
                 <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
                   <div className="relative z-20">
                     <PayPalButtons
                       style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
                       createOrder={(data, actions) => {
                         return actions.order.create({
-                          purchase_units: [{ amount: { value: total.toFixed(2) } }]
+                          purchase_units: [{ amount: { value: total.toFixed(2) } }],
                         });
                       }}
                       onApprove={(data, actions) => {
@@ -98,25 +162,19 @@ const CheckoutPage = () => {
                     />
                   </div>
                 </PayPalScriptProvider>
-                <div className="flex justify-center gap-3 mt-4"> 
-                  <img src="/images/mastercard.png" alt="Mastercard" className="h-8 w-auto" /> 
-                  <img src="/images/visa.png" alt="Visa" className="h-8 w-auto" /> 
-                  <img src="/images/discover.png" alt="Discover" className="h-8 w-auto" /> 
-                  <img src="/images/amex.png" alt="American Express" className="h-8 w-auto" /> 
-                  <img src="/images/unionpay.png" alt="China UnionPay" className="h-8 w-auto" /> 
-                  <img src="/images/eftpos.png" alt="Eftpos Australia" className="h-8 w-auto" /> 
-                </div>
               </div>
             </>
           )}
 
           {showPaymentForm && (
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Enter Card Details</h2>
-              <Elements stripe={stripePromise}>
-                <PaymentForm totalAmount={total} onSuccess={handlePaymentSuccess} />
-              </Elements>
-            </div>
+            <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Payment Form...</div>}>
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">Enter Card Details</h2>
+                <Elements stripe={stripePromise}>
+                  <PaymentForm totalAmount={total} paymentIntentId={paymentIntentId} onSuccess={handlePaymentSuccess} />
+                </Elements>
+              </div>
+            </Suspense>
           )}
         </div>
       </div>

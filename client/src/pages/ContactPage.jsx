@@ -1,14 +1,24 @@
-import React from 'react';
-import ContactBanner from '../components/banners/ContactBanner';
-import ContactForm from '../components/ContactForm';
+import React, { Suspense, lazy } from "react";
 
-function CalendarPage() {
-    return (
-        <div>
-            <ContactBanner />
-            <ContactForm />
-        </div>
-    );
+// Lazy Load Components
+const ContactBanner = lazy(() => import("../components/banners/ContactBanner"));
+const ContactForm = lazy(() => import("../components/ContactForm"));
+
+function ContactPage() {
+  return (
+    <div>
+      <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Banner...</div>}>
+<br />
+<br />
+
+        <ContactBanner />
+      </Suspense>
+
+      <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Contact Form...</div>}>
+        <ContactForm />
+      </Suspense>
+    </div>
+  );
 }
 
-export default CalendarPage;
+export default ContactPage;

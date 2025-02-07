@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoMdStar, IoMdClose, IoMdPlay } from "react-icons/io";
 import 'animate.css';
 import AnimatedSection from "./AnimatedSection";
+import { Link } from "react-router-dom";
 
 function PopTopic() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,9 +123,9 @@ function PopTopic() {
 
                         <p className="text-sm text-gray-600 mb-4">{topic.description}</p>
 
-                        <button className="py-2 px-4 bg-deepBlue text-white rounded-lg font-semibold transition hover:bg-sky-600">
+                        <Link to="/courses" className="text-center py-2 px-4 bg-deepBlue text-white rounded-lg font-semibold transition hover:bg-sky-600">
                             Start Learning
-                        </button>
+                        </Link>
                     </div>
                 ))}
             </div>

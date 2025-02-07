@@ -1,76 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useCart } from "../context/CartContext"; // ✅ Import Cart Context
+import toast, { Toaster } from "react-hot-toast";
 
 const SubscriptionPage = () => {
-  const plans = [
-    {
-      name: "Learn",
-      price: "$500",
-      features: [
-        "Standard Dummy Text: There are many variations of Lorem Ipsum available",
-        "Randomised Words: Which don't look even slightly unbelievable",
-        "Free Event Passes",
-      ],
-    },
-    {
-      name: "Achieve",
-      price: "$800",
-      features: [
-        "All benefits of Personal: There are many variations of Lorem Ipsum",
-        "Various Versions: All the Lorem Ipsum generators on the Internet",
-        "Unlimited Storage",
-      ],
-    },
-    {
-      name: "Excel",
-      price: "$1000",
-      features: [
-        "All benefits of Team: There are many variations of Lorem Ipsum",
-        "Sentence Structures: Making this the first true generator on the Internet",
-        "Lifetime Access to all the content",
-      ],
-    },
-  ];
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart(); // ✅ Access addToCart function
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/stripe/get-plans");
+        const data = await response.json();
+
+        console.log("Fetched Plans:", data); // ✅ Debugging
+
+        if (Array.isArray(data)) {
+          setPlans(data);
+        }
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  // ✅ Function to Handle Subscription Click
+  const handleSubscribe = (plan) => {
+    addToCart(plan); // ✅ Add to Cart
+    toast.success(`${plan.name} added to cart!`); // ✅ Show Notification
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-16 ">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-16">
       <div className="text-center py-24 bg-deepBlue w-full text-white">
-        <h2 className="text-3xl font-bold text-white">Flexible Plans & Pricing</h2>
+        <h2 className="text-3xl font-bold text-white">Your Path to Math Mastery Starts Here
+        </h2>
         <p className="text-white max-w-2xl mx-auto mt-2">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry and has been the standard ever since.
+        RockstarMath offers three tailored subscription plans designed to help students succeed at every level. Whether you’re strengthening your foundation or preparing for advanced exams, we have the perfect plan for you.
         </p>
       </div>
-
+<Toaster position="top-right" reverseOrder={false} />
       {/* ✅ Pricing Cards Section */}
-      <div className="grid md:grid-cols-3 gap-8 mt-10 max-w-5xl mx-auto">
-        {plans.map((plan, index) => (
-          <div
-            key={index}
-            className="bg-white p-6 rounded-lg shadow-md border border-gray-200 text-center"
-          >
-            {/* ✅ Plan Header */}
-            <div className="flex flex-col items-center mb-4">
-              <img src="/images/education-cap.svg" alt="image" className="w-20 h-20" />
-              <h3 className="text-xl font-semibold mt-2 text-gray-700">{plan.name}</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 max-w-6xl mx-auto px-4 md:px-0">
+        {loading ? (
+          <p className="text-center text-gray-700 text-lg">Loading plans...</p>
+        ) : plans.length > 0 ? (
+          plans.map((plan, index) => (
+            <div 
+              key={index} 
+              className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 text-center flex flex-col justify-between"
+            >
+              {/* ✅ Plan Header */}
+              <div className="flex flex-col items-center mb-4">
+                <img 
+                  src={plan.images || "/default-image.png"} 
+                  alt={plan.name} 
+                  className="w-24 h-24 object-contain mb-3"
+                />
+                <h3 className="text-2xl font-semibold text-gray-800">{plan.name}</h3>
+              </div>
+
+              {/* ✅ Price */}
+              <p className="text-3xl font-bold text-gray-900 my-3">
+                ${plan.price !== "N/A" ? plan.price : "Not Available"}{" "}
+                <span className="text-sm text-gray-500">/ {plan.currency}</span>
+              </p>
+
+              {/* ✅ Description */}
+              <p className="text-sm text-gray-600 my-4">{plan.description}</p>
+
+              {/* ✅ Subscribe Button (Add to Cart) */}
+              <button 
+                className="mt-auto bg-blue-600 text-white w-full py-3 rounded-lg font-medium hover:bg-blue-700 transition-all"
+                onClick={() => handleSubscribe(plan)} // ✅ Add to Cart & Show Toast
+              >
+                Subscribe
+              </button>
             </div>
-
-            {/* ✅ Price */}
-            <p className="text-3xl font-bold text-gray-900">{plan.price} <span className="text-sm text-gray-500">/ month</span></p>
-
-            {/* ✅ Features List */}
-            <ul className="my-9 text-sm text-gray-600 space-y-4 text-left">
-              {plan.features.map((feature, i) => (
-                <li key={i} >
-                  ✅ {feature}
-                </li>
-              ))}
-            </ul>
-
-            {/* ✅ Subscribe Button */}
-            <button className="mt-6 bg-blue-600 text-white w-full py-3 rounded-lg font-medium hover:bg-blue-700 transition-all">
-              Subscribe
-            </button>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-center text-gray-700 text-lg">No plans available.</p>
+        )}
       </div>
     </div>
   );

@@ -5,8 +5,8 @@ const client = new twilio('AC75e9fbdaa03266d90065fb6b191c0fca', 'b99d34a9a862020
 
 client.messages.create({
     body: 'Test Message',
-    from: '+15104104963',
-    to: '+1(682)375-8818'
+    from: '+19499796284',
+    to: '+18474970649'
 })
 .then(message => console.log("Message SID:", message.sid))
 .catch(error => console.error("Twilio Error:", error));

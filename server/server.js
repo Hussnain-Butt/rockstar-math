@@ -7,13 +7,15 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const registerRoutes = require("./routes/registerRoutes");
 // const otpRoutes = require("./routes/otpRoutes");
-const purchaseRoutes = require("./routes/purchaseRoutes");
 const subscribeRoute = require("./routes/subscribeRoute");
 const contactRoutes = require('./routes/contactRoutes');
 const stripeRoutes = require("./routes/stripe"); // Import the Stripe route
 const twilio = require("twilio");
 const consultationRoutes = require("./routes/consultationRoutes");
+const waitlist = require("./routes/waitlist");
 
+const userRoutes = require("./routes/userRoutes")
+const paymentRoutes = require("./routes/paymentRoutes"); // ✅ Import Payment Routes
 connectDB();
 
 const app = express();
@@ -21,6 +23,8 @@ app.use(cors({
     origin: 'http://localhost:5173', // Replace with your frontend's URL
     credentials: true,
 }));
+
+
 app.use(bodyParser.json());
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 console.log("Twilio SID:", process.env.TWILIO_ACCOUNT_SID);
@@ -54,14 +58,16 @@ app.post("/api/send-otp", async (req, res) => {
   });
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use("/api/payment", paymentRoutes); // ✅ Use Payment Routes
 app.use("/api", subscribeRoute);
 app.use('/api/contact', contactRoutes);
 app.use("/api/stripe", stripeRoutes); // Set up route
 app.use("/api", registerRoutes);
 // app.use("/api/otp", otpRoutes);
 app.use("/api/consultation", consultationRoutes);
-app.use("/api/purchases", purchaseRoutes); // Ensure correct path
+app.use("/api", waitlist);
+
+app.use('/api/users', userRoutes); // ✅ Now users API will work properly
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

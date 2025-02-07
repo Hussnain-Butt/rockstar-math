@@ -11,8 +11,8 @@ function Reviews() {
             date: "March 10, 2024",
             stars: 5,
             profilePic: "/images/feedback_images/1.jpg",
-            name: "John Doe",
-            details: "As a student, my experience has been incredibly positive overall. The curriculum is well-structured and covers a wide range of mathematical topics, from basic algebra to advanced calculus. The instructors are knowledgeable and approachable, which makes it easy to ask questions and seek help whenever needed.",
+            name: "Parent",
+            details: "Amy worked with all 3 of my very different kids, and I would actually hear them laughing during math tutoring! Each of them was ahead of their class and comfortable with their math courses",
             videoUrl: "/videos/video.mp4",
             position: "Math student",
             thumbnailUrl: "/images/teacher1.png"
@@ -21,8 +21,8 @@ function Reviews() {
             date: "March 15, 2024",
             stars: 4,
             profilePic: "/images/feedback_images/2.jpg",
-            name: "Jane Smith",
-            details: "As a student, my experience has been incredibly positive overall. The curriculum is well-structured and covers a wide range of mathematical topics, from basic algebra to advanced calculus. The instructors are knowledgeable and approachable, which makes it easy to ask questions and seek help whenever needed.",
+            name: "High School Student",
+            details: "You are literally the best tutor ever.  I wouldn't have graduated without you",
             videoUrl: "/videos/video.mp4",
             position: "Math student",
             thumbnailUrl: "/images/teacher2.png"
@@ -34,34 +34,27 @@ function Reviews() {
             date: "March 18, 2024",
             stars: 5,
             profilePic: "/images/feedback_images/3.jpg",
-            name: "Alice Brown",
-            details: "I found the teaching methods highly effective. The step-by-step approach to solving problems helped me gain confidence in mathematics. The support team is also very responsive.",
+            name: "High School Physics Teacher ",
+            details: "Tiana went from eyes glossed over to sitting in the front of the class and raising her hand with confidence since working with you.  Thank you",
             position: "Physics student"
         },
         {
             date: "March 20, 2024",
             stars: 4,
             profilePic: "/images/feedback_images/4.jpg",
-            name: "Bob White",
-            details: "Great learning platform with a comprehensive curriculum. It helped me understand concepts that I struggled with before.",
+            name: "College Student",
+            details: "You are the most approachable teacher I have ever had, I felt so comfortable asking questions in your class.",
             position: "Chemistry student"
         },
         {
             date: "March 20, 2024",
             stars: 4,
             profilePic: "/images/feedback_images/4.jpg",
-            name: "Bob White",
-            details: "Great learning platform with a comprehensive curriculum. It helped me understand concepts that I struggled with before.",
+            name: "Returning Adult, College Student",
+            details: "I would not have passed this class without you.  Thank you.",
             position: "Chemistry student"
         },
-        {
-            date: "March 20, 2024",
-            stars: 4,
-            profilePic: "/images/feedback_images/4.jpg",
-            name: "Bob White",
-            details: "Great learning platform with a comprehensive curriculum. It helped me understand concepts that I struggled with before.",
-            position: "Chemistry student"
-        }
+      
     ];
 
     const openModal = (videoUrl) => {

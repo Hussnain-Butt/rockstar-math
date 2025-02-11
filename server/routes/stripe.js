@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();  // Ensure environment variables are loaded
-
+const { updatePaymentStatus } = require("../controller/paymentController");
 // ✅ Use Stripe Secret Key from environment variable
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -210,45 +210,28 @@ router.post("/webhook", express.raw({ type: "application/json" }), async (req, r
     let event;
 
     try {
-        // ✅ Verify Webhook Signature
         event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
         console.error("❌ Webhook Signature Verification Failed:", err.message);
-        return res.status(400).json({ success: false, error: `Webhook Signature Error: ${err.message}` });
+        return res.status(400).json({ error: `Webhook Signature Error: ${err.message}` });
     }
 
-    // ✅ Extract Event Data
     const eventType = event.type;
     const eventData = event.data.object;
 
-    // ✅ Handle Different Event Types
     switch (eventType) {
         case "payment_intent.succeeded":
-            console.log(`✅ Payment Success: ID=${eventData.id}, Amount=$${eventData.amount / 100}`);
-
-            // ✅ Update Database (Example)
+            console.log(`✅ Payment Success: ${eventData.id} - $${eventData.amount / 100}`);
             await updatePaymentStatus(eventData.id, "succeeded");
-
             break;
 
         case "payment_intent.payment_failed":
-            console.error(`❌ Payment Failed: ID=${eventData.id}, Reason=${eventData.last_payment_error?.message || "Unknown Error"}`);
-
-            // ✅ Update Database with Failed Payment (Example)
+            console.error(`❌ Payment Failed: ${eventData.id} - Reason: ${eventData.last_payment_error?.message || "Unknown"}`);
             await updatePaymentStatus(eventData.id, "failed");
-
-            break;
-
-        case "checkout.session.completed":
-            console.log(`✅ Checkout Completed: Session ID=${eventData.id}, Customer=${eventData.customer}`);
-
-            // ✅ Handle Checkout Completion (Example: Activate Subscription)
-            await handleCheckoutCompletion(eventData.id, eventData.customer);
-
             break;
 
         default:
-            console.log(`ℹ️ Unhandled Event Type: ${eventType}`);
+            console.log(`ℹ️ Unhandled Event: ${eventType}`);
     }
 
     res.json({ success: true, received: true });

@@ -94,13 +94,13 @@ export function Navbar() {
           <NavLink to="/cart" onClick={handleLinkClick} className="text-gray-700 hover:text-sky-600 transition-all">
             Cart
           </NavLink>
+           <NavLink to="/subscription" onClick={handleLinkClick} className="block  py-2 text-gray-700  hover:text-sky-600">
+                  Subscription
+                </NavLink>
 
           {/* Auth Buttons */}
           {user ? (
            <>
-           <NavLink to="/subscription" onClick={handleLinkClick} className="block  py-2 text-gray-700  hover:text-sky-600">
-                  Subscription
-                </NavLink>
             <NavLink to="/dashboard" onClick={handleLinkClick} className="block  py-2 text-gray-700  hover:text-sky-600">
                   Go To Dashboard
                 </NavLink>

@@ -1,5 +1,7 @@
 import React from "react";
-import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaTwitter } from "react-icons/fa6";
+
 import SubscribeForm from "./SubscribeForm";
 
 const Footer = () => {
@@ -17,12 +19,12 @@ const Footer = () => {
   ];
 
   const categories = [
-    { name: "Trigonometry", url: "/courses/trigonometry" },
-    { name: "Pre-Calculus", url: "/courses/pre-calculus" },
-    { name: "Math Analysis", url: "/courses/math-analysis" },
-    { name: "Calculus 1", url: "/courses/calculus-1" },
-    { name: "Calculus 2", url: "/courses/calculus-2" },
-    { name: "Business Calculus", url: "/courses/business-calculus" },
+    { name: "Trigonometry", url: "/courses" },
+    { name: "Pre-Calculus", url: "/courses" },
+    { name: "Math Analysis", url: "/courses" },
+    { name: "Calculus 1", url: "/courses" },
+    { name: "Calculus 2", url: "/courses" },
+    { name: "Business Calculus", url: "/courses" },
   ];
 
   return (
@@ -49,14 +51,17 @@ const Footer = () => {
             </p>
           </div>
           <div className="flex mt-6 gap-4">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
+            <a href="https://facebook.com/rockstartutoring" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
               <FaFacebook />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
+            <a href="https://www.instagram.com/rockstarmath/rockstartutoring" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
               <FaInstagram />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
-              <FaLinkedin />
+            <a href="https://x.com/rock_star_math" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
+            <FaTwitter />
+            </a>
+            <a href="https://www.youtube.com/watch?v=aYH6CCTiqVY" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-sky-600 transition text-xl">
+            <FaYoutube />
             </a>
           </div>
         </div>

@@ -11,7 +11,7 @@ function Reviews() {
             date: "March 10, 2024",
             stars: 5,
             profilePic: "/images/feedback_images/1.jpg",
-            name: "Parent",
+            name: "Student",
             details: "Amy worked with all 3 of my very different kids, and I would actually hear them laughing during math tutoring! Each of them was ahead of their class and comfortable with their math courses",
             videoUrl: "/videos/video.mp4",
             position: "Math student",
@@ -49,7 +49,7 @@ function Reviews() {
         {
             date: "March 20, 2024",
             stars: 4,
-            profilePic: "/images/feedback_images/4.jpg",
+            profilePic: "/images/feedback_images/5.jpg",
             name: "Returning Adult, College Student",
             details: "I would not have passed this class without you.  Thank you.",
             position: "Chemistry student"

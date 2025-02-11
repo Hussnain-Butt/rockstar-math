@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const RegisterSchema = new mongoose.Schema(
   {
     userType: { type: String, required: true },
+    studentAge: { type: Number }, // ✅ Added Student Age field
     adultName: { type: String, required: true },
     numStudents: { type: Number, required: true },
     studentNames: { type: String, required: true },

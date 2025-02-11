@@ -1,6 +1,6 @@
 const paypal = require('@paypal/checkout-server-sdk');
 const client = require('../config/paymentConfig');
-const Order = require('../models/Order'); // Optional, if saving orders
+
 
 // Create PayPal Order
 exports.createOrder = async (req, res) => {

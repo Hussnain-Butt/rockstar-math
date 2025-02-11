@@ -66,6 +66,7 @@ app.use("/api", registerRoutes);
 // app.use("/api/otp", otpRoutes);
 app.use("/api/consultation", consultationRoutes);
 app.use("/api", waitlist);
+app.use("/api/paypal", require("./routes/paypal")); // PayPal API
 
 app.use('/api/users', userRoutes); // ✅ Now users API will work properly
 const PORT = process.env.PORT || 5000;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import { FaInfoCircle, FaClock, FaCalendarAlt, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -34,6 +34,19 @@ const Services = () => {
     toast.success(`${service.name} added to cart!`);
   };
 
+  // ✅ Grouping Services into 3 categories
+  const categorizedServices = {
+    "Dummy Title 1": services.filter(service =>
+      /(\b8 x 30 minutes\b|\b5 x 30 minutes\b|\b3 x 30 minutes\b)/i.test(service.name)
+    ),
+    "Dummy Title 2": services.filter(service =>
+      /(\b8 x 60 minutes\b|\b5 x 60 minutes\b|\b3 x 60 minutes\b)/i.test(service.name)
+    ),
+    "Dummy Title 3": services.filter(service =>
+      /(\b8 x 90 minutes\b|\b5 x 90 minutes\b|\b3 x 90 minutes\b)/i.test(service.name)
+    ),
+  };
+
   return (
     <>
       {/* ✅ Hero Section */}
@@ -46,18 +59,26 @@ const Services = () => {
       <div className="container mx-auto p-6 py-20">
         <Toaster position="top-right" reverseOrder={false} />
 
-        {/* ✅ Lazy Load Services Cards */}
+        {/* ✅ Display Services by Category */}
         <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Services...</div>}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service) => (
-              <ServiceCard
-                key={service.id}
-                service={service}
-                users={users}
-                handleAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
+          {Object.entries(categorizedServices).map(([category, items]) => (
+            items.length > 0 && (
+              <div key={category} className="mb-12">
+                <h2 className="text-xl font-bold text-gray-800 mb-6">{category}</h2>
+                {/* ✅ 3 Cards Per Row */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {items.map((service) => (
+                    <ServiceCard
+                      key={service.id}
+                      service={service}
+                      users={users}
+                      handleAddToCart={handleAddToCart}
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+          ))}
         </Suspense>
       </div>
     </>

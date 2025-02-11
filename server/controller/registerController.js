@@ -6,6 +6,7 @@ const registerUser = async (req, res) => {
     // ✅ Extract data from request body
     const {
       userType,
+      studentAge,
       adultName,
       numStudents,
       studentNames,
@@ -25,6 +26,7 @@ const registerUser = async (req, res) => {
     // ✅ Basic validation (Ensure required fields are not empty)
     if (
       !userType ||
+      (userType === "Student" && studentAge === undefined) || // Ensure studentAge is present if user is Student
       !adultName ||
       !numStudents ||
       !studentNames ||
@@ -39,10 +41,10 @@ const registerUser = async (req, res) => {
     }
 
     // ✅ Additional validation based on user type
-    if (userType === "Student" && (!parentEmail || !parentPhone)) {
+    if (userType === "Student" && studentAge < 18 && (!parentEmail || !parentPhone)) {
       return res.status(400).json({
         success: false,
-        error: "Students must provide Parent's Email and Phone Number!",
+        error: "Students under 18 must provide Parent's Email and Phone Number!",
       });
     }
 
@@ -56,6 +58,7 @@ const registerUser = async (req, res) => {
     // ✅ Create a new user entry
     const newUser = new Register({
       userType,
+      studentAge,
       adultName,
       numStudents,
       studentNames,

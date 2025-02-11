@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useCart } from "../context/CartContext";
 import { FaTrashAlt, FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 // Lazy Load Components
 const CartSummary = lazy(() => import("../components/CartSummary"));
@@ -16,12 +17,43 @@ const CartPage = () => {
     setCartItems(cart); // Sync cart state with context
   }, [cart]);
 
-  // ✅ Store cart before proceeding to registration
-  const handleProceedToCheckout = () => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Save cart items
-    navigate("/register-before-checkout");
+  const handleProceedToCheckout = async () => {
+    try {
+      const email = localStorage.getItem("userEmail");
+      const phone = localStorage.getItem("userPhone");
+  
+      console.log("Checking registration for:", { email, phone });
+  
+      if (!email || !phone) {
+        console.log("User data not found in localStorage. Redirecting to register.");
+        localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Save cart items
+        navigate("/register-before-checkout");
+        return;
+      }
+  
+      // ✅ Check Registration Status from Backend
+      const response = await axiosInstance.post("/check-registration", { email, phone });
+  
+      console.log("Registration check response:", response.data);
+  
+      if (response.data.success) {
+        // ✅ User is already registered, go to checkout
+        console.log("User already registered. Redirecting to checkout...");
+        navigate("/checkout");
+      } else {
+        // ❌ User not registered, go to registration page
+        console.log("User NOT registered. Redirecting to register-before-checkout...");
+        localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Save cart items
+        navigate("/register-before-checkout");
+      }
+    } catch (error) {
+      console.error("❌ Error checking registration:", error);
+      localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Save cart items
+      navigate("/register-before-checkout"); // If error, go to registration
+    }
   };
-
+  
+  
   // ✅ Remove items from cart (with localStorage update)
   const handleRemoveItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);

@@ -139,13 +139,13 @@ const CoursesPage = () => {
 
         {/* Advanced Courses Section */}
         <div className="pt-10 pb-32 bg-gray-50">
-          <div className="text-center max-w-4xl mx-auto mb-12">
+          {/* <div className="text-center max-w-4xl mx-auto mb-12">
             <h1 className="text-2xl font-extrabold text-deepBlue leading-tight">Introduction to Physics</h1>
             <h2 className="text-5xl font-semibold text-deepBlue mt-4">Physics Made Easy</h2>
             <p className="mt-6 text-lg md:text-xl text-deepBlue leading-relaxed">
               Learn physics essentials — Simplify complex topics — Empower your learning journey.
             </p>
-          </div>
+          </div> */}
 
           {/* Courses List */}
           <div className="flex flex-col gap-16 px-5 xl:px-20">

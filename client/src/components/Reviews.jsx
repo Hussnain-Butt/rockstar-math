@@ -49,7 +49,7 @@ function Reviews() {
         {
             date: "March 20, 2024",
             stars: 4,
-            profilePic: "/images/feedback_images/5.jpg",
+            profilePic: "/images/feedback_images/6.jpg",
             name: "Returning Adult, College Student",
             details: "I would not have passed this class without you.  Thank you.",
             position: "Chemistry student"

@@ -10,13 +10,13 @@ function StudentFeedback() {
         },
         {
             img: "/images/feedback_images/2.jpg",
-            name: "Bob Smith",
+            name: "Josh Hammond",
             class: "FSC",
             review: "I really improved my understanding of calculus. The examples provided were very practical and matched real-world scenarios. The exercises allowed me to apply what I had learned effectively. I would highly recommend this to students."
         },
         {
             img: "/images/feedback_images/3.jpg",
-            name: "Charlie Brown",
+            name: "Amber Sanderson",
             class: "Grade 10",
             review: "Great teaching style and very engaging. I always struggled with understanding certain concepts in math, but this platform made it so much simpler. The interactive sessions kept me focused, and I feel more confident in my abilities now."
         },

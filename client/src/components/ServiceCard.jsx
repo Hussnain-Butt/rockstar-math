@@ -15,10 +15,7 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
             <FaInfoCircle className="text-blue-400" />
             <strong className="text-deepBlue">Details:</strong> {service.details}
           </p>
-          <p className="text-sm flex items-center gap-2 mt-2 text-deepBlue">
-            <FaClock className="text-yellow-400" />
-            <strong className="text-deepBlue">Duration:</strong> {service.duration}
-          </p>
+       
           
         </div>
       </div>

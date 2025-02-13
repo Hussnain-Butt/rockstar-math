@@ -1,5 +1,5 @@
-import React from "react";
-import { FaInfoCircle, FaClock, FaCalendarAlt, FaShoppingCart } from "react-icons/fa";
+import React from 'react'
+import { FaInfoCircle, FaClock, FaCalendarAlt, FaShoppingCart } from 'react-icons/fa'
 
 const ServiceCard = ({ service, users, handleAddToCart }) => {
   return (
@@ -7,16 +7,19 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
       <div>
         {/* ✅ Service Name & Price */}
         <h2 className="text-lg font-semibold text-deepBlue">{service.name}</h2>
-        <p className="text-emerald-400 font-bold text-xl">${service.price} {service.currency}</p>
+        <p className="text-emerald-400 font-bold text-xl">
+          ${service.price} {service.currency}
+        </p>
 
         {/* ✅ Service Details Section */}
-        <div className="bg-detext-deepBlue/10 backdrop-blur-md p-5 rounded-xl mt-3 border border-gray-700 shadow-inner">
+        <div className="bg-deepBlue/10 backdrop-blur-md p-5 rounded-xl mt-3 border border-gray-700 shadow-inner">
           <p className="text-sm flex items-center gap-2 text-deepBlue">
             <FaInfoCircle className="text-blue-400" />
             <strong className="text-deepBlue">Details:</strong> {service.details}
           </p>
-       
-          
+          <p className="text-sm text-gray-500">
+            <strong>Category:</strong> {service.category}
+          </p>
         </div>
       </div>
 
@@ -38,7 +41,7 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ServiceCard;
+export default ServiceCard

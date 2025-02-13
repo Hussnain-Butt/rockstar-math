@@ -20,8 +20,10 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your frontend's URL
-    credentials: true,
+  origin: 'https://rockstar-math-production.up.railway.app', // Your Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow necessary HTTP methods
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers if needed
 }));
 
 

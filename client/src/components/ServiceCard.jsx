@@ -29,7 +29,7 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
       <div className="mt-4">
         {!users ? (
           <button className="bg-deepBlue text-white w-full py-3 rounded-xl hover:bg-sky-600 transition-all duration-300 shadow-lg">
-            Sign Up
+            Buy Now to Sign-Up
           </button>
         ) : (
           <div className="flex flex-col gap-3">

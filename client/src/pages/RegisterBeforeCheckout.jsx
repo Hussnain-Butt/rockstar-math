@@ -25,6 +25,8 @@ const RegisterBeforeCheckout = () => {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false); // OTP popup state
   const [isOtpVerified, setIsOtpVerified] = useState(false); // OTP verification state
   const [generatedOtp, setGeneratedOtp] = useState(""); // Store received OTP for comparison
+  const [isWebcamPopupOpen, setIsWebcamPopupOpen] = useState(false);
+  const [isSmsPopupOpen, setIsSmsPopupOpen] = useState(false);
   
   const navigate = useNavigate()
 
@@ -61,6 +63,18 @@ const openOtpPopup = async () => {
     toast.error(error.response?.data?.error || "Error sending OTP.");
   }
 };
+
+ // ✅ Handle Webcam Agreement
+ const openWebcamPopup = (e) => {
+  e.preventDefault();
+  setIsWebcamPopupOpen(true);
+};
+
+const handleAgreeWebcam = () => {
+  setFormData((prev) => ({ ...prev, didUserApproveWebcam: true }));
+  setIsWebcamPopupOpen(false);
+};
+
 
 // ✅ Verify OTP Dynamically
 const verifyOtp = async () => {
@@ -128,6 +142,17 @@ const verifyOtp = async () => {
 
     checkUserRegistration();
   }, [navigate]);
+
+  const openSmsPopup = (e) => {
+    e.preventDefault();
+    setIsSmsPopupOpen(true);
+  };
+
+  const handleAgreeSms = () => {
+    setFormData((prev) => ({ ...prev, didUserApproveSMS: true }));
+    setIsSmsPopupOpen(false);
+    openOtpPopup(); // ✅ Send OTP after agreeing
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -282,11 +307,8 @@ const verifyOtp = async () => {
               />
               <Link
                 to="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openOtpPopup();
-                }}
-                className="text-gray-700 text-sm"
+                onClick={openSmsPopup}
+                className="text-gray-700 text-sm underline  text-blue-700"
               >
                 I agree to receive SMS notifications
               </Link>
@@ -298,7 +320,13 @@ const verifyOtp = async () => {
                 checked={formData.didUserApproveWebcam}
                 onChange={handleChange}
               />
-              <label className="text-gray-700 text-sm">I agree to use a webcam</label>
+               <Link
+                to="#"
+                onClick={openWebcamPopup}
+                className="text-gray-700 text-sm underline  text-blue-700"
+              >
+                I agree to use a webcam
+              </Link>
             </div>
           </div>
 
@@ -310,6 +338,72 @@ const verifyOtp = async () => {
           </button>
         </form>
       </div>
+
+ {/* ✅ Webcam Agreement Popup */}
+ {isWebcamPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
+          <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
+            <h3 className="text-2xl font-bold text-gray-800">Webcam Attendance Agreement</h3>
+            <p className="text-sm text-gray-600 mt-4 text-left">
+              Rockstar Math Webcam Attendance & Identity Verification Policy
+            </p>
+            <ul className="text-left text-gray-600 text-sm mt-2">
+              <li>✅ Attendance Verification – Ensuring students are present for their scheduled sessions.</li>
+              <li>✅ Identity Confirmation – Preventing unauthorized individuals from joining sessions.</li>
+              <li>✅ Engagement & Participation – Encouraging active participation in lessons.</li>
+            </ul>
+            <p className="text-left text-gray-600 text-sm mt-2">
+              <strong>Agreement Terms:</strong>
+              <br />
+              ● Students must have their webcam turned on during all live sessions.
+              <br />
+              ● Failure to comply may result in removal from the session.
+              <br />
+              ● Exceptions may be granted for documented technical difficulties or special accommodations.
+            </p>
+            <button
+              onClick={handleAgreeWebcam}
+              className="w-full mt-4 py-3 bg-blue-600 text-white font-semibold rounded-md"
+            >
+              I AGREE
+            </button>
+          </div>
+        </div>
+      )}
+
+  {/* ✅ SMS Agreement Popup */}
+  {isSmsPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
+          <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
+            <h3 className="text-2xl font-bold text-gray-800">
+              SMS Text Agreement
+            </h3>
+            <p className="text-sm text-gray-600 mt-4 text-left">
+              Rockstar Math SMS Notification & Alerts Agreement
+            </p>
+            <p className="text-left text-gray-600 text-sm mt-2">
+              By providing your phone number during registration, you consent to
+              receive SMS notifications, updates, and alerts related to your
+              tutoring sessions, payment confirmations, and important
+              announcements from Rockstar Math.
+            </p>
+            <p className="text-left text-gray-600 text-sm mt-2">
+              <strong>Opt-Out Instructions:</strong>
+              <br />
+              ● To stop SMS notifications, reply STOP to any message.
+              <br />
+              ● For further assistance, contact us at x@gmail.com.
+            </p>
+            <button
+              onClick={handleAgreeSms}
+              className="w-full mt-4 py-3 bg-blue-600 text-white font-semibold rounded-md"
+            >
+              I AGREE
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* ✅ OTP Popup */}
       {isOtpPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

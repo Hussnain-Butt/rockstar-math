@@ -18,7 +18,7 @@ function AboutPage() {
       image: "/images/about2.png",
       title: "The Reasoning to each step ",
       description:
-        "Often I would ask my students why they took the step they did and they would immediately think they made a mistake. We are trained in school to get to the right answer. The real goal is to understand why we are taking each step when we solve a problem",
+        "Often I would ask my students why they took the Step they did and they would immediately think they made a mistake. We are trained in school to get to the right answer. The real goal is to understand why we are taking each step when we solve a problem",
     },
     {
       image: "/images/about3.png",

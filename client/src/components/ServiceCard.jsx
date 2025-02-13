@@ -4,25 +4,28 @@ import { FaInfoCircle, FaClock, FaCalendarAlt, FaShoppingCart } from 'react-icon
 const ServiceCard = ({ service, users, handleAddToCart }) => {
   return (
     <div className="bg-slate-100 text-deepBlue border border-gray-800 shadow-xl rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:scale-105">
-      <div>
-        {/* ✅ Service Name & Price */}
-        <h2 className="text-lg font-semibold text-deepBlue">{service.name}</h2>
-        <p className="text-emerald-400 font-bold text-xl">
-          ${service.price} {service.currency}
+      <div className="border p-5 rounded-lg shadow-lg bg-white">
+      {/* ✅ Service Image */}
+      <img
+        src={service.images[0]}
+        alt={service.name}
+        className="w-full h-40 object-cover rounded-lg"
+      />
+
+      {/* ✅ Service Name & Price */}
+      <h2 className="text-lg font-semibold text-deepBlue mt-2">{service.name}</h2>
+      <p className="text-emerald-400 font-bold text-xl">
+        ${service.default_price.unit_amount / 100} {service.default_price.currency.toUpperCase()}
+      </p>
+
+      {/* ✅ Service Details Section */}
+      <div className="bg-blue-50 p-3 rounded-lg mt-3 border border-gray-300">
+        <p className="text-sm flex items-center gap-2 text-gray-800">
+          <FaInfoCircle className="text-blue-400" />
+          <strong className="text-gray-700">Details:</strong> {service.description}
         </p>
-
-        {/* ✅ Service Details Section */}
-        <div className="bg-deepBlue/10 backdrop-blur-md p-5 rounded-xl mt-3 border border-gray-700 shadow-inner">
-          <p className="text-sm flex items-center gap-2 text-deepBlue">
-            <FaInfoCircle className="text-blue-400" />
-            <strong className="text-deepBlue">Details:</strong> {service.details}
-          </p>
-          <p className="text-sm text-gray-500">
-            <strong>Category:</strong> {service.category}
-          </p>
-        </div>
       </div>
-
+    </div>
       {/* ✅ Buttons Section */}
       <div className="mt-4">
         {!users ? (

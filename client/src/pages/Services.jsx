@@ -20,7 +20,7 @@ const Services = () => {
   // ✅ Fetch products from the backend
   useEffect(() => {
     axios
-      .get('http://localhost:5000/api/stripe/get-products')
+      .get('https://rockstar-math-production.up.railway.app/api/stripe/get-products')
       .then((response) => {
         setServices(response.data)
       })

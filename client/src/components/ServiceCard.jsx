@@ -21,8 +21,7 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
       {/* ✅ Service Details Section */}
       <div className="bg-blue-50 p-3 rounded-lg mt-3 border border-gray-300">
         <p className="text-sm flex items-center gap-2 text-gray-800">
-          <FaInfoCircle className="text-blue-400" />
-          <strong className="text-gray-700">Details:</strong> {service.description}
+          <strong className="text-gray-700"></strong> {service.description}
         </p>
       </div>
     </div>

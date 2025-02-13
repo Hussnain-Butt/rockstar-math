@@ -20,7 +20,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-  origin: 'https://rockstar-math-production.up.railway.app', // Your Frontend URL
+  origin: 'https://industrious-empathy-production.up.railway.app', // Your Frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow necessary HTTP methods
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'], // Allow headers if needed

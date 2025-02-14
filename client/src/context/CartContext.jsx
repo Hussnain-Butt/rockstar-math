@@ -10,8 +10,8 @@ export const CartProvider = ({ children }) => {
   // ✅ Load cart from localStorage when the page loads (With Error Handling)
   useEffect(() => {
     try {
-      const storedCart = localStorage.getItem("cartItems");
-      setCart(storedCart ? JSON.parse(storedCart) : []);
+      const storedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      setCart(storedCart);
     } catch (error) {
       console.error("❌ Failed to load cart from localStorage:", error);
       setCart([]); // Ensure fallback to empty cart
@@ -27,53 +27,53 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  // ✅ Function to add item to cart (Prevents Duplicates)
- const addToCart = (service) => {
-  setCart((prevCart) => {
-    const exists = prevCart.some((item) => item.id === service.id);
-    if (exists) {
-      console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
-      return prevCart;
-    }
+  // ✅ Function to add item to cart (Prevents Duplicates & Ensures Pricing)
+  const addToCart = (service) => {
+    setCart((prevCart) => {
+      // ✅ Check if item already exists in cart
+      const exists = prevCart.some((item) => item.id === service.id);
+      if (exists) {
+        console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
+        return prevCart;
+      }
 
-    // ✅ Check if price exists, otherwise set a default price
-    const price = service.default_price?.unit_amount
-      ? (service.default_price.unit_amount / 100).toFixed(2)
-      : null; // Fallback if price is missing
+      // ✅ Ensure price exists before adding
+      if (!service.default_price || !service.default_price.unit_amount) {
+        console.error("❌ Cannot add plan without a valid price!", service);
+        alert("This plan cannot be added because it has no price set.");
+        return prevCart; // Don't add item if price is missing
+      }
 
-    const currency = service.default_price?.currency
-      ? service.default_price.currency.toUpperCase()
-      : "USD"; // Default to USD
+      // ✅ Convert price from cents to dollars
+      const newItem = {
+        ...service,
+        price: (service.default_price.unit_amount / 100).toFixed(2),
+        currency: service.default_price.currency.toUpperCase(),
+      };
 
-    if (!price) {
-      console.error("❌ Cannot add plan without a valid price!", service);
-      return prevCart; // Don't add the item if price is missing
-    }
+      // ✅ Update cart state
+      const updatedCart = [...prevCart, newItem];
 
-    const newItem = {
-      ...service,
-      price,
-      currency,
-    };
+      // ✅ Store updated cart in localStorage
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
 
-    const updatedCart = [...prevCart, newItem];
-
-    // ✅ Store updated cart in localStorage
-    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-
-    return updatedCart;
-  });
-};
+      return updatedCart;
+    });
+  };
 
   // ✅ Function to remove item from cart
   const removeFromCart = (serviceId) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== serviceId));
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(cart.filter((item) => item.id !== serviceId))
+    );
   };
 
   // ✅ Function to clear the cart (Optional)
   const clearCart = () => {
     setCart([]);
-    localStorage.removeItem("cartItems"); // Remove cart from localStorage when cleared
+    localStorage.removeItem("cartItems"); // ✅ Remove cart from localStorage when cleared
   };
 
   return (

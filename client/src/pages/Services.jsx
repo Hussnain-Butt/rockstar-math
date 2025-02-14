@@ -35,7 +35,10 @@ const Services = () => {
   }
 
   // ✅ Grouping Services into 3 categories
-  const categorizedServices = {
+ const categorizedServices = {
+    'Seasonal - AP Calc Sessions': services.filter(
+      (service) => /(\bAP Calc Review 20 hours\b)/i.test(service.name),
+    ),
     '30 Minute Sessions - *Recommended For Algebra 1 Students And Below*': services.filter(
       (service) =>
         /(\b8 x 30 minutes\b|\b5 x 30 minutes\b|\b3 x 30 minutes\b|3 - 30 minutes\b|5 - 30 minutes\b)/i.test(
@@ -50,11 +53,9 @@ const Services = () => {
       (service) => /(\b8 x 90 minutes\b|\b5 x 90 minutes\b|\b3 x 90 minutes\b|\b8 - 90 minutes\b)/i.test(service.name),
     ),
     'Seasonal - AP Calc Sessions': services.filter(
-      (service) => /(\bAP Calc Review 20 hours\b)/i.test(service.name),
-    ),
-     'Seasonal - AP Calc Sessions': services.filter(
       (service) => /(\b13 x 30 minutes\b|\b13 x 60 minutes\b|\b13 x 90 minutes\b)/i.test(service.name),
     ),
+
   }
 
   return (

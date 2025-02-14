@@ -5,6 +5,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
+ import { useCallback } from 'react';
 
 // ✅ Lazy Load Components
 const ServiceCard = lazy(() => import("../components/ServiceCard"));
@@ -29,10 +30,16 @@ const Services = () => {
       });
   }, []);
 
-  const handleAddToCart = (service) => {
-    addToCart(service);
-    toast.success(`${service.name} added to cart!`);
-  };
+
+const handleAddToCart = useCallback((service) => {
+  if (!service.price || isNaN(Number(service.price))) {
+    toast.error(`⚠️ Cannot add ${service.name} to cart, missing price!`);
+    return;
+  }
+
+  addToCart(service);
+  toast.success(`${service.name} added to cart!`);
+}, [addToCart]);
 
   // ✅ Grouping Services into 3 categories
   const categorizedServices = {

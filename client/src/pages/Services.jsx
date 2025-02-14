@@ -52,6 +52,9 @@ const Services = () => {
     'Seasonal - AP Calc Sessions': services.filter(
       (service) => /(\bAP Calc Review 20 hours\b)/i.test(service.name),
     ),
+     'Seasonal - AP Calc Sessions': services.filter(
+      (service) => /(\b13 x 30 minutes\b|\b13 x 60 minutes\b|\b13 x 90 minutes\b)/i.test(service.name),
+    ),
   }
 
   return (

@@ -131,11 +131,15 @@ router.post("/create-payment-intent", async (req, res) => {
     try {
         let { amount, currency, userId, orderId } = req.body;
 
+        console.log("🔹 Received Payment Request:", { amount, currency, userId, orderId });
+
         if (!userId || !orderId) {
+            console.error("❌ Missing userId or orderId.");
             return res.status(400).json({ error: "Missing userId or orderId." });
         }
 
         if (!amount || isNaN(amount) || amount <= 0) {
+            console.error("❌ Invalid amount received:", amount);
             return res.status(400).json({ error: "Invalid amount. Must be greater than 0." });
         }
 
@@ -143,16 +147,15 @@ router.post("/create-payment-intent", async (req, res) => {
 
         const supportedCurrencies = ["usd", "eur", "gbp", "cad", "aud"];
         if (!currency || !supportedCurrencies.includes(currency.toLowerCase())) {
+            console.error("❌ Unsupported currency:", currency);
             return res.status(400).json({ error: "Unsupported currency. Use USD, EUR, GBP, etc." });
         }
 
-        const paymentMethods = ["card", "apple_pay", "google_pay"];
-
-        // ✅ Ensure PaymentIntent is created successfully
+        // ✅ FIXED: Use correct payment_method_types
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
             currency: currency.toLowerCase(),
-            payment_method_types: paymentMethods,
+            payment_method_types: ["card"], // ✅ Ensure "card" is used (no Apple Pay, Google Pay unless enabled)
             metadata: {
                 userId,
                 orderId,
@@ -160,18 +163,20 @@ router.post("/create-payment-intent", async (req, res) => {
         });
 
         if (!paymentIntent.client_secret) {
-            console.error("❌ Stripe PaymentIntent Missing client_secret:", paymentIntent);
-            return res.status(500).json({ error: "Failed to create payment intent. No client_secret returned." });
+            console.error("❌ Missing client_secret in response:", paymentIntent);
+            return res.status(500).json({ error: "Payment Intent creation failed. No client_secret returned." });
         }
 
         console.log(`✅ PaymentIntent Created: ${paymentIntent.id} for User: ${userId}`);
 
-        res.json({ clientSecret: paymentIntent.client_secret });
+        res.json({ clientSecret: paymentIntent.client_secret, id: paymentIntent.id });
+
     } catch (error) {
         console.error("❌ Stripe Payment Intent Error:", error);
         res.status(500).json({ error: "Payment creation failed. Please try again later." });
     }
 });
+
 
 
 // ✅ Fetch Payment Details (Test Mode)

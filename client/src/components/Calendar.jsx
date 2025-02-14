@@ -2,13 +2,22 @@ import React, { useState } from "react";
 import AnimatedSection from "./AnimatedSection";
 
 const Calendar = () => {
-  // 🛠 Event Data
+  // 🛠 Event Data with Categories
   const eventData = {
-    Sunday: ["Individual Lessons - 3 - 6 pm", "Common Core Drop In for Parents - 8 - 9 pm"],
-    Monday: ["Group Tutoring - 4 PM", "Private Tutoring - 6 PM"],
-    Tuesday: ["Live Class - 5 PM"],
-    Wednesday: ["Group Tutoring - 3 PM", "AP Bootcamp - 7 PM"],
-    Thursday: ["Private Tutoring - 5 PM"],
+    Sunday: [
+      { name: "Individual Lessons - 3 - 6 pm", type: "individual" },
+      { name: "Common Core Drop In for Parents - 8 - 9 pm", type: "general" },
+    ],
+    Monday: [
+      { name: "Group Tutoring - 4 PM", type: "general" },
+      { name: "Private Tutoring - 6 PM", type: "individual" },
+    ],
+    Tuesday: [{ name: "Live Class - 5 PM", type: "seasonal" }],
+    Wednesday: [
+      { name: "Group Tutoring - 3 PM", type: "general" },
+      { name: "AP Bootcamp - 7 PM", type: "seasonal" },
+    ],
+    Thursday: [{ name: "Private Tutoring - 5 PM", type: "individual" }],
   };
 
   // 🛠 Define Different Background Colors for Each Day
@@ -18,6 +27,13 @@ const Calendar = () => {
     Tuesday: "bg-red-500 hover:bg-red-600 text-white",
     Wednesday: "bg-blue-500 hover:bg-blue-600 text-white",
     Thursday: "bg-green-500 hover:bg-green-600 text-white",
+  };
+
+  // 🛠 Define Colors for Bullet Points Based on Type
+  const bulletColors = {
+    individual: "text-blue-400", // 🔵 Individual Courses
+    general: "text-purple-400", // 🟣 Everything Else
+    seasonal: "text-yellow-400", // 🟡 Seasonal Courses
   };
 
   // 🛠 State for Tooltip Visibility
@@ -48,7 +64,9 @@ const Calendar = () => {
                 <div className="absolute top-full mt-3 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm py-3 px-5 rounded-lg shadow-xl opacity-90 animate-fadeIn whitespace-nowrap z-10">
                   <ul className="list-disc list-inside">
                     {eventData[day].map((event, index) => (
-                      <li key={index} className="text-center">{event}</li>
+                      <li key={index} className={`text-center ${bulletColors[event.type]}`}>
+                        {event.name}
+                      </li>
                     ))}
                   </ul>
                 </div>

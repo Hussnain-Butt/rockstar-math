@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext"; // ✅ Import Cart Context
-import toast, { Toaster } from 'react-hot-toast'
+import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
 
 const SubscriptionPage = () => {
   const [plans, setPlans] = useState([]);

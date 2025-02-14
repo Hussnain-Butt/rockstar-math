@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 const PaymentForm = lazy(() => import("../components/PaymentForm"));
 
 // ✅ Load Stripe Public Key
-const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe("pk_live_51QKwhUE4sPC5ms3x7cYIFoYqx3lULz1hFA9EoRobabZVPwdDm8KbDNlHOZMizb2YftdwRSyxRfyi93ovv5Rev7i300CpaQEtU2");
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);

@@ -4,7 +4,7 @@ import { FaCreditCard } from "react-icons/fa";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast'
 import "react-toastify/dist/ReactToastify.css";
 
 // Lazy Load Components
@@ -109,6 +109,7 @@ const handlePaymentSuccess = async () => {
 
 return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32">
+       <Toaster position="top-right" />
       <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Checkout</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">

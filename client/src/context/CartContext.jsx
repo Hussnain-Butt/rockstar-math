@@ -27,29 +27,28 @@ export const CartProvider = ({ children }) => {
     }
   }, [cart]);
 
-  // ✅ Function to add item to cart (Prevents Duplicates & Ensures Pricing)
-  const addToCart = (service) => {
-      setCart((prevCart) => {
-      const exists = prevCart.some((item) => item.id === service.id);
+  // ✅ Function to add item to cart (Fix for "Cannot add plan without price" error)
+  const addToCart = (plan) => {
+    setCart((prevCart) => {
+      // ✅ Check if item already exists in cart
+      const exists = prevCart.some((item) => item.id === plan.id);
       if (exists) {
-        console.warn(`Item already exists in the cart: ${service.name}`);
+        console.warn(`⚠️ Item already exists in the cart: ${plan.name}`);
         return prevCart;
       }
-      return [...prevCart, service];
-    });
 
       // ✅ Ensure price exists before adding
-      if (!service.default_price || !service.default_price.unit_amount) {
-        console.error("❌ Cannot add plan without a valid price!", service);
+      if (!plan.price || isNaN(Number(plan.price))) {
+        console.error("❌ Cannot add plan without a valid price!", plan);
         alert("This plan cannot be added because it has no price set.");
         return prevCart; // Don't add item if price is missing
       }
 
-      // ✅ Convert price from cents to dollars
+      // ✅ Convert price to a fixed 2 decimal format
       const newItem = {
-        ...service,
-        price: (service.default_price.unit_amount / 100).toFixed(2),
-        currency: service.default_price.currency.toUpperCase(),
+        ...plan,
+        price: Number(plan.price).toFixed(2), // ✅ Ensure proper price format
+        currency: plan.currency.toUpperCase(),
       };
 
       // ✅ Update cart state

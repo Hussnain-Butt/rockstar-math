@@ -17,6 +17,7 @@ const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentIntentId, setPaymentIntentId] = useState(null);
+  const [clientSecret, setClientSecret] = useState(null);  // ✅ Initialize clientSecret
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const CheckoutPage = () => {
     toast.error("Cannot process a payment of $0.00!");
   };
 
-  // ✅ Create Stripe Payment Intent
+// ✅ Create Stripe Payment Intent
 const createPaymentIntent = async () => {
     if (total <= 0) {
         handleZeroAmount();
@@ -45,7 +46,7 @@ const createPaymentIntent = async () => {
 
     try {
         const userId = localStorage.getItem("userId") || "guest_user";
-        const orderId = `order_${new Date().getTime()}`; // Unique order ID
+        const orderId = `order_${Date.now()}`; // Unique order ID
         const currency = "usd"; 
 
         console.log("🔹 Sending Payment Request:", { amount: total, currency, userId, orderId });
@@ -58,18 +59,20 @@ const createPaymentIntent = async () => {
 
         if (!response.ok) {
             console.error("❌ Failed to create payment intent. Status:", response.status);
-            throw new Error("Payment Intent creation failed. Please try again.");
+            throw new Error(`Payment Intent creation failed. Server responded with ${response.status}`);
         }
 
-        const { clientSecret, id } = await response.json();
+        const data = await response.json();
 
-        if (!clientSecret) {
-            console.error("❌ Missing clientSecret in API response", { clientSecret, id });
+        if (!data || !data.clientSecret) {
+            console.error("❌ Missing `clientSecret` in API response", data);
             throw new Error("Payment processing error. No clientSecret returned.");
         }
 
-        setPaymentIntentId(id);
-        return clientSecret;
+        console.log("✅ Payment Intent Created:", data);
+
+        setPaymentIntentId(data.id);
+        return data.clientSecret;  // ✅ Returning clientSecret
 
     } catch (error) {
         console.error("❌ Payment Intent Error:", error);

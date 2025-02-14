@@ -31,15 +31,16 @@ const SubscriptionPage = () => {
   }, []);
 
   // ✅ Function to Handle Subscription Click
- const handleSubscribe = useCallback((plan) => {
+ const handleSubscribe = (plan) => {
     if (!plan.price || isNaN(Number(plan.price))) {
-        toast.error(`⚠️ Cannot subscribe to ${plan.name}, missing price!`);
-        return;
-    }
+      toast.error(`⚠️ Cannot subscribe to ${plan.name}, missing price!`);
+      return;
+  }
 
-    addToCart(plan);
-    toast.success(`✅ ${plan.name} added to cart!`);
-}, [addToCart]); // ✅ Prevent function recreation on re-renders
+  addToCart(plan);
+  toast.success(`✅ ${plan.name} added to cart!`);
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-16">

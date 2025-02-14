@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css"; // Global styles
 import "tailwindcss/tailwind.css"; // Tailwind CSS
-
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import Navbar from "./components/Navbar.jsx";
@@ -41,6 +41,7 @@ createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <Navbar />
         <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+          <Toaster position="top-right" reverseOrder={false} />
           <Routes>
             <Route path="/" element={<App />} />
             <Route index element={<HomePage />} />

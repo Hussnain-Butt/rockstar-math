@@ -47,6 +47,12 @@ const WaitlistForm = ({ setIsFormModalOpen }) => {
           <button type="submit" className="w-full bg-deepBlue text-white py-2 mt-4 rounded-lg hover:bg-sky-600">
             Submit
           </button>
+             <button
+                onClick={() => setIsFormModalOpen(false)}
+                className="w-full mt-2 text-gray-600 underline text-sm"
+              >
+                Cancel
+              </button>
         </form>
       </div>
     </div>

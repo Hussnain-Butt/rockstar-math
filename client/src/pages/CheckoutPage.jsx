@@ -134,7 +134,21 @@ return (
             <p>Total:</p>
             <p>${total.toFixed(2)} USD</p>
           </div>
-
+       {!showPaymentForm && (
+            <button
+              onClick={() => {
+                if (total > 0) {
+                  setShowPaymentForm(true);
+                  createPaymentIntent();
+                } else {
+                  handleZeroAmount();
+                }
+              }}
+              className="w-full px-6 py-3 mt-5 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-md flex items-center justify-center gap-2"
+            >
+              <FaCreditCard /> Pay with Card
+            </button>
+          )}
           {/* PayPal Payment */}
           <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
             <div className="mt-6">

@@ -30,9 +30,16 @@ const SubscriptionPage = () => {
 
   // ✅ Function to Handle Subscription Click
   const handleSubscribe = (plan) => {
-    addToCart(plan); // ✅ Add to Cart
-    toast.success(`${plan.name} added to cart!`); // ✅ Show Notification
-  };
+  console.log("✅ Adding Plan to Cart:", plan); // Debugging
+  if (!plan.default_price || !plan.default_price.unit_amount) {
+    toast.error("⚠️ Cannot add plan without a valid price.");
+    return;
+  }
+
+  addToCart(plan); // ✅ Add to Cart
+  toast.success(`${plan.name} added to cart!`);
+};
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-16">

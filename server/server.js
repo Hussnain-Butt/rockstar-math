@@ -16,7 +16,7 @@ const waitlist = require("./routes/waitlist");
 const zoomRoutes = require("./routes/zoomRoutes");
 const userRoutes = require("./routes/userRoutes")
 const paymentRoutes = require("./routes/paymentRoutes"); // ✅ Import Payment Routes
-const ordersRoute = require("./routes/orders"); // ✅ Import Orders Route
+const ordersRoute = require("./routes/order"); // ✅ Import Orders Route
 connectDB();
 
 const app = express();

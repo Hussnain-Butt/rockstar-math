@@ -109,9 +109,10 @@ const CartPage = () => {
                   </div>
 
                   {/* Price */}
-                  <p className="text-green-600 font-semibold">
-      ${item.price ? Number(item.price).toFixed(2) : "N/A"} {item.currency || "USD"}
-    </p>
+        <p className="text-green-600 font-semibold w-1/6">
+  {item.price ? `$${item.price} ${item.currency}` : "Price Not Available"}
+</p>
+
 
                   {/* Remove Button */}
                   <button

@@ -14,9 +14,10 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
 
       {/* ✅ Service Name & Price */}
       <h2 className="text-lg font-semibold text-deepBlue mt-2">{service.name}</h2>
-      <p className="text-emerald-400 font-bold text-xl">
-        ${service.default_price.unit_amount / 100} {service.default_price.currency.toUpperCase()}
-      </p>
+   <p className="text-emerald-400 font-bold text-xl">
+  ${service.default_price ? (service.default_price.unit_amount / 100).toFixed(2) : "N/A"}{" "}
+  {service.default_price ? service.default_price.currency.toUpperCase() : ""}
+</p>
 
       {/* ✅ Service Details Section */}
       <div className="bg-blue-50 p-3 rounded-lg mt-3 border border-gray-300">

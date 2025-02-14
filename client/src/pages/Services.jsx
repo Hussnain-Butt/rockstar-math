@@ -1,68 +1,63 @@
-import React, { useEffect, useState, Suspense, lazy } from 'react'
-import { useAuth } from '../context/AuthContext'
-import { useCart } from '../context/CartContext'
-import { FaShoppingCart } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useEffect, useState, Suspense, lazy } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
 
 // ✅ Lazy Load Components
-const ServiceCard = lazy(() => import('../components/ServiceCard'))
+const ServiceCard = lazy(() => import("../components/ServiceCard"));
 
 const Services = () => {
-  const { users } = useAuth()
-  const navigate = useNavigate()
-  const { addToCart } = useCart()
+  const { users } = useAuth();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // ✅ State to store fetched services
-  const [services, setServices] = useState([])
+  const [services, setServices] = useState([]);
 
   // ✅ Fetch products from the backend
   useEffect(() => {
     axios
-      .get('https://rockstar-math-production.up.railway.app/api/stripe/get-products')
+      .get("https://rockstar-math-production.up.railway.app/api/stripe/get-products")
       .then((response) => {
-        setServices(response.data)
+        setServices(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching products:', error)
-      })
-  }, [])
+        console.error("Error fetching products:", error);
+      });
+  }, []);
 
-    const handleAddToCart = (service) => {
-    addToCart(service)
-    toast.success(`${service.name} added to cart!`)
-  }
+  const handleAddToCart = (service) => {
+    addToCart(service);
+    toast.success(`${service.name} added to cart!`);
+  };
 
   // ✅ Grouping Services into 3 categories
-// ✅ Grouping Services into 3 categories
- const categorizedServices = {
-  // ✅ Renamed First Seasonal Group & Moved to Top
-  'Seasonal - AP Calc Review': services.filter(
-    (service) => /(\bAP Calc Review 20 hours\b)/i.test(service.name),
-  ),
-
-  '30 Minute Sessions - *Recommended For Algebra 1 Students And Below*': services.filter(
-    (service) =>
-      /(\b8 x 30 minutes\b|\b5 x 30 minutes\b|\b3 x 30 minutes\b|3 - 30 minutes\b|5 - 30 minutes\b)/i.test(
-        service.name,
-      ),
-  ),
-
-  '60 Minute Sessions - Standard': services.filter((service) =>
-    /(\b8 x 60 minutes\b|\b5 x 60 minutes\b|\b3 x 60 minutes\b)/i.test(service.name),
-  ),
-
-  '90 Minute Sessions - *Recommended For Calc 1 Students And Higher*': services.filter(
-    (service) => /(\b8 x 90 minutes\b|\b5 x 90 minutes\b|\b3 x 90 minutes\b|\b8 - 90 minutes\b)/i.test(service.name),
-  ),
-
-  // ✅ Renamed Second Seasonal Group
-  'Seasonal - AP Calc 13 Sessions': services.filter(
-    (service) => /(\b13 x 30 minutes\b|\b13 x 60 minutes\b|\b13 x 90 minutes\b)/i.test(service.name),
-  ),
-};
-
+  const categorizedServices = {
+    "Seasonal - AP Calc Review": services.filter((service) =>
+      /(\bAP Calc Review 20 hours\b)/i.test(service.name)
+    ),
+    "30 Minute Sessions - *Recommended For Algebra 1 Students And Below*": services.filter(
+      (service) =>
+        /(\b8 x 30 minutes\b|\b5 x 30 minutes\b|\b3 x 30 minutes\b|3 - 30 minutes\b|5 - 30 minutes\b)/i.test(
+          service.name
+        )
+    ),
+    "60 Minute Sessions - Standard": services.filter((service) =>
+      /(\b8 x 60 minutes\b|\b5 x 60 minutes\b|\b3 x 60 minutes\b)/i.test(service.name)
+    ),
+    "90 Minute Sessions - *Recommended For Calc 1 Students And Higher*": services.filter(
+      (service) =>
+        /(\b8 x 90 minutes\b|\b5 x 90 minutes\b|\b3 x 90 minutes\b|\b8 - 90 minutes\b)/i.test(
+          service.name
+        )
+    ),
+    "Seasonal - AP Calc 13 Sessions": services.filter((service) =>
+      /(\b13 x 30 minutes\b|\b13 x 60 minutes\b|\b13 x 90 minutes\b)/i.test(service.name)
+    ),
+  };
 
   return (
     <>
@@ -77,9 +72,7 @@ const Services = () => {
         <Toaster position="top-right" reverseOrder={false} />
 
         {/* ✅ Display Services by Category */}
-        <Suspense
-          fallback={<div className="text-center py-10 text-gray-500">Loading Services...</div>}
-        >
+        <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Services...</div>}>
           {Object.entries(categorizedServices).map(
             ([category, items]) =>
               items.length > 0 && (
@@ -97,12 +90,12 @@ const Services = () => {
                     ))}
                   </div>
                 </div>
-              ),
+              )
           )}
         </Suspense>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Services
+export default Services;

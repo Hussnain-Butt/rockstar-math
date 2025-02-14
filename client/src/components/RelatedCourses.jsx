@@ -10,19 +10,19 @@ import { RiFunctionLine } from "react-icons/ri";
 import AnimatedSection from "./AnimatedSection";
 
 function RelatedCourses() {
-  const courses = [
-    { Icon: FaSquareRootAlt, title: "Algebra I & II", link: "https://youtube.com" },
-    { Icon: TbGeometry, title: "Trigonometry (Pre-Calculus)", link: "https://youtube.com" },
-    { Icon: BiAnalyse, title: "Math Analysis", link: "https://youtube.com" },
-    { Icon: TbMath, title: "Math Analysis (Pre-Calculus)", link: "https://youtube.com" },
-    { Icon: TbBusinessplan, title: "Business Calculus", link: "https://youtube.com" },
-    { Icon: TbMath, title: "Calculus 1", link: "https://youtube.com" },
-    { Icon: RiFunctionLine, title: "Calculus 2", link: "https://youtube.com" },
-    { Icon: GiStairs, title: "Calculus 3 (Multivariable)", link: "https://youtube.com" },
-    { Icon: IoIosStats, title: "Probability and Statistics", link: "https://youtube.com" },
-    { Icon: MdOutlineBarChart, title: "Discrete Math", link: "https://youtube.com" },
-    { Icon: MdOutlineMultilineChart, title: "Linear Algebra", link: "https://youtube.com" },
-    { Icon: RiFunctionLine, title: "Differential Equations", link: "https://youtube.com" },
+ const courses = [
+    { Icon: FaSquareRootAlt, title: "Algebra I & II", link: "https://www.youtube.com/watch?v=8pLuWu9w_4w" },
+    { Icon: TbGeometry, title: "Trigonometry (Pre-Calculus)", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: BiAnalyse, title: "Math Analysis", link: "https://www.youtube.com/watch?v=KT8ZHvdLL1s&t=17s" },
+    { Icon: TbMath, title: "Math Analysis (Pre-Calculus)", link: "https://www.youtube.com/watch?v=u7s7Ufl_Y7U" },
+    { Icon: TbBusinessplan, title: "Business Calculus", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: TbMath, title: "Calculus 1", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: RiFunctionLine, title: "Calculus 2", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: GiStairs, title: "Calculus 3 (Multivariable)", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: IoIosStats, title: "Probability and Statistics", link: "https://www.youtube.com/watch?v=cQDiIsay9r0" },
+    { Icon: MdOutlineBarChart, title: "Discrete Math", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
+    { Icon: MdOutlineMultilineChart, title: "Linear Algebra", link: "https://www.youtube.com/watch?v=ck9yuOupO4Y" },
+    { Icon: RiFunctionLine, title: "Differential Equations", link: "https://www.youtube.com/@RockstarMathTutoring/videos" },
   ];
 
   return (

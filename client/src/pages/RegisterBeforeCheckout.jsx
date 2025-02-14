@@ -140,6 +140,7 @@ const verifyOtp = async () => {
     checkUserRegistration();
   }, [navigate]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -168,6 +169,20 @@ const verifyOtp = async () => {
     if (formData.didUserApproveSMS && !isOtpVerified) {
       toast.error('Please verify your OTP before proceeding!')
       return
+    }
+
+    if (!formData.didUserApproveSMS) {
+      toast.error('You must agree to receive SMS notifications!');
+      return;
+    }
+    if (!formData.didUserApproveWebcam) {
+      toast.error('You must agree to use a webcam!');
+      return;
+    }
+
+    if (formData.didUserApproveSMS && !isOtpVerified) {
+      toast.error('Please verify your OTP before proceeding!');
+      return;
     }
 
     try {

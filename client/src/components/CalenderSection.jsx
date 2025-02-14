@@ -10,7 +10,7 @@ const CalenderSection = () => {
         { name: "Individual Lessons", type: "individual" },
         { name: "Individual Lessons", type: "individual" },
         { name: "Individual Lessons", type: "individual" },
-        { name: "Special Thursday Session", type: "gold" },
+        { name: "Seasonal Course (TBD)", type: "gold" }, // ✅ Updated
       ],
     },
     {
@@ -20,7 +20,7 @@ const CalenderSection = () => {
         { name: "Middle School Study Group", type: "studyGroup" },
         { name: "Algebra I Study Group", type: "studyGroup" },
         { name: "Middle School Study Group", type: "studyGroup" },
-        { name: "Special Thursday Session", type: "gold" },
+        { name: "TBD", type: "gold" }, // ✅ Updated
       ],
     },
     {
@@ -30,7 +30,7 @@ const CalenderSection = () => {
         { name: "Trigonometry and Precalculus", type: "studyGroup" },
         { name: "Calculus Drop In Group (1.5 hours)", type: "studyGroup" },
         { name: "Geometry Study Group", type: "studyGroup" },
-        { name: "Special Thursday Session", type: "gold" },
+        { name: "TBD", type: "gold" }, // ✅ Updated
       ],
     },
   ];
@@ -40,7 +40,7 @@ const CalenderSection = () => {
     individual: "text-blue-500 font-semibold", // 🔵 Individual Lessons
     commonCore: "text-green-500 font-semibold", // 🟢 Common Core
     studyGroup: "text-purple-500 font-semibold", // 🟣 Study Groups
-    gold: "text-yellow-500 font-semibold", // 🟡 All of Thursday
+    gold: "text-yellow-500 font-semibold", // 🟡 All of Thursday (Updated)
   };
 
   return (
@@ -48,7 +48,6 @@ const CalenderSection = () => {
       <h2 className="text-4xl font-bold mb-6 text-center text-gray-900">  
         Calendar
       </h2>
-     
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border rounded-lg">

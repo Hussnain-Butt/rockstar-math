@@ -28,16 +28,30 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   // ✅ Function to add item to cart (Prevents Duplicates)
-  const addToCart = (service) => {
-    setCart((prevCart) => {
-      const exists = prevCart.some((item) => item.id === service.id);
-      if (exists) {
-        console.warn(`Item already exists in the cart: ${service.name}`);
-        return prevCart;
-      }
-      return [...prevCart, service];
-    });
-  };
+ const addToCart = (service) => {
+  setCart((prevCart) => {
+    const exists = prevCart.some((item) => item.id === service.id);
+    
+    if (exists) {
+      console.warn(`Item already exists in the cart: ${service.name}`);
+      return prevCart; // If item already exists, do nothing
+    }
+
+    // ✅ Ensure price & currency are added
+    const newItem = {
+      ...service,
+      price: Number(service.price || 0),  // Convert price to number
+      currency: service.currency || "USD",  // Default to USD if undefined
+    };
+
+    // ✅ Store updated cart in localStorage
+    const updatedCart = [...prevCart, newItem];
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+    return updatedCart;
+  });
+};
+
 
   // ✅ Function to remove item from cart
   const removeFromCart = (serviceId) => {

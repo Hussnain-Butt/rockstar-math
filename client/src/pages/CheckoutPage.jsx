@@ -46,8 +46,8 @@ const createPaymentIntent = async () => {
 
     try {
         const userId = localStorage.getItem("userId") || "guest_user";
-        const orderId = `order_${Date.now()}`; // Unique order ID
-        const currency = "usd"; 
+        const orderId = `order_${Date.now()}`;
+        const currency = "usd";
 
         console.log("🔹 Sending Payment Request:", { amount: total, currency, userId, orderId });
 
@@ -71,8 +71,8 @@ const createPaymentIntent = async () => {
 
         console.log("✅ Payment Intent Created:", data);
 
-        setPaymentIntentId(data.id);
-        return data.clientSecret;  // ✅ Returning clientSecret
+        setPaymentIntentId(data.id);  // ✅ Storing Payment Intent ID
+        return data.clientSecret;      // ✅ Returning clientSecret properly
 
     } catch (error) {
         console.error("❌ Payment Intent Error:", error);
@@ -80,6 +80,7 @@ const createPaymentIntent = async () => {
         return null;
     }
 };
+
 
 
 

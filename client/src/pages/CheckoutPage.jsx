@@ -45,22 +45,19 @@ const createPaymentIntent = async () => {
 
     try {
         const userId = localStorage.getItem("userId") || "guest_user";
-        const orderId = `order_${new Date().getTime()}`; // Generate a unique order ID
-        const currency = "usd"; // Set default currency
+        const orderId = `order_${new Date().getTime()}`; // Unique order ID
+        const currency = "usd"; 
+
+        console.log("🔹 Sending Payment Request:", { amount: total, currency, userId, orderId });
 
         const response = await fetch("https://rockstar-math-production.up.railway.app/api/stripe/create-payment-intent", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                amount: total,
-                currency: currency, 
-                userId: userId,
-                orderId: orderId
-            }),
+            body: JSON.stringify({ amount: total, currency, userId, orderId }),
         });
 
         if (!response.ok) {
-            console.error("❌ Failed to create payment intent", response.status);
+            console.error("❌ Failed to create payment intent. Status:", response.status);
             throw new Error("Payment Intent creation failed. Please try again.");
         }
 
@@ -80,6 +77,7 @@ const createPaymentIntent = async () => {
         return null;
     }
 };
+
 
 
   // ✅ Handle Payment Success (Stripe & PayPal)

@@ -37,31 +37,50 @@ const CheckoutPage = () => {
   };
 
   // ✅ Create Stripe Payment Intent
-  const createPaymentIntent = async () => {
+const createPaymentIntent = async () => {
     if (total <= 0) {
-      handleZeroAmount();
-      return;
+        handleZeroAmount();
+        return null;
     }
 
     try {
-      const response = await fetch("https://rockstar-math-production.up.railway.app/api/stripe/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total }),
-      });
+        const userId = localStorage.getItem("userId") || "guest_user";
+        const orderId = `order_${new Date().getTime()}`; // Generate a unique order ID
+        const currency = "usd"; // Set default currency
 
-      if (!response.ok) {
-        throw new Error("Failed to create payment intent");
-      }
+        const response = await fetch("https://rockstar-math-production.up.railway.app/api/stripe/create-payment-intent", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                amount: total,
+                currency: currency, 
+                userId: userId,
+                orderId: orderId
+            }),
+        });
 
-      const { clientSecret, id } = await response.json();
-      setPaymentIntentId(id);
-      return clientSecret;
+        if (!response.ok) {
+            console.error("❌ Failed to create payment intent", response.status);
+            throw new Error("Payment Intent creation failed. Please try again.");
+        }
+
+        const { clientSecret, id } = await response.json();
+
+        if (!clientSecret) {
+            console.error("❌ Missing clientSecret in API response", { clientSecret, id });
+            throw new Error("Payment processing error. No clientSecret returned.");
+        }
+
+        setPaymentIntentId(id);
+        return clientSecret;
+
     } catch (error) {
-      toast.error(`Payment Error: ${error.message}`);
-      return null;
+        console.error("❌ Payment Intent Error:", error);
+        toast.error(`Payment Error: ${error.message}`);
+        return null;
     }
-  };
+};
+
 
   // ✅ Handle Payment Success (Stripe & PayPal)
   const handlePaymentSuccess = async () => {

@@ -32,14 +32,42 @@ const Services = () => {
 
 
   const handleAddToCart = (service) => {
-    if (!service.price || isNaN(Number(service.price))) {
-      toast.error(`⚠️ Cannot add ${service.name} to cart, missing price!`);
-      return;
-    }
-  
-    addToCart(service);
-    toast.success(`${service.name} added to cart!`);
+  let price = null;
+  let currency = "USD";
+
+  // ✅ If service has a direct price (like Subscription)
+  if (service.price) {
+    price = Number(service.price).toFixed(2);
+    currency = service.currency ? service.currency.toUpperCase() : "USD";
   }
+
+  // ✅ If service has `default_price.unit_amount` (like Services)
+  if (!price && service.default_price && service.default_price.unit_amount) {
+    price = (service.default_price.unit_amount / 100).toFixed(2);
+    currency = service.default_price.currency.toUpperCase();
+  }
+
+  // ❌ Prevent Adding if Price is Missing
+  if (!price || isNaN(price)) {
+    console.error("❌ Cannot add service to cart, missing price!", service);
+    toast.error(`⚠️ Cannot add ${service.name} to cart, missing price!`);
+    return;
+  }
+
+  // ✅ Create a clean cart item
+  const newItem = {
+    id: service.id,
+    name: service.name,
+    description: service.description || "",
+    images: service.images || [],
+    price,
+    currency,
+  };
+
+  addToCart(newItem); // ✅ Add to Cart
+  toast.success(`${service.name} added to cart!`);
+};
+
 
   // ✅ Grouping Services into 3 categories
   const categorizedServices = {

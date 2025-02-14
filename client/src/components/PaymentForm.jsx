@@ -3,42 +3,54 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import { FaCreditCard } from "react-icons/fa";
 
-const PaymentForm = ({ totalAmount, paymentIntentId }) => {
+// ✅ Pass `createPaymentIntent` as a prop
+const PaymentForm = ({ totalAmount, createPaymentIntent }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
 
-const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!stripe || !elements) return;
     setLoading(true);
 
-    // ✅ Ensure clientSecret is properly fetched
-    const clientSecret = await createPaymentIntent();
-    if (!clientSecret) {
+    try {
+      // ✅ Ensure `createPaymentIntent` exists before calling it
+      if (!createPaymentIntent) {
+        console.error("❌ createPaymentIntent function is not provided.");
+        toast.error("Payment initialization failed!");
+        setLoading(false);
+        return;
+      }
+
+      const clientSecret = await createPaymentIntent();
+      if (!clientSecret) {
         toast.error("❌ Payment initialization failed!");
         setLoading(false);
         return;
-    }
+      }
 
-    console.log("🔹 Using clientSecret:", clientSecret);
+      console.log("🔹 Using clientSecret:", clientSecret);
 
-    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: { card: elements.getElement(CardElement) }
-    });
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card: elements.getElement(CardElement) },
+      });
 
-    setLoading(false);
+      setLoading(false);
 
-    if (error) {
+      if (error) {
         toast.error(`Payment Failed: ${error.message}`);
-    } else if (paymentIntent.status === "succeeded") {
+      } else if (paymentIntent.status === "succeeded") {
         toast.success("✅ Payment Successful! Redirecting...");
-        setTimeout(() => window.location.href = "/dashboard", 2000);
+        setTimeout(() => (window.location.href = "/dashboard"), 2000);
+      }
+    } catch (error) {
+      console.error("❌ Error in Payment Processing:", error);
+      toast.error("Unexpected payment error. Please try again.");
+      setLoading(false);
     }
-};
-
-
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

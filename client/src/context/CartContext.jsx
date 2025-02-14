@@ -28,29 +28,42 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   // ✅ Function to add item to cart (Prevents Duplicates)
-  const addToCart = (service) => {
-    setCart((prevCart) => {
-      const exists = prevCart.some((item) => item.id === service.id);
-      if (exists) {
-        console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
-        return prevCart;
-      }
+ const addToCart = (service) => {
+  setCart((prevCart) => {
+    const exists = prevCart.some((item) => item.id === service.id);
+    if (exists) {
+      console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
+      return prevCart;
+    }
 
-      // Ensure price exists before adding
-      if (!service.default_price || !service.default_price.unit_amount) {
-        console.error("❌ Service price or currency missing!", service);
-        return prevCart;
-      }
+    // ✅ Check if price exists, otherwise set a default price
+    const price = service.default_price?.unit_amount
+      ? (service.default_price.unit_amount / 100).toFixed(2)
+      : null; // Fallback if price is missing
 
-      const newItem = {
-        ...service,
-        price: (service.default_price.unit_amount / 100).toFixed(2), // Convert cents to dollars
-        currency: service.default_price.currency.toUpperCase(),
-      };
+    const currency = service.default_price?.currency
+      ? service.default_price.currency.toUpperCase()
+      : "USD"; // Default to USD
 
-      return [...prevCart, newItem];
-    });
-  };
+    if (!price) {
+      console.error("❌ Cannot add plan without a valid price!", service);
+      return prevCart; // Don't add the item if price is missing
+    }
+
+    const newItem = {
+      ...service,
+      price,
+      currency,
+    };
+
+    const updatedCart = [...prevCart, newItem];
+
+    // ✅ Store updated cart in localStorage
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+    return updatedCart;
+  });
+};
 
   // ✅ Function to remove item from cart
   const removeFromCart = (serviceId) => {

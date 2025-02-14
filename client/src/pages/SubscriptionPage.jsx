@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback  } from "react";
 import { useCart } from "../context/CartContext"; // ✅ Import Cart Context
 import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
 
@@ -31,15 +31,15 @@ const SubscriptionPage = () => {
   }, []);
 
   // ✅ Function to Handle Subscription Click
-  const handleSubscribe = (plan) => {
+ const handleSubscribe = useCallback((plan) => {
     if (!plan.price || isNaN(Number(plan.price))) {
-      toast.error(`⚠️ Cannot subscribe to ${plan.name}, missing price!`);
-      return;
+        toast.error(`⚠️ Cannot subscribe to ${plan.name}, missing price!`);
+        return;
     }
 
-    addToCart(plan); // ✅ Add to Cart
-    toast.success(`✅ ${plan.name} added to cart!`); // ✅ Show Notification
-  };
+    addToCart(plan);
+    toast.success(`✅ ${plan.name} added to cart!`);
+}, [addToCart]); // ✅ Prevent function recreation on re-renders
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-16">

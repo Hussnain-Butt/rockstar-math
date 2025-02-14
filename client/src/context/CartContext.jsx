@@ -31,18 +31,28 @@ export const CartProvider = ({ children }) => {
  const addToCart = (service) => {
   setCart((prevCart) => {
     const exists = prevCart.some((item) => item.id === service.id);
-    
     if (exists) {
       console.warn(`Item already exists in the cart: ${service.name}`);
-      return prevCart; // If item already exists, do nothing
+      return prevCart;
     }
 
-    // ✅ Ensure price & currency are added
-    const newItem = {
-      ...service,
-      price: Number(service.price || 0),  // Convert price to number
-      currency: service.currency || "USD",  // Default to USD if undefined
-    };
+    // Ensure price exists before adding
+    if (!service.default_price || !service.default_price.unit_amount) {
+      console.error("Service price or currency missing!", service);
+      return prevCart;
+    }
+
+    return [
+      ...prevCart,
+      {
+        ...service,
+        price: (service.default_price.unit_amount / 100).toFixed(2), // Convert cents to dollars
+        currency: service.default_price.currency.toUpperCase(),
+      },
+    ];
+  });
+};
+
 
     // ✅ Store updated cart in localStorage
     const updatedCart = [...prevCart, newItem];

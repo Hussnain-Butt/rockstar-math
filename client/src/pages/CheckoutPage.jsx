@@ -17,7 +17,7 @@ const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentIntentId, setPaymentIntentId] = useState(null);
-  const [clientSecret, setClientSecret] = useState(null);  // ✅ Ensure `clientSecret` is used
+  const [clientSecret, setClientSecret] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,8 +71,8 @@ const createPaymentIntent = async () => {
 
         console.log("✅ Payment Intent Created:", data);
 
-        setPaymentIntentId(data.id);  // ✅ Storing Payment Intent ID
-        setClientSecret(data.clientSecret); // ✅ Storing clientSecret for PaymentForm
+        setPaymentIntentId(data.id);
+        setClientSecret(data.clientSecret);
         return data.clientSecret;
 
     } catch (error) {
@@ -134,24 +134,38 @@ return (
             <p>${total.toFixed(2)} USD</p>
           </div>
 
-          {!showPaymentForm && (
-            <>
-              <button
-                onClick={() => {
-                  if (total > 0) {
-                    setShowPaymentForm(true);
-                    createPaymentIntent();
-                  } else {
-                    handleZeroAmount();
+          {/* PayPal Payment */}
+          <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
+            <div className="mt-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Or Pay with PayPal</h2>
+              <PayPalButtons
+                style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
+                createOrder={async () => {
+                  try {
+                    const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/create-order", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ userId: "guest_user", classData: cartItems }),
+                    });
+
+                    if (!response.ok) throw new Error("Failed to create PayPal order");
+
+                    const { orderId } = await response.json();
+                    return orderId;
+                  } catch (error) {
+                    console.error("Error creating PayPal order:", error);
+                    toast.error("Error creating PayPal order.");
                   }
                 }}
-                className="w-full px-6 py-3 mt-5 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-md flex items-center justify-center gap-2"
-              >
-                <FaCreditCard /> Pay ${total.toFixed(2)} USD
-              </button>
-            </>
-          )}
+                onApprove={async (data, actions) => {
+                  const order = await actions.order.capture();
+                  handlePaymentSuccess();
+                }}
+              />
+            </div>
+          </PayPalScriptProvider>
 
+          {/* Stripe Payment */}
           {showPaymentForm && clientSecret && (
             <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Payment Form...</div>}>
               <div className="mt-6">

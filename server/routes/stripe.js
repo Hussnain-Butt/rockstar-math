@@ -131,34 +131,40 @@ router.post("/create-payment-intent", async (req, res) => {
     try {
         let { amount, currency, userId, orderId } = req.body;
 
-        // ✅ Validate Amount
+        if (!userId || !orderId) {
+            return res.status(400).json({ error: "Missing userId or orderId." });
+        }
+
         if (!amount || isNaN(amount) || amount <= 0) {
             return res.status(400).json({ error: "Invalid amount. Must be greater than 0." });
         }
 
-        amount = Math.round(amount * 100); // ✅ Convert amount to cents
+        amount = Math.round(amount * 100); // Convert to cents
 
-        // ✅ Ensure currency is supported by Stripe
         const supportedCurrencies = ["usd", "eur", "gbp", "cad", "aud"];
         if (!currency || !supportedCurrencies.includes(currency.toLowerCase())) {
             return res.status(400).json({ error: "Unsupported currency. Use USD, EUR, GBP, etc." });
         }
 
-        // ✅ Define Payment Methods Dynamically (Supports Google Pay, Apple Pay, etc.)
         const paymentMethods = ["card", "apple_pay", "google_pay"];
 
-        // ✅ Create Payment Intent with Metadata
+        // ✅ Ensure PaymentIntent is created successfully
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount, // Must be an integer (cents)
+            amount: amount,
             currency: currency.toLowerCase(),
             payment_method_types: paymentMethods,
             metadata: {
-                userId: userId || "anonymous",
-                orderId: orderId || "unknown",
+                userId,
+                orderId,
             },
         });
 
-        console.log(`✅ PaymentIntent Created: ${paymentIntent.id} for User: ${userId || "N/A"}`);
+        if (!paymentIntent.client_secret) {
+            console.error("❌ Stripe PaymentIntent Missing client_secret:", paymentIntent);
+            return res.status(500).json({ error: "Failed to create payment intent. No client_secret returned." });
+        }
+
+        console.log(`✅ PaymentIntent Created: ${paymentIntent.id} for User: ${userId}`);
 
         res.json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {

@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 const PaymentForm = lazy(() => import("../components/PaymentForm"));
 
 // ✅ Load Stripe Public Key
-const stripePromise = loadStripe("pk_live_51QKwhUE4sPC5ms3x7cYIFoYqx3lULz1hFA9EoRobabZVPwdDm8KbDNlHOZMizb2YftdwRSyxRfyi93ovv5Rev7i300CpaQEtU2");
+const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -88,6 +88,8 @@ const CheckoutPage = () => {
     }
   };
 
+
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-32">
       <h1 className="text-4xl font-bold text-center text-gray-900 mb-8">Checkout</h1>
@@ -148,17 +150,59 @@ const CheckoutPage = () => {
                 <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
                   <div className="relative z-20">
                     <PayPalButtons
-                      style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
-                      createOrder={(data, actions) => {
-                        return actions.order.create({
-                          purchase_units: [{ amount: { value: total.toFixed(2) } }],
-                        });
+                       style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
+                       createOrder={async () => {
+                        try {
+                          const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/create-order", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ userId: user.id, classData: cartItems }),
+                          });
+                    
+                          if (!response.ok) throw new Error("Failed to create PayPal order");
+                    
+                          const { orderId } = await response.json();
+                          return orderId; // ✅ Return Order ID to PayPal
+                        } catch (error) {
+                          console.error("Error creating PayPal order:", error);
+                          toast.error("Error creating PayPal order.");
+                        }
                       }}
-                      onApprove={(data, actions) => {
-                        return actions.order.capture().then(() => {
-                          handlePaymentSuccess();
-                        });
-                      }}
+                       onApprove={(data, actions) => {
+                         return actions.order.capture().then(async (details) => {
+                           toast.success("Payment Successful! Sending confirmation email...");
+                     
+                           const user = JSON.parse(localStorage.getItem("user"));
+                           if (!user || !user.email) {
+                             toast.error("User email not found!");
+                             return;
+                           }
+                     
+                           // ✅ Send Payment Data to Backend
+                           try {
+                             const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/capture-order", {
+                               method: "POST",
+                               headers: { "Content-Type": "application/json" },
+                               body: JSON.stringify({
+                                 orderId: details.id,
+                                 userId: user.id,
+                                 userEmail: user.email, // ✅ Send user email
+                                 cartItems,
+                               }),
+                             });
+                     
+                             if (!response.ok) throw new Error("Payment not saved in database");
+                     
+                             toast.success("Payment & Email Sent Successfully! Redirecting...");
+                             setTimeout(() => {
+                               navigate("/dashboard");
+                             }, 2000);
+                           } catch (error) {
+                             console.error("Error saving PayPal payment:", error);
+                             toast.error("Error saving payment details.");
+                           }
+                         });
+                       }}
                     />
                   </div>
                 </PayPalScriptProvider>

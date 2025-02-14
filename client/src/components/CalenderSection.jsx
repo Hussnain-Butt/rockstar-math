@@ -45,23 +45,21 @@ const CalenderSection = () => {
 
   return (
     <div className="max-w-full px-10 py-10 animate__animated animate__fadeIn">
-      <h2 className="text-4xl font-bold mb-6 text-center text-gray-900">
-        📅 Interactive Calendar
+      <h2 className="text-4xl font-bold mb-6 text-center text-gray-900">  
+        Calendar
       </h2>
-      <p className="text-lg text-gray-600 text-center mb-8">
-        Plan your learning schedule with ease!
-      </p>
+     
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border rounded-lg">
           <thead>
             <tr className="bg-gray-200">
               <th className="border border-black p-4 text-left text-lg">Time (PST)</th>
-              <th className="border border-black p-4 text-left text-lg text-blue-600">Sunday</th>
-              <th className="border border-black p-4 text-left text-lg text-blue-600">Monday</th>
-              <th className="border border-black p-4 text-left text-lg text-red-600">Tuesday</th>
-              <th className="border border-black p-4 text-left text-lg text-blue-600">Wednesday</th>
-              <th className="border border-black p-4 text-left text-lg text-yellow-600 bg-yellow-100">Thursday</th>
+              <th className="border  border-black p-4 text-left text-lg">Sunday</th>
+              <th className="border  border-black p-4 text-left text-lg">Monday</th>
+              <th className="border  border-black p-4 text-left text-lg">Tuesday</th>
+              <th className="border  border-black p-4 text-left text-lg">Wednesday</th>
+              <th className="border  border-black p-4 text-left text-lg">Thursday</th>
             </tr>
           </thead>
           <tbody>

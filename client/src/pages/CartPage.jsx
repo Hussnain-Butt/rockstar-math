@@ -109,7 +109,9 @@ const CartPage = () => {
                   </div>
 
                   {/* Price */}
-                  <p className="text-green-600 font-semibold w-1/6">${Number(item.price || 0).toFixed(2)} USD</p>
+                  <p className="text-green-600 font-semibold">
+      ${item.price ? Number(item.price).toFixed(2) : "N/A"} {item.currency || "USD"}
+    </p>
 
                   {/* Remove Button */}
                   <button

@@ -8,53 +8,36 @@ const PaymentForm = ({ totalAmount, paymentIntentId }) => {
   const elements = useElements();
   const [loading, setLoading] = useState(false);
 
- const handleSubmit = async (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
-        console.error("❌ Stripe or Elements not initialized");
-        return;
-    }
-
-    if (!clientSecret) {
-        console.error("❌ Missing `clientSecret`. Cannot process payment.");
-        toast.error("Payment error: Missing client secret.");
-        return;
-    }
-
+    if (!stripe || !elements) return;
     setLoading(true);
 
-    try {
-        console.log("🔹 Confirming payment with Stripe...");
-
-        const { error, paymentIntent } = await stripe.confirmCardPayment(
-            clientSecret,  // ✅ Using clientSecret from state
-            {
-                payment_method: {
-                    card: elements.getElement(CardElement),
-                },
-            }
-        );
-
+    // ✅ Ensure clientSecret is properly fetched
+    const clientSecret = await createPaymentIntent();
+    if (!clientSecret) {
+        toast.error("❌ Payment initialization failed!");
         setLoading(false);
+        return;
+    }
 
-        if (error) {
-            console.error("❌ Payment Failed:", error);
-            toast.error(`Payment Failed: ${error.message}`);
-        } else if (paymentIntent && paymentIntent.status === "succeeded") {
-            console.log("✅ Payment Successful:", paymentIntent);
-            toast.success("Payment Successful! Redirecting...");
-            setTimeout(() => window.location.href = "/dashboard", 2000);
-        } else {
-            console.warn("⚠️ Unexpected payment status:", paymentIntent);
-            toast.error("Unexpected payment status. Please try again.");
-        }
-    } catch (error) {
-        console.error("❌ Payment Processing Error:", error);
-        toast.error("An error occurred during payment. Please try again.");
-        setLoading(false);
+    console.log("🔹 Using clientSecret:", clientSecret);
+
+    const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: { card: elements.getElement(CardElement) }
+    });
+
+    setLoading(false);
+
+    if (error) {
+        toast.error(`Payment Failed: ${error.message}`);
+    } else if (paymentIntent.status === "succeeded") {
+        toast.success("✅ Payment Successful! Redirecting...");
+        setTimeout(() => window.location.href = "/dashboard", 2000);
     }
 };
+
 
 
   return (

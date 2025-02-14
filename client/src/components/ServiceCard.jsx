@@ -28,20 +28,16 @@ const ServiceCard = ({ service, users, handleAddToCart }) => {
     </div>
       {/* ✅ Buttons Section */}
       <div className="mt-4">
-        {!users ? (
-          <button className="bg-deepBlue text-white w-full py-3 rounded-xl hover:bg-sky-600 transition-all duration-300 shadow-lg">
-            Buy Now to Sign-Up
-          </button>
-        ) : (
+     
           <div className="flex flex-col gap-3">
             <button
               className="flex items-center justify-center gap-2 bg-deepBlue text-white w-full py-3 rounded-xl hover:from-yellow-600 hover:to-yellow-800 transition-all duration-300 shadow-lg"
               onClick={() => handleAddToCart(service)}
             >
-              <FaShoppingCart /> Add to Cart
+              <FaShoppingCart /> Buy Now to Sign-Up
             </button>
           </div>
-        )}
+      
       </div>
     </div>
   )

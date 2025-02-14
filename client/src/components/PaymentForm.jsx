@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-import { toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast'
 import { FaCreditCard } from "react-icons/fa";
 
 // ✅ Pass `createPaymentIntent` as a prop
@@ -54,6 +54,7 @@ const PaymentForm = ({ totalAmount, createPaymentIntent }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+       <Toaster position="top-right" />
       <CardElement className="p-3 border border-gray-300 rounded-lg w-full" />
       <button
         type="submit"

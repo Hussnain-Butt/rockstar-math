@@ -55,7 +55,7 @@ const Calendar = () => {
           {Object.keys(eventData).map((day) => (
             <div
               key={day}
-              className={`relative py-6 px-5 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-300 font-semibold text-lg ${bgColors[day]} text-white`}
+              className={`relative py-6 px-5 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-300 font-semibold text-lg text-black`}
               onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
             >

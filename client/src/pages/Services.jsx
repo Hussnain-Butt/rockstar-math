@@ -30,9 +30,20 @@ const Services = () => {
   }, [])
 
   const handleAddToCart = (service) => {
-    addToCart(service)
-    toast.success(`${service.name} added to cart!`)
-  }
+    if (!service.price || !service.currency) {
+      console.error("❌ Service price or currency missing!", service);
+    }
+  
+    addToCart({
+      id: service.id,
+      name: service.name,
+      description: service.description,
+      price: Number(service.price || 0), // Ensure price is a number
+      currency: service.currency || "USD", // Ensure currency is set
+    });
+  
+    toast.success(`${service.name} added to cart!`);
+  };
 
   // ✅ Grouping Services into 3 categories
 // ✅ Grouping Services into 3 categories

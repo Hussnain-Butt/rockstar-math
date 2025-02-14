@@ -28,7 +28,7 @@ const PaymentForm = ({ totalAmount, paymentIntentId }) => {
         console.log("🔹 Confirming payment with Stripe...");
 
         const { error, paymentIntent } = await stripe.confirmCardPayment(
-            clientSecret, // ✅ Use `clientSecret` here instead of `paymentIntentId`
+            clientSecret,  // ✅ Using clientSecret from state
             {
                 payment_method: {
                     card: elements.getElement(CardElement),

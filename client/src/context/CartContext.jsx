@@ -29,13 +29,14 @@ export const CartProvider = ({ children }) => {
 
   // ✅ Function to add item to cart (Prevents Duplicates & Ensures Pricing)
   const addToCart = (service) => {
-    setCart((prevCart) => {
-      // ✅ Check if item already exists in cart
+      setCart((prevCart) => {
       const exists = prevCart.some((item) => item.id === service.id);
       if (exists) {
-        console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
+        console.warn(`Item already exists in the cart: ${service.name}`);
         return prevCart;
       }
+      return [...prevCart, service];
+    });
 
       // ✅ Ensure price exists before adding
       if (!service.default_price || !service.default_price.unit_amount) {

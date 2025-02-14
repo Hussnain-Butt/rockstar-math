@@ -3,6 +3,8 @@ const router = express.Router();
 const paypal = require("@paypal/checkout-server-sdk");
 const client = require("../config/paymentConfig");
 const Order = require("../models/OrderModel"); // ✅ Import Order Model
+const sendEmail = require("../utils/emailSender"); // ✅ Import Your Nodemailer Function
+const User = require("../models/User"); // ✅ Import User Model
 
 // ✅ Create PayPal Order
 router.post("/create-order", async (req, res) => {
@@ -27,11 +29,12 @@ router.post("/create-order", async (req, res) => {
   }
 });
 
-// ✅ Capture PayPal Payment
+// ✅ Capture PayPal Payment & Save to Database
 router.post("/capture-order", async (req, res) => {
   try {
-    const { orderId } = req.body;
+    const { orderId, userId, cartItems, userEmail } = req.body;
     if (!orderId) return res.status(400).json({ error: "Order ID is required" });
+    if (!userId) return res.status(400).json({ error: "User ID is required" });
 
     const request = new paypal.orders.OrdersCaptureRequest(orderId);
     const capture = await client.execute(request);
@@ -39,18 +42,70 @@ router.post("/capture-order", async (req, res) => {
 
     console.log(`✅ PayPal Payment Captured: ${captureData.id}`);
 
-    await Order.create({
-      orderId: captureData.id,
-      status: captureData.status,
-      amount: captureData.purchase_units[0].amount.value,
-      currency: captureData.purchase_units[0].amount.currency_code,
+    // ✅ Get Payment Source (Debit, Credit, PayPal)
+    const paymentSource = captureData.payment_source?.card ? "Debit/Credit Card" : "PayPal";
+
+    // ✅ Format Purchased Classes According to Schema
+    const purchasedClasses = cartItems.map(item => ({
+        title: item.name || "Unknown Class", // ✅ Ensure title exists
+        teacher: item.teacher || "Unknown Teacher",
+        date: new Date().toISOString(), // ✅ Use current date if no date provided
+        image: item.image || "",
+        description: item.description || "",
+    }));
+
+    // ✅ Store Paid Items in Order Collection
+    const newOrder = await Order.create({
+        userId,
+        orderId: captureData.id,
+        status: "Paid",
+        amount: captureData.purchase_units[0].amount.value,
+        currency: captureData.purchase_units[0].amount.currency_code,
+        items: purchasedClasses, // ✅ Save Purchased Items Correctly
+        paymentMethod: paymentSource,
+        createdAt: new Date(),
     });
 
-    res.status(200).json({ message: "PayPal Payment Captured Successfully", orderId: captureData.id });
+    console.log("✅ Order saved:", newOrder);
+
+    // ✅ Update User's Purchased Classes in Database
+    const user = await User.findById(userId);
+    if (user) {
+        user.purchasedClasses = [...user.purchasedClasses, ...purchasedClasses]; // ✅ Append Purchased Classes
+        await user.save();
+    }
+
+    // ✅ Send Email to User
+    const userEmailContent = `
+        <h2>Payment Successful</h2>
+        <p>Thank you for your payment of <strong>$${newOrder.amount} USD</strong>.</p>
+        <p>Your Order ID: <strong>${newOrder.orderId}</strong></p>
+        <p>Payment Method: <strong>${paymentSource}</strong></p>
+        <p><strong>Purchased Classes:</strong></p>
+        <ul>
+            ${purchasedClasses.map(classItem => `<li>${classItem.title} by ${classItem.teacher}</li>`).join("")}
+        </ul>
+        <p>You will receive further details soon.</p>
+    `;
+    await sendEmail(userEmail, "Payment Successful - Your Purchased Classes", "", userEmailContent);
+
+      // ✅ Send Email to Admin
+      const adminEmail = "bhussnain966@gmail.com";
+      const adminEmailContent = `
+          <h2>New Order Received</h2>
+          <p>A new payment has been received from ${userEmail}.</p>
+          <p>Amount: <strong>$${newOrder.amount} USD</strong></p>
+          <p>Order ID: <strong>${newOrder.orderId}</strong></p>
+          <p>Payment Method: <strong>${paymentSource}</strong></p>
+      `;
+      await sendEmail(adminEmail, "New Order Received", "", adminEmailContent);
+
+      res.status(200).json({ message: "PayPal Payment Captured & Emails Sent Successfully", orderId: captureData.id });
   } catch (error) {
-    console.error("❌ PayPal Capture Error:", error.message);
-    res.status(500).json({ error: "Failed to capture PayPal payment" });
+      console.error("❌ PayPal Capture Error:", error.message);
+      res.status(500).json({ error: "Failed to capture PayPal payment and send email" });
   }
 });
+
 
 module.exports = router;

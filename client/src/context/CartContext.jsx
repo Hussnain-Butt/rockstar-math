@@ -28,38 +28,54 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   // ✅ Function to add item to cart (Fix for "Cannot add plan without price" error)
-  const addToCart = (plan) => {
-    setCart((prevCart) => {
-      // ✅ Check if item already exists in cart
-      const exists = prevCart.some((item) => item.id === plan.id);
-      if (exists) {
-        console.warn(`⚠️ Item already exists in the cart: ${plan.name}`);
-        return prevCart;
-      }
+  const addToCart = (service) => {
+  setCart((prevCart) => {
+    const exists = prevCart.some((item) => item.id === service.id);
+    if (exists) {
+      console.warn(`⚠️ Item already exists in the cart: ${service.name}`);
+      return prevCart;
+    }
 
-      // ✅ Ensure price exists before adding
-      if (!plan.price || isNaN(Number(plan.price))) {
-        console.error("❌ Cannot add plan without a valid price!", plan);
-        alert("This plan cannot be added because it has no price set.");
-        return prevCart; // Don't add item if price is missing
-      }
+    // ✅ Handle Both Subscription & Services Price Data Structure
+    let price = null;
+    let currency = "USD";
 
-      // ✅ Convert price to a fixed 2 decimal format
-      const newItem = {
-        ...plan,
-        price: Number(plan.price).toFixed(2), // ✅ Ensure proper price format
-        currency: plan.currency.toUpperCase(),
-      };
+    // Subscription plans use `price` directly
+    if (service.price) {
+      price = Number(service.price).toFixed(2);
+      currency = service.currency ? service.currency.toUpperCase() : "USD";
+    }
 
-      // ✅ Update cart state
-      const updatedCart = [...prevCart, newItem];
+    // Services have `default_price.unit_amount` structure
+    if (!price && service.default_price && service.default_price.unit_amount) {
+      price = (service.default_price.unit_amount / 100).toFixed(2);
+      currency = service.default_price.currency.toUpperCase();
+    }
 
-      // ✅ Store updated cart in localStorage
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+    // ✅ Prevent Adding Items Without Price
+    if (!price || isNaN(price)) {
+      console.error("❌ Cannot add plan without a valid price!", service);
+      toast.error("This plan cannot be added because it has no price set.");
+      return prevCart;
+    }
 
-      return updatedCart;
-    });
-  };
+    // ✅ Create a Clean Object for the Cart
+    const newItem = {
+      id: service.id,
+      name: service.name,
+      description: service.description,
+      images: service.images || [],
+      price,
+      currency,
+    };
+
+    const updatedCart = [...prevCart, newItem];
+    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+    toast.success(`${service.name} added to cart!`);
+    return updatedCart;
+  });
+};
 
   // ✅ Function to remove item from cart
   const removeFromCart = (serviceId) => {

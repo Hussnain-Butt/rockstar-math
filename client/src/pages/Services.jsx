@@ -31,15 +31,15 @@ const Services = () => {
   }, []);
 
 
-const handleAddToCart = useCallback((service) => {
-  if (!service.price || isNaN(Number(service.price))) {
-    toast.error(`⚠️ Cannot add ${service.name} to cart, missing price!`);
-    return;
+  const handleAddToCart = (service) => {
+    if (!service.price || isNaN(Number(service.price))) {
+      toast.error(`⚠️ Cannot add ${service.name} to cart, missing price!`);
+      return;
+    }
+  
+    addToCart(service);
+    toast.success(`${service.name} added to cart!`);
   }
-
-  addToCart(service);
-  toast.success(`${service.name} added to cart!`);
-}, [addToCart]);
 
   // ✅ Grouping Services into 3 categories
   const categorizedServices = {

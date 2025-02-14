@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext'
 import { FaShoppingCart } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast'
+import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
 
 // ✅ Lazy Load Components
 const ServiceCard = lazy(() => import('../components/ServiceCard'))

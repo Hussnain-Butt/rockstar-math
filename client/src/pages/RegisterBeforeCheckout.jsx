@@ -58,7 +58,7 @@ const openOtpPopup = async () => {
   setIsOtpPopupOpen(true);
 
   try {
-    const response = await axios.post("http://localhost:5000/api/send-otp", {
+    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/send-otp", {
       phone: formData.phone,
     });
 
@@ -76,7 +76,7 @@ const openOtpPopup = async () => {
 // ✅ Verify OTP Dynamically
 const verifyOtp = async () => {
   try {
-    const response = await axios.post("http://localhost:5000/api/verify-otp", {
+    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/verify-otp", {
       phone: formData.phone,
       otp,
     });
@@ -100,7 +100,7 @@ const verifyOtp = async () => {
     if (isChecked) {
       setIsOtpPopupOpen(true)
       try {
-        const response = await axios.post('http://localhost:5000/api/send-otp', {
+        const response = await axios.post('https://rockstar-math-production.up.railway.app/api/send-otp', {
           phone: formData.phone,
         })
 
@@ -126,7 +126,7 @@ const verifyOtp = async () => {
 
         if (!email || !phone) return; // User ka data nahi hai, allow registration
 
-        const response = await axios.post("http://localhost:5000/api/check-registration", { email, phone });
+        const response = await axios.post("https://rockstar-math-production.up.railway.app/api/check-registration", { email, phone });
 
         if (response.data.success) {
           toast.success("You are already registered! Redirecting to checkout...");
@@ -186,7 +186,7 @@ const verifyOtp = async () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/register', formData)
+      const response = await axios.post('https://rockstar-math-production.up.railway.app/api/register', formData)
       if (response.data.success) {
         toast.success(response.data.message);
 

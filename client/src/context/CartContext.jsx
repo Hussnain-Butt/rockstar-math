@@ -28,40 +28,34 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   // ✅ Function to add item to cart (Prevents Duplicates)
- const addToCart = (service) => {
-  setCart((prevCart) => {
-    const exists = prevCart.some((item) => item.id === service.id);
-    if (exists) {
-      console.warn(`Item already exists in the cart: ${service.name}`);
-      return prevCart;
-    }
+  const addToCart = (service) => {
+    setCart((prevCart) => {
+      const exists = prevCart.some((item) => item.id === service.id);
+      if (exists) {
+        console.warn(`Item already exists in the cart: ${service.name}`);
+        return prevCart;
+      }
 
-    // Ensure price exists before adding
-    if (!service.default_price || !service.default_price.unit_amount) {
-      console.error("Service price or currency missing!", service);
-      return prevCart;
-    }
+      // Ensure price exists before adding
+      if (!service.default_price || !service.default_price.unit_amount) {
+        console.error("Service price or currency missing!", service);
+        return prevCart;
+      }
 
-    return [
-      ...prevCart,
-      {
+      const newItem = {
         ...service,
         price: (service.default_price.unit_amount / 100).toFixed(2), // Convert cents to dollars
         currency: service.default_price.currency.toUpperCase(),
-      },
-    ];
-  });
-};
+      };
 
+      const updatedCart = [...prevCart, newItem];
 
-    // ✅ Store updated cart in localStorage
-    const updatedCart = [...prevCart, newItem];
-    localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+      // ✅ Store updated cart in localStorage
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
 
-    return updatedCart;
-  });
-};
-
+      return updatedCart;
+    });
+  };
 
   // ✅ Function to remove item from cart
   const removeFromCart = (serviceId) => {
@@ -71,6 +65,7 @@ export const CartProvider = ({ children }) => {
   // ✅ Function to clear the cart (Optional)
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem("cartItems"); // Remove cart from localStorage when cleared
   };
 
   return (

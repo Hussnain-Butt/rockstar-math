@@ -5,35 +5,39 @@ const Calendar = () => {
   // 🛠 Event Data with Categories
   const eventData = {
     Sunday: [
-      { name: "Individual Lessons - 3 - 6 pm", type: "individual" },
-      { name: "Common Core Drop In for Parents - 8 - 9 pm", type: "general" },
+      { name: "3-6pm: Individual Classes", type: "individual" },
+      { name: "7-8pm: Individual Classes", type: "individual" },
+      { name: "8-9pm: Common Core Drop-In For Parents", type: "math" },
     ],
     Monday: [
-      { name: "Group Tutoring - 4 PM", type: "general" },
-      { name: "Private Tutoring - 6 PM", type: "individual" },
+      { name: "3-6pm: Individual Classes", type: "individual" },
+      { name: "7-8pm: Middle School Study Group", type: "study" },
+      { name: "8-9pm: Trigonometry & Precalculus", type: "math" },
     ],
-    Tuesday: [{ name: "Live Class - 5 PM", type: "seasonal" }],
+    Tuesday: [
+      { name: "3-6pm: Individual Classes", type: "individual" },
+      { name: "7-8pm: Algebra I Study Group", type: "study" },
+      { name: "8-9pm: Calculus Drop-In Group (1.5 Hours)", type: "study" },
+    ],
     Wednesday: [
-      { name: "Group Tutoring - 3 PM", type: "general" },
-      { name: "AP Bootcamp - 7 PM", type: "seasonal" },
+      { name: "3-6pm: Individual Classes", type: "individual" },
+      { name: "7-8pm: Middle School Study Group", type: "study" },
+      { name: "8-9pm: Geometry Study Group", type: "study" },
     ],
-    Thursday: [{ name: "Private Tutoring - 5 PM", type: "individual" }],
-  };
-
-  // 🛠 Define Different Background Colors for Each Day
-  const bgColors = {
-    Sunday: "bg-green-500 hover:bg-green-600 text-white",
-    Monday: "bg-blue-500 hover:bg-blue-600 text-white",
-    Tuesday: "bg-red-500 hover:bg-red-600 text-white",
-    Wednesday: "bg-blue-500 hover:bg-blue-600 text-white",
-    Thursday: "bg-green-500 hover:bg-green-600 text-white",
+    Thursday: [
+      { name: "3-6pm: Seasonal Course (TBD)", type: "seasonal" },
+      { name: "7-8pm: TBD", type: "seasonal" },
+      { name: "8-9pm: TBD", type: "seasonal" },
+    ],
   };
 
   // 🛠 Define Colors for Bullet Points Based on Type
   const bulletColors = {
-    individual: "text-blue-400", // 🔵 Individual Courses
-    general: "text-purple-400", // 🟣 Everything Else
-    seasonal: "text-yellow-400", // 🟡 Seasonal Courses
+    individual: "text-blue-500", // 🔵 Individual Classes
+    study: "text-purple-500", // 🟣 Study Groups
+    math: "text-green-500", // 🟢 Math Courses
+    seasonal: "text-yellow-500", // 🟡 Seasonal Courses
+    general: "text-gray-500", // ⚪ General Events
   };
 
   // 🛠 State for Tooltip Visibility
@@ -41,13 +45,13 @@ const Calendar = () => {
 
   return (
     <AnimatedSection direction="top">
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-10">
+      <div className="max-w-5xl mx-auto bg-gradient-to-r from-purple-500 to-indigo-500 shadow-xl rounded-2xl p-10 text-white">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
+          <h2 className="text-4xl font-bold flex items-center justify-center gap-3">
             <span role="img" aria-label="calendar">📅</span> Interactive Calendar
           </h2>
-          <p className="text-gray-600 mt-2 text-lg">Plan your learning schedule with ease!</p>
+          <p className="mt-2 text-lg">Plan your learning schedule with ease!</p>
         </div>
 
         {/* Calendar Grid */}
@@ -55,7 +59,7 @@ const Calendar = () => {
           {Object.keys(eventData).map((day) => (
             <div
               key={day}
-              className={`relative py-6 px-5 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer border border-gray-300 font-semibold text-lg text-black`}
+              className="relative py-6 px-5 rounded-lg shadow-md bg-white text-gray-900 hover:shadow-lg transition-all cursor-pointer border border-gray-300 font-semibold text-lg"
               onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
             >

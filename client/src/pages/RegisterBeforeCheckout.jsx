@@ -25,23 +25,32 @@ const RegisterBeforeCheckout = () => {
   const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false); // OTP popup state
   const [isOtpVerified, setIsOtpVerified] = useState(false); // OTP verification state
   const [generatedOtp, setGeneratedOtp] = useState(""); // Store received OTP for comparison
-  const [isWebcamPopupOpen, setIsWebcamPopupOpen] = useState(false);
-  const [isSmsPopupOpen, setIsSmsPopupOpen] = useState(false);
   
   const navigate = useNavigate()
+
+  const handleNumStudentsChange = (e) => {
+    let value = parseInt(e.target.value, 10);
+    if (isNaN(value) || value < 0) {
+      value = 0; // Reset to 0 if negative value is entered
+    }
+    setFormData((prev) => ({
+      ...prev,
+      numStudents: value,
+    }));
+  };
 
   // ✅ Handle Input Change
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value.trim(),
+      [name]: type === 'checkbox' ? checked : value,
     }))
   }
   // ✅ Open OTP Popup (Checkbox or Text Click)
 // ✅ Open OTP Popup and Send OTP
 const openOtpPopup = async () => {
-  if (!formData.phone || formData.phone.trim() === "") {
+  if (!formData.phone || formData.phone === "") {
     toast.error("Please enter a valid phone number!");
     return;
   }
@@ -49,7 +58,7 @@ const openOtpPopup = async () => {
   setIsOtpPopupOpen(true);
 
   try {
-    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/send-otp", {
+    const response = await axios.post("http://localhost:5000/api/send-otp", {
       phone: formData.phone,
     });
 
@@ -64,22 +73,10 @@ const openOtpPopup = async () => {
   }
 };
 
- // ✅ Handle Webcam Agreement
- const openWebcamPopup = (e) => {
-  e.preventDefault();
-  setIsWebcamPopupOpen(true);
-};
-
-const handleAgreeWebcam = () => {
-  setFormData((prev) => ({ ...prev, didUserApproveWebcam: true }));
-  setIsWebcamPopupOpen(false);
-};
-
-
 // ✅ Verify OTP Dynamically
 const verifyOtp = async () => {
   try {
-    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/verify-otp", {
+    const response = await axios.post("http://localhost:5000/api/verify-otp", {
       phone: formData.phone,
       otp,
     });
@@ -103,7 +100,7 @@ const verifyOtp = async () => {
     if (isChecked) {
       setIsOtpPopupOpen(true)
       try {
-        const response = await axios.post('https://rockstar-math-production.up.railway.app/api/send-otp', {
+        const response = await axios.post('http://localhost:5000/api/send-otp', {
           phone: formData.phone,
         })
 
@@ -129,7 +126,7 @@ const verifyOtp = async () => {
 
         if (!email || !phone) return; // User ka data nahi hai, allow registration
 
-        const response = await axios.post("https://rockstar-math-production.up.railway.app/api/check-registration", { email, phone });
+        const response = await axios.post("http://localhost:5000/api/check-registration", { email, phone });
 
         if (response.data.success) {
           toast.success("You are already registered! Redirecting to checkout...");
@@ -142,17 +139,6 @@ const verifyOtp = async () => {
 
     checkUserRegistration();
   }, [navigate]);
-
-  const openSmsPopup = (e) => {
-    e.preventDefault();
-    setIsSmsPopupOpen(true);
-  };
-
-  const handleAgreeSms = () => {
-    setFormData((prev) => ({ ...prev, didUserApproveSMS: true }));
-    setIsSmsPopupOpen(false);
-    openOtpPopup(); // ✅ Send OTP after agreeing
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -173,7 +159,7 @@ const verifyOtp = async () => {
     ]
 
     for (const field of requiredFields) {
-      if (!formData[field] || formData[field].trim() === '') {
+      if (!formData[field] || formData[field] === '') {
         toast.error(`${field.replace(/([A-Z])/g, ' $1')} is required!`)
         return
       }
@@ -185,7 +171,7 @@ const verifyOtp = async () => {
     }
 
     try {
-      const response = await axios.post('https://rockstar-math-production.up.railway.app/api/register', formData)
+      const response = await axios.post('http://localhost:5000/api/register', formData)
       if (response.data.success) {
         toast.success(response.data.message);
 
@@ -244,7 +230,7 @@ const verifyOtp = async () => {
           {/* ✅ Always Show These Inputs */}
           {[
             { name: 'adultName', label: 'Name of Adult *' },
-            { name: 'numStudents', label: 'Number of Students *', type: 'number' },
+            { name: 'numStudents', label: 'Number of Students *', type: 'number'  },
             { name: 'studentNames', label: 'Name of Student(s) *' },
             { name: 'studentGrades', label: 'Grade of Student(s) *' },
             { name: 'studentMathLevels', label: 'Level of Math for Student(s) *' },
@@ -259,7 +245,8 @@ const verifyOtp = async () => {
                 type={type}
                 name={name}
                 value={formData[name]}
-                onChange={handleChange}
+                onChange={name === 'numStudents' ? handleNumStudentsChange : handleChange} // ✅ Conditionally apply handler
+                min={name === 'numStudents' ? "0" : undefined} // ✅ Prevent negative numbers for numStudents
                 required
                 className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
@@ -307,8 +294,11 @@ const verifyOtp = async () => {
               />
               <Link
                 to="#"
-                onClick={openSmsPopup}
-                className="text-gray-700 text-sm underline  text-blue-700"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openOtpPopup();
+                }}
+                className="text-gray-700 text-sm"
               >
                 I agree to receive SMS notifications
               </Link>
@@ -320,13 +310,7 @@ const verifyOtp = async () => {
                 checked={formData.didUserApproveWebcam}
                 onChange={handleChange}
               />
-               <Link
-                to="#"
-                onClick={openWebcamPopup}
-                className="text-gray-700 text-sm underline  text-blue-700"
-              >
-                I agree to use a webcam
-              </Link>
+              <label className="text-gray-700 text-sm">I agree to use a webcam</label>
             </div>
           </div>
 
@@ -338,72 +322,6 @@ const verifyOtp = async () => {
           </button>
         </form>
       </div>
-
- {/* ✅ Webcam Agreement Popup */}
- {isWebcamPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
-          <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
-            <h3 className="text-2xl font-bold text-gray-800">Webcam Attendance Agreement</h3>
-            <p className="text-sm text-gray-600 mt-4 text-left">
-              Rockstar Math Webcam Attendance & Identity Verification Policy
-            </p>
-            <ul className="text-left text-gray-600 text-sm mt-2">
-              <li>✅ Attendance Verification – Ensuring students are present for their scheduled sessions.</li>
-              <li>✅ Identity Confirmation – Preventing unauthorized individuals from joining sessions.</li>
-              <li>✅ Engagement & Participation – Encouraging active participation in lessons.</li>
-            </ul>
-            <p className="text-left text-gray-600 text-sm mt-2">
-              <strong>Agreement Terms:</strong>
-              <br />
-              ● Students must have their webcam turned on during all live sessions.
-              <br />
-              ● Failure to comply may result in removal from the session.
-              <br />
-              ● Exceptions may be granted for documented technical difficulties or special accommodations.
-            </p>
-            <button
-              onClick={handleAgreeWebcam}
-              className="w-full mt-4 py-3 bg-blue-600 text-white font-semibold rounded-md"
-            >
-              I AGREE
-            </button>
-          </div>
-        </div>
-      )}
-
-  {/* ✅ SMS Agreement Popup */}
-  {isSmsPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
-          <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
-            <h3 className="text-2xl font-bold text-gray-800">
-              SMS Text Agreement
-            </h3>
-            <p className="text-sm text-gray-600 mt-4 text-left">
-              Rockstar Math SMS Notification & Alerts Agreement
-            </p>
-            <p className="text-left text-gray-600 text-sm mt-2">
-              By providing your phone number during registration, you consent to
-              receive SMS notifications, updates, and alerts related to your
-              tutoring sessions, payment confirmations, and important
-              announcements from Rockstar Math.
-            </p>
-            <p className="text-left text-gray-600 text-sm mt-2">
-              <strong>Opt-Out Instructions:</strong>
-              <br />
-              ● To stop SMS notifications, reply STOP to any message.
-              <br />
-              ● For further assistance, contact us at x@gmail.com.
-            </p>
-            <button
-              onClick={handleAgreeSms}
-              className="w-full mt-4 py-3 bg-blue-600 text-white font-semibold rounded-md"
-            >
-              I AGREE
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* ✅ OTP Popup */}
       {isOtpPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

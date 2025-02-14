@@ -16,6 +16,7 @@ const waitlist = require("./routes/waitlist");
 const zoomRoutes = require("./routes/zoomRoutes");
 const userRoutes = require("./routes/userRoutes")
 const paymentRoutes = require("./routes/paymentRoutes"); // ✅ Import Payment Routes
+const ordersRoute = require("./routes/orders"); // ✅ Import Orders Route
 connectDB();
 
 const app = express();
@@ -89,6 +90,7 @@ app.use("/api", waitlist);
 app.use("/api/paypal", require("./routes/paypal")); // PayPal API
 app.use("/api", zoomRoutes);
 app.use('/api/users', userRoutes); // ✅ Now users API will work properly
+app.use("/api/orders", ordersRoute); // ✅ Set orders route
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -148,7 +148,7 @@ return (
             >
               <FaCreditCard /> Pay with Card
             </button>
-          )}
+          
           {/* PayPal Payment */}
           <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
             <div className="mt-6">
@@ -179,7 +179,7 @@ return (
               />
             </div>
           </PayPalScriptProvider>
-
+)}
           {/* Stripe Payment */}
           {showPaymentForm && clientSecret && (
             <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Payment Form...</div>}>

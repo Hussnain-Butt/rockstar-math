@@ -134,52 +134,89 @@ return (
             <p>Total:</p>
             <p>${total.toFixed(2)} USD</p>
           </div>
-       {!showPaymentForm && (
-            <button
-              onClick={() => {
-                if (total > 0) {
-                  setShowPaymentForm(true);
-                  createPaymentIntent();
-                } else {
-                  handleZeroAmount();
-                }
-              }}
-              className="w-full px-6 py-3 mt-5 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-md flex items-center justify-center gap-2"
-            >
-              <FaCreditCard /> Pay with Card
-            </button>
-          
-          {/* PayPal Payment */}
-          <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Or Pay with PayPal</h2>
-              <PayPalButtons
-                style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
-                createOrder={async () => {
-                  try {
-                    const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/create-order", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ userId: "guest_user", classData: cartItems }),
-                    });
-
-                    if (!response.ok) throw new Error("Failed to create PayPal order");
-
-                    const { orderId } = await response.json();
-                    return orderId;
-                  } catch (error) {
-                    console.error("Error creating PayPal order:", error);
-                    toast.error("Error creating PayPal order.");
+      {!showPaymentForm && (
+            <>
+              {/* Stripe Payment Button */}
+              <button
+                onClick={() => {
+                  if (total > 0) {
+                    setShowPaymentForm(true);
+                    createPaymentIntent();
+                  } else {
+                    handleZeroAmount();
                   }
                 }}
-                onApprove={async (data, actions) => {
-                  const order = await actions.order.capture();
-                  handlePaymentSuccess();
-                }}
-              />
-            </div>
-          </PayPalScriptProvider>
-)}
+                className="w-full px-6 py-3 mt-5 text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-lg shadow-md flex items-center justify-center gap-2"
+              >
+                <FaCreditCard /> Pay ${total.toFixed(2)} USD
+              </button>
+
+              {/* PayPal Payment Integration */}
+              <div className="mt-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">Or Pay with PayPal</h2>
+                <PayPalScriptProvider options={{ "client-id": "AaZbEygWpyKJsxxTXfZ5gSpgfm2rzf_mCanmJb80kbNg1wvj6e0ktu3jzxxjKYjBOLSkFTeMSqDLAv4L" }}>
+                  <div className="relative z-20">
+                    <PayPalButtons
+                       style={{ layout: "vertical", color: "blue", shape: "pill", label: "paypal" }}
+                       createOrder={async () => {
+                        try {
+                          const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/create-order", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ userId: user.id, classData: cartItems }),
+                          });
+                    
+                          if (!response.ok) throw new Error("Failed to create PayPal order");
+                    
+                          const { orderId } = await response.json();
+                          return orderId; // ✅ Return Order ID to PayPal
+                        } catch (error) {
+                          console.error("Error creating PayPal order:", error);
+                          toast.error("Error creating PayPal order.");
+                        }
+                      }}
+                       onApprove={(data, actions) => {
+                         return actions.order.capture().then(async (details) => {
+                           toast.success("Payment Successful! Sending confirmation email...");
+                     
+                           const user = JSON.parse(localStorage.getItem("user"));
+                           if (!user || !user.email) {
+                             toast.error("User email not found!");
+                             return;
+                           }
+                     
+                           // ✅ Send Payment Data to Backend
+                           try {
+                             const response = await fetch("https://rockstar-math-production.up.railway.app/api/payments/capture-order", {
+                               method: "POST",
+                               headers: { "Content-Type": "application/json" },
+                               body: JSON.stringify({
+                                 orderId: details.id,
+                                 userId: user.id,
+                                 userEmail: user.email, // ✅ Send user email
+                                 cartItems,
+                               }),
+                             });
+                     
+                             if (!response.ok) throw new Error("Payment not saved in database");
+                     
+                             toast.success("Payment & Email Sent Successfully! Redirecting...");
+                             setTimeout(() => {
+                               navigate("/dashboard");
+                             }, 2000);
+                           } catch (error) {
+                             console.error("Error saving PayPal payment:", error);
+                             toast.error("Error saving payment details.");
+                           }
+                         });
+                       }}
+                    />
+                  </div>
+                </PayPalScriptProvider>
+              </div>
+            </>
+          )}
+
           {/* Stripe Payment */}
           {showPaymentForm && clientSecret && (
             <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Payment Form...</div>}>

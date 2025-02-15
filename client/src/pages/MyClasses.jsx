@@ -2,53 +2,50 @@ import React, { useEffect, useState } from 'react'
 import ClassCard from '../components/ClassCard'
 import { Link } from 'react-router-dom'
 import AnimatedSection from '../components/AnimatedSection'
+import { useAuth } from '../context/AuthContext';
 
 const MyClasses = () => {
-  const [currentClasses, setCurrentClasses] = useState([])
+   const user = JSON.parse(localStorage.getItem("user")) || { name: 'Guest', id: null };
+   const [currentClasses, setCurrentClasses] = useState([]);
+   const [zoomMeeting, setZoomMeeting] = useState(null); 
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Simulate fetching data from API
-    const fetchClasses = async () => {
-      try {
-        // Mock data - Replace this with actual API call
-        const currentData = [
-          {
-            id: 1,
-            title: 'Algebra I & II',
-            teacher: 'Lana Steiner',
-            date: '18 Jan 2022',
-            image: '/images/course1.png',
-            description:
-              'The rise of RESTful APIs has been met by rise in tools for creating, testing.',
-          },
-          {
-            id: 2,
-            title: 'Math Class',
-            teacher: 'Lana Steiner',
-            date: '18 Jan 2022',
-            image: '/images/course2.png',
-            description:
-              'The rise of RESTful APIs has been met by rise in tools for creating, testing.',
-          },
-          {
-            id: 2,
-            title: 'Math Class',
-            teacher: 'Lana Steiner',
-            date: '18 Jan 2022',
-            image: '/images/course3.png',
-            description:
-              'The rise of RESTful APIs has been met by rise in tools for creating, testing.',
-          },
-        ]
-
-        setCurrentClasses(currentData)
-      } catch (error) {
-        console.error('Error fetching classes:', error)
-      }
-    }
-
-    fetchClasses()
-  }, [])
+ const { users } = useAuth();
+ 
+   useEffect(() => {
+     if (!users || !users._id) return;
+     const fetchDashboardData = async () => {
+       setLoading(true);
+       try {
+         // ✅ Fetch Purchased Classes
+         const classResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/${users._id}/purchased-classes`);
+         const classData = await classResponse.json();
+         
+         if (classResponse.ok && classData.purchasedClasses) {
+           setCurrentClasses(classData.purchasedClasses);
+         }
+ 
+         // ✅ Fetch Zoom Meeting if user has a subscription
+         const zoomResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/${users._id}/zoom-meeting`);
+         const zoomData = await zoomResponse.json();
+         
+         if (zoomResponse.ok && zoomData.meeting) {
+           setZoomMeeting(zoomData.meeting);
+         } else {
+           setZoomMeeting(null);
+         }
+       } catch (error) {
+         console.error("❌ Error fetching dashboard data:", error);
+         setError("Failed to load data. Please try again later.");
+       } finally {
+         setLoading(false);
+       }
+     };
+ 
+     fetchDashboardData();
+   }, [users]);
+ 
   return (
     <section>
       <AnimatedSection direction='right'>

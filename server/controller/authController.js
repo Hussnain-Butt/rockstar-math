@@ -1,34 +1,34 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const sendEmail = require('../utils/emailSender');
-const crypto = require('crypto');
-const { use } = require('../routes/authRoutes');
+const Register = require('../models/registerModel') // ✅ Using Register Model
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+const sendEmail = require('../utils/emailSender')
+const crypto = require('crypto')
 // Generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-};
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1h' })
+}
 
 // @desc    Register a new user
 // @route   POST /api/auth/signup
 exports.signup = async (req, res) => {
-  const {fullName, email, phoneNumber, password, confirmPassword, } = req.body;
+  const { fullName, email, phoneNumber, password, confirmPassword } = req.body
 
   if (password !== confirmPassword) {
-    return res.status(400).json({ message: 'Passwords do not match' });
+    return res.status(400).json({ message: 'Passwords do not match' })
   }
 
   try {
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email })
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User already exists' })
     }
 
-    const newUser = new User({ email, phoneNumber, password,fullName });
-    await newUser.save();
+    const newUser = new User({ email, phoneNumber, password, fullName })
+    await newUser.save()
 
-     // Send confirmation email
-     const subject = 'Welcome to Rockstar Math!';
-     const message = `
+    // Send confirmation email
+    const subject = 'Welcome to Rockstar Math!'
+    const message = `
      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #00008B; border: 1px solid #e0e0e0; border-radius: 10px;">
        <div style="text-align: center; padding: 10px;">
          <img src="https://scontent.flhe5-1.fna.fbcdn.net/v/t39.30808-6/442503438_957788876133590_2909592720330641516_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=_dgNhmagikUQ7kNvgF7yFq6&_nc_oc=Adhr6WCD8Nl5hiM9AQ1natQbVg_toEMzMqVnjaMr__V4XoY-MX0a4LKwhYr5eJigaBgxjmT1aETfgLzr7M-ieaVR&_nc_zt=23&_nc_ht=scontent.flhe5-1.fna&_nc_gid=A4Uh5Hdlx5SDIa1YcpDnRa3&oh=00_AYDj2m22g0-YYSOi9qqOvw0EWXp14czCwIw4M6zGGPB0cQ&oe=679A2D99" alt="Rockstar Math" style="height: 50px; margin-bottom: 20px;" />
@@ -54,103 +54,117 @@ exports.signup = async (req, res) => {
          © 2025 Rockstar Math. All rights reserved.
        </div>
      </div>
-   `;
-   
- 
-     await sendEmail(email, subject, 'Welcome to Rockstar Math!', message);
+   `
 
-    res.status(201).json({ message: 'User registered successfully' });
+    await sendEmail(email, subject, 'Welcome to Rockstar Math!', message)
+
+    res.status(201).json({ message: 'User registered successfully' })
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    res.status(500).json({ message: 'Server Error', error: error.message })
   }
-};
+}
 
 // @desc    Login user
 // @route   POST /api/auth/login
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const user = await User.findOne({ email });
+    console.log("🔍 Incoming Login Request:", req.body);
+
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password are required!" });
+    }
+
+    // ✅ Find User in the Register Model
+    const user = await Register.findOne({ username });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ error: "User not found!" });
     }
 
+    // ✅ Compare Hashed Password
     const isMatch = await user.matchPassword(password);
+    console.log("🔍 Entered Password:", password);
+    console.log("🔍 Stored Hashed Password:", user.password);
+    console.log("🔍 Password Match Status:", isMatch);
+
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({ error: "Invalid credentials!" });
     }
 
-    const token = generateToken(user._id);
+    // ✅ Generate JWT Token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(200).json({
-      message: 'Login successful',
+      message: "Login successful",
       token,
       user: {
-        _id: user._id, 
-        email: user.email,
-        fullName:user.fullName,
-      
+        _id: user._id,
+        username: user.username,
+        fullName: user.fullName,
       },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+    console.error("❌ Backend Login Error:", error);
+    res.status(500).json({ error: "Internal server error!" });
   }
 };
+
 
 // ✅ Save Purchased Class for User
 exports.addPurchasedClass = async (req, res) => {
   try {
-    const { userId, classData } = req.body;
-    
+    const { userId, classData } = req.body
+
     if (!userId || !classData) {
-      return res.status(400).json({ message: "User ID and class data are required" });
+      return res.status(400).json({ message: 'User ID and class data are required' })
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId)
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' })
     }
 
-    user.purchasedClasses.push(classData);
-    await user.save();
+    user.purchasedClasses.push(classData)
+    await user.save()
 
-    res.status(200).json({ message: "Class added to user account", purchasedClasses: user.purchasedClasses });
+    res
+      .status(200)
+      .json({ message: 'Class added to user account', purchasedClasses: user.purchasedClasses })
   } catch (error) {
-    res.status(500).json({ message: "Error adding class", error: error.message });
+    res.status(500).json({ message: 'Error adding class', error: error.message })
   }
-};
+}
 
 // ✅ Get User Purchased Classes
 exports.getPurchasedClasses = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await User.findById(req.params.userId)
+    if (!user) return res.status(404).json({ message: 'User not found' })
 
-    res.json({ purchasedClasses: user.purchasedClasses || [] });
+    res.json({ purchasedClasses: user.purchasedClasses || [] })
   } catch (error) {
-    console.error("Error fetching purchased classes:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error fetching purchased classes:', error)
+    res.status(500).json({ message: 'Server error' })
   }
-};
+}
 exports.forgotPassword = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.body
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'User not found' })
     }
 
     // Generate reset token
-    const resetToken = user.getResetPasswordToken();
-    await user.save(); // Save token and expiration to the database
+    const resetToken = user.getResetPasswordToken()
+    await user.save() // Save token and expiration to the database
 
     // Create reset URL
     const resetUrl = `http://localhost:5173/reset-password/${resetToken}`
 
     // Send email
-    const subject = 'Password Reset Request';
+    const subject = 'Password Reset Request'
     const message = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #00008B; border: 1px solid #e0e0e0; border-radius: 10px;">
       <div style="text-align: center; padding: 10px;">
@@ -178,50 +192,47 @@ exports.forgotPassword = async (req, res) => {
         © 2025 Rockstar Math. All rights reserved.
       </div>
     </div>
-  `;
-  
+  `
 
-    await sendEmail(user.email, subject, 'Reset Your Password', message);
+    await sendEmail(user.email, subject, 'Reset Your Password', message)
 
-    res.status(200).json({ message: 'Password reset email sent successfully' });
+    res.status(200).json({ message: 'Password reset email sent successfully' })
   } catch (error) {
-    console.error('Error in forgotPassword:', error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error in forgotPassword:', error.message)
+    res.status(500).json({ message: 'Server Error' })
   }
-};
+}
 
 // Reset Password Controller
 
 exports.resetPassword = async (req, res) => {
-  const { token } = req.params; // Token from the URL
-  const { password } = req.body; // New password from the request body
+  const { token } = req.params // Token from the URL
+  const { password } = req.body // New password from the request body
 
   try {
     // Hash the token to match the database entry
-    const resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex');
+    const resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex')
 
     // Find the user by the token and ensure it hasn't expired
     const user = await User.findOne({
       resetPasswordToken,
       resetPasswordExpires: { $gt: Date.now() }, // Token expiration check
-    });
+    })
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired reset token' });
+      return res.status(400).json({ message: 'Invalid or expired reset token' })
     }
 
     // Update the user's password
-    user.password = password; // Ensure password hashing is handled in the user model
-    user.resetPasswordToken = undefined; // Clear the token
-    user.resetPasswordExpires = undefined; // Clear the expiration time
+    user.password = password // Ensure password hashing is handled in the user model
+    user.resetPasswordToken = undefined // Clear the token
+    user.resetPasswordExpires = undefined // Clear the expiration time
 
-    await user.save();
+    await user.save()
 
-    res.status(200).json({ message: 'Password reset successful' });
+    res.status(200).json({ message: 'Password reset successful' })
   } catch (error) {
-    console.error('Error in resetPassword:', error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error in resetPassword:', error.message)
+    res.status(500).json({ message: 'Server Error' })
   }
-};
-
-
+}

@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -9,17 +9,30 @@ import axiosInstance from "../utils/axiosInstance";
 const ForgotPassword = lazy(() => import("../components/ForgotPassword.jsx"));
 
 function LoginPage() {
-  // State for password visibility & form data
+  const { login } = useAuth(); // Access login function from Auth Context
+  const navigate = useNavigate();
+
+  // ✅ Load stored credentials from localStorage (if user registered before)
+  const savedUsername = localStorage.getItem("savedUsername") || "";
+  const savedPassword = localStorage.getItem("savedPassword") || "";
+
+  // ✅ Set state with stored credentials
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
+    username: savedUsername,
+    password: savedPassword,
+    rememberMe: true, // Auto-check Remember Me
   });
 
-  const navigate = useNavigate();
-  const { login } = useAuth(); // Access login function from Auth Context
+  useEffect(() => {
+    setFormData({
+      username: savedUsername,
+      password: savedPassword,
+      rememberMe: true, // ✅ Set Remember Me as true
+    });
+  }, []);
 
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -28,23 +41,20 @@ function LoginPage() {
     });
   };
 
+  // Handle Login Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axiosInstance.post("/auth/login", {
-        email: formData.email,
+      // ✅ Send username instead of email
+      const response = await axiosInstance.post("auth/login", {
+        username: formData.username,
         password: formData.password,
       });
 
       console.log("✅ Server Response:", response.data);
 
-      if (
-        !response.data ||
-        !response.data.token ||
-        !response.data.user ||
-        !response.data.user._id
-      ) {
+      if (!response.data || !response.data.token || !response.data.user || !response.data.user._id) {
         console.error("❌ Error: JWT Token or User ID missing in the response!", response.data);
         return;
       }
@@ -53,23 +63,13 @@ function LoginPage() {
 
       if (formData.rememberMe) {
         localStorage.setItem("token", token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ id: user._id, email: user.email, fullName: user.fullName })
-        );
+        localStorage.setItem("user", JSON.stringify({ id: user._id, username: user.username, fullName: user.fullName }));
       } else {
         sessionStorage.setItem("token", token);
-        sessionStorage.setItem(
-          "user",
-          JSON.stringify({ id: user._id, email: user.email, fullName: user.fullName })
-        );
+        sessionStorage.setItem("user", JSON.stringify({ id: user._id, username: user.username, fullName: user.fullName }));
       }
 
-      console.log("✅ User Data Stored:", {
-        id: user._id,
-        email: user.email,
-        fullName: user.fullName,
-      });
+      console.log("✅ User Data Stored:", { id: user._id, username: user.username, fullName: user.fullName });
 
       login(user);
       toast.success("Login successful! Redirecting...");
@@ -96,19 +96,19 @@ function LoginPage() {
         <p className="text-gray-600 mb-6">Welcome back! Please log in to access your account.</p>
 
         <form className="w-full" onSubmit={handleSubmit}>
-          {/* Email Input */}
+          {/* Username Input (Instead of Email) */}
           <div className="mb-4 w-full">
-            <label className="block text-sm font-bold text-black mb-2" htmlFor="email">
-              Email
+            <label className="block text-sm font-bold text-black mb-2" htmlFor="username">
+              Username
             </label>
             <input
-              type="email"
-              name="email"
-              placeholder="Your email"
-              value={formData.email}
+              type="text"
+              name="username"
+              placeholder="Your username"
+              value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 bg-gray2 rounded-lg outline-none"
+              className="w-full px-4 py-2 border border-gray-300 bg-gray-200 rounded-lg outline-none"
             />
           </div>
 
@@ -124,7 +124,7 @@ function LoginPage() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 bg-gray2 rounded-lg outline-none"
+              className="w-full px-4 py-2 border border-gray-300 bg-gray-200 rounded-lg outline-none"
             />
             <div
               className="absolute right-4 top-[55%] text-gray-500 cursor-pointer"
@@ -148,7 +148,6 @@ function LoginPage() {
                 Remember Me
               </label>
             </div>
-            {/* Lazy Load Forgot Password Page */}
             <Suspense fallback={<div className="text-gray-500">Loading...</div>}>
               <Link to="/forgot-password" className="text-sm text-blue-500">
                 Forgot Password?
@@ -159,7 +158,10 @@ function LoginPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-deepBlue text-white py-2 rounded hover:bg-sky-600 transition-all duration-500"
+            disabled={!formData.username || !formData.password}
+            className={`w-full text-white py-2 rounded transition-all duration-500 ${
+              !formData.username || !formData.password ? "bg-gray-400 cursor-not-allowed" : "bg-deepBlue hover:bg-sky-600"
+            }`}
           >
             Login
           </button>

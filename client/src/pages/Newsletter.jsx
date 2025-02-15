@@ -34,15 +34,9 @@ const Newsletter = ({ onClose }) => {
 
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+    <div className="flex items-center justify-center  py-40">
       <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-5xl md:flex md:flex-row flex-col relative">
-        {/* ❌ Close Button */}
-        <button
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-          onClick={onClose}
-        >
-          ✖
-        </button>
+      
 
         {/* ✅ Left Side: Newsletter Image */}
         <div className="md:w-1/2 w-full bg-gray-100 rounded-t-lg md:rounded-l-lg overflow-hidden flex justify-center">

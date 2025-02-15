@@ -13,26 +13,11 @@ const JoinOurCommunity = lazy(() => import("../components/JoinOurCommunity"));
 const Newsletter = lazy(() => import("./Newsletter"));
 
 function HomePage() {
-  const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowPopup(true); // ✅ Show popup after 4 seconds
-    }, 4000);
-  }, []);
 
   return (
     <>
-      {/* ✅ Lazy Loaded Popup */}
-      {showPopup && (
-        <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Newsletter...</div>}>
-          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white rounded-lg shadow-xl p-8 max-w-lg w-full flex flex-col items-center my-20">
-              <Newsletter onClose={() => setShowPopup(false)} />
-            </div>
-          </div>
-        </Suspense>
-      )}
+  
 
       {/* ✅ Lazy Loaded Components */}
       <Suspense fallback={<div className="text-center py-10 text-gray-500">Loading Hero Section...</div>}>

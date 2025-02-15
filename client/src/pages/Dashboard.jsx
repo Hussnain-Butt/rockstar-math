@@ -20,7 +20,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         // ✅ Fetch Purchased Classes
-        const classResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/users/${users._id}/purchased-classes`);
+        const classResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/${users._id}/purchased-classes`);
         const classData = await classResponse.json();
         
         if (classResponse.ok && classData.purchasedClasses) {
@@ -28,7 +28,7 @@ const Dashboard = () => {
         }
 
         // ✅ Fetch Zoom Meeting if user has a subscription
-        const zoomResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/users/${users._id}/zoom-meeting`);
+        const zoomResponse = await fetch(`https://rockstar-math-production.up.railway.app/api/${users._id}/zoom-meeting`);
         const zoomData = await zoomResponse.json();
         
         if (zoomResponse.ok && zoomData.meeting) {

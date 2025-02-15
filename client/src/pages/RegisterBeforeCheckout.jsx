@@ -1,33 +1,35 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
+import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
 
 const RegisterBeforeCheckout = () => {
+  
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const [formData, setFormData] = useState({
+    username: '',
+    password: '',
     userType: 'Parent',
     adultName: '',
-    numStudents: '',
-    studentNames: '',
-    studentGrades: '',
-    studentMathLevels: '',
+    numStudents: 1, // Default: 1 student
+    students: [{ name: '', grade: '', mathLevel: '', age: '' }], // Store students dynamically
     billingEmail: '',
     schedulingEmails: '',
     phone: '',
-    parentEmail: '',
-    parentPhone: '',
-    studentPhone: '',
     goals: '',
     didUserApproveSMS: false,
     didUserApproveWebcam: false,
   })
-  const [otp, setOtp] = useState(""); // OTP input field
-  const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false); // OTP popup state
-  const [isOtpVerified, setIsOtpVerified] = useState(false); // OTP verification state
-  const [generatedOtp, setGeneratedOtp] = useState(""); // Store received OTP for comparison
-  const [isWebcamPopupOpen, setIsWebcamPopupOpen] = useState(false);
-  const [isSmsPopupOpen, setIsSmsPopupOpen] = useState(false);
-  
+
+  const [otp, setOtp] = useState('') // OTP input field
+  const [isOtpPopupOpen, setIsOtpPopupOpen] = useState(false) // OTP popup state
+  const [isOtpVerified, setIsOtpVerified] = useState(false) // OTP verification state
+  const [generatedOtp, setGeneratedOtp] = useState('') // Store received OTP for comparison
+  const [isWebcamPopupOpen, setIsWebcamPopupOpen] = useState(false)
+  const [isSmsPopupOpen, setIsSmsPopupOpen] = useState(false)
+
   const navigate = useNavigate()
 
   // ✅ Handle Input Change
@@ -39,75 +41,103 @@ const RegisterBeforeCheckout = () => {
     }))
   }
 
-    // ✅ Prevent negative values in "Number of Students"
-    const handleNumStudentsChange = (e) => {
-      let value = parseInt(e.target.value, 10);
-      if (isNaN(value) || value < 0) {
-        value = 0;
+  // ✅ Prevent negative values in "Number of Students"
+  // ✅ Handle Number of Students Change
+  // ✅ Handle Number of Students Change
+  const handleNumStudentsChange = (e) => {
+    let value = parseInt(e.target.value, 10)
+    if (isNaN(value) || value < 1) value = 1 // Minimum: 1 student
+    if (value > 10) value = 10 // Maximum: 10 students
+
+    setFormData((prev) => {
+      let updatedStudents = [...prev.students]
+
+      if (value > updatedStudents.length) {
+        for (let i = updatedStudents.length; i < value; i++) {
+          updatedStudents.push({ name: '', grade: '', mathLevel: '', age: '' })
+        }
+      } else {
+        updatedStudents.length = value
       }
+
+      return { ...prev, numStudents: value, students: updatedStudents }
+    })
+  }
+
+  // ✅ Handle Dynamic Student Fields
+  const handleStudentChange = (index, e) => {
+    const { name, value } = e.target
+    setFormData((prev) => {
+      let updatedStudents = [...prev.students]
+      updatedStudents[index][name] = value
+      return { ...prev, students: updatedStudents }
+    })
+  }
+  useEffect(() => {
+    if (formData.numStudents === 1) {
       setFormData((prev) => ({
         ...prev,
-        numStudents: value,
-      }));
-    };
+        students: [{ name: '', grade: '', mathLevel: '', age: '' }],
+      }))
+    }
+  }, [formData.numStudents])
 
   // ✅ Open OTP Popup (Checkbox or Text Click)
-// ✅ Open OTP Popup and Send OTP
-const openOtpPopup = async () => {
-  if (!formData.phone || formData.phone === "") {
-    toast.error("Please enter a valid phone number!");
-    return;
-  }
-
-  setIsOtpPopupOpen(true);
-
-  try {
-    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/send-otp", {
-      phone: formData.phone,
-    });
-
-    if (response.data.success) {
-      toast.success("OTP sent successfully!");
-      setGeneratedOtp(response.data.otp); // ⚠️ Store OTP securely (Remove this in production!)
-    } else {
-      toast.error("Failed to send OTP. Try again!");
+  // ✅ Open OTP Popup and Send OTP
+  const openOtpPopup = async () => {
+    if (!formData.phone || formData.phone === '') {
+      toast.error('Please enter a valid phone number!')
+      return
     }
-  } catch (error) {
-    toast.error(error.response?.data?.error || "Error sending OTP.");
-  }
-};
 
- // ✅ Handle Webcam Agreement
- const openWebcamPopup = (e) => {
-  e.preventDefault();
-  setIsWebcamPopupOpen(true);
-};
+    setIsOtpPopupOpen(true)
 
-const handleAgreeWebcam = () => {
-  setFormData((prev) => ({ ...prev, didUserApproveWebcam: true }));
-  setIsWebcamPopupOpen(false);
-};
+    try {
+      const response = await axios.post('https://rockstar-math-production.up.railway.app/api/send-otp', {
+        phone: formData.phone,
+      })
 
-
-// ✅ Verify OTP Dynamically
-const verifyOtp = async () => {
-  try {
-    const response = await axios.post("https://rockstar-math-production.up.railway.app/api/verify-otp", {
-      phone: formData.phone,
-      otp,
-    });
-
-    if (response.data.success) {
-      toast.success("OTP Verified Successfully!");
-      setIsOtpVerified(true);
-      setIsOtpPopupOpen(false);
-    } else {
-      toast.error("Invalid OTP. Try again.");
+      if (response.data.success) {
+        toast.success('OTP sent successfully!')
+        setGeneratedOtp(response.data.otp) // ⚠️ Store OTP securely (Remove this in production!)
+      } else {
+        toast.error('Failed to send OTP. Try again!')
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'Error sending OTP.')
     }
-  } catch (error) {
-    toast.error(error.response?.data?.error || "OTP Verification Failed.");
   }
-};
+
+  // ✅ Handle Webcam Agreement
+  const openWebcamPopup = (e) => {
+    e.preventDefault()
+    setIsWebcamPopupOpen(true)
+  }
+
+  const handleAgreeWebcam = () => {
+    setFormData((prev) => ({ ...prev, didUserApproveWebcam: true }))
+    setIsWebcamPopupOpen(false)
+  }
+
+  // ✅ Verify OTP Dynamically
+  const verifyOtp = async () => {
+    try {
+      const response = await axios.post('https://rockstar-math-production.up.railway.app/api/verify-otp', {
+        phone: formData.phone,
+        otp,
+      })
+
+      if (response.data.success) {
+        toast.success('OTP Verified Successfully!')
+        setIsOtpVerified(true)
+        setIsOtpPopupOpen(false)
+      } else {
+        toast.error('Invalid OTP. Try again.')
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.error || 'OTP Verification Failed.')
+    }
+  }
   // ✅ Handle SMS Checkbox & Open OTP Popup
   const handleSmsCheckboxChange = async (e) => {
     const isChecked = e.target.checked
@@ -131,103 +161,154 @@ const verifyOtp = async () => {
     }
   }
 
-
-
-   // ✅ Page load hone pe check karein ke user pehle register ho chuka hai ya nahi
-   useEffect(() => {
+  // ✅ Page load hone pe check karein ke user pehle register ho chuka hai ya nahi
+  useEffect(() => {
     const checkUserRegistration = async () => {
       try {
-        const email = localStorage.getItem('userEmail');
-        const phone = localStorage.getItem('userPhone');
+        const email = localStorage.getItem('userEmail')
+        const phone = localStorage.getItem('userPhone')
 
-        if (!email || !phone) return; // User ka data nahi hai, allow registration
+        if (!email || !phone) return // User ka data nahi hai, allow registration
 
-        const response = await axios.post("https://rockstar-math-production.up.railway.app/api/check-registration", { email, phone });
+        const response = await axios.post('https://rockstar-math-production.up.railway.app/api/check-registration', {
+          email,
+          phone,
+        })
 
         if (response.data.success) {
-          toast.success("You are already registered! Redirecting to checkout...");
-          setTimeout(() => navigate("/checkout"), 2000);
+          toast.success('You are already registered! Redirecting to checkout...')
+          setTimeout(() => navigate('/checkout'), 2000)
         }
       } catch (error) {
-        console.error("❌ Error checking registration:", error);
+        console.error('❌ Error checking registration:', error)
       }
-    };
+    }
 
-    checkUserRegistration();
-  }, [navigate]);
+    checkUserRegistration()
+  }, [navigate])
 
   const openSmsPopup = (e) => {
-    e.preventDefault();
-    setIsSmsPopupOpen(true);
-  };
+    e.preventDefault()
+    setIsSmsPopupOpen(true)
+  }
 
   const handleAgreeSms = () => {
-    setFormData((prev) => ({ ...prev, didUserApproveSMS: true }));
-    setIsSmsPopupOpen(false);
-    openOtpPopup(); // ✅ Send OTP after agreeing
-  };
+    setFormData((prev) => ({ ...prev, didUserApproveSMS: true }))
+    setIsSmsPopupOpen(false)
+    openOtpPopup() // ✅ Send OTP after agreeing
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    console.log('📝 Form Data Before Submission:', formData)
-
+    e.preventDefault();
+  
+    console.log("📝 Form Data Before Submission:", formData);
+  
     const requiredFields = [
-      'userType',
-      'adultName',
-      'numStudents',
-      'studentNames',
-      'studentGrades',
-      'studentMathLevels',
-      'billingEmail',
-      'schedulingEmails',
-      'phone',
-      'goals',
-    ]
-
+      "username",
+      "password",
+      "userType",
+      "adultName",
+      "numStudents",
+      "billingEmail",
+      "schedulingEmails",
+      "phone",
+      "goals",
+    ];
+  
+    if (formData.userType === "Student") {
+      requiredFields.push("studentAge");
+    }
+  
+    // ✅ If only 1 student, validate these fields
+    if (formData.numStudents === 1) {
+      requiredFields.push("studentNames", "studentGrades", "studentMathLevels");
+    } else {
+      // ✅ If numStudents > 1, remove these fields before sending to backend
+      delete formData.studentNames;
+      delete formData.studentGrades;
+      delete formData.studentMathLevels;
+    }
+  
+    // 🔹 Validate Required Fields
     for (const field of requiredFields) {
-      if (!formData[field] || formData[field] === '') {
-        toast.error(`${field.replace(/([A-Z])/g, ' $1')} is required!`)
-        return
+      if (typeof formData[field] === "string" && !formData[field].trim()) {
+        toast.error(`${field.replace(/([A-Z])/g, " $1")} is required!`);
+        return;
+      }
+      if (formData[field] === undefined || formData[field] === "") {
+        toast.error(`${field.replace(/([A-Z])/g, " $1")} is required!`);
+        return;
       }
     }
-
-    if (formData.didUserApproveSMS && !isOtpVerified) {
-      toast.error('Please verify your OTP before proceeding!')
-      return
+  
+    // ✅ Validate Students Array When `numStudents > 1`
+    if (formData.numStudents > 1) {
+      if (!Array.isArray(formData.students) || formData.students.length !== formData.numStudents) {
+        toast.error("Number of students does not match the student details provided!");
+        return;
+      }
+  
+      for (let i = 0; i < formData.students.length; i++) {
+        let student = formData.students[i];
+  
+        if (!student.name || !student.grade || !student.mathLevel || student.age === "") {
+          toast.error(`Student ${i + 1} details are incomplete!`);
+          return;
+        }
+  
+        student.name = student.name.trim();
+        student.grade = student.grade.trim();
+        student.mathLevel = student.mathLevel.trim();
+      }
     }
-
-    if (!formData.didUserApproveSMS) {
-      toast.error('You must agree to receive SMS notifications!');
-      return;
-    }
-    if (!formData.didUserApproveWebcam) {
-      toast.error('You must agree to use a webcam!');
-      return;
-    }
-
-    if (formData.didUserApproveSMS && !isOtpVerified) {
-      toast.error('Please verify your OTP before proceeding!');
-      return;
-    }
-
-
+  
     try {
-      const response = await axios.post('https://rockstar-math-production.up.railway.app/api/register', formData)
+      const response = await axios.post("https://rockstar-math-production.up.railway.app/api/register", formData);
+  
       if (response.data.success) {
-        toast.success(response.data.message);
-
-        // ✅ Store user details in localStorage
-        localStorage.setItem("userEmail", formData.billingEmail);
-        localStorage.setItem("userPhone", formData.phone);
-
-        // ✅ Redirect to checkout
-        setTimeout(() => navigate("/checkout"), 2000);
+        toast.success("Registration successful! Redirecting to checkout...");
+  
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("savedUsername", formData.username);
+        localStorage.setItem("savedPassword", formData.password);
+        setShowConfirmation(true);
+  
+        setTimeout(() => {
+          navigate("/checkout");
+        }, 3000);
       }
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Registration failed.')
+      console.error("❌ Backend Error Response:", error.response?.data);
+  
+      if (error.response?.data?.error === "Username already taken!") {
+        toast.error("This username is already taken! Please choose another.");
+      } else {
+        toast.error(error.response?.data?.error || "Registration failed.");
+      }
     }
+  };
+  
+
+  if (showConfirmation) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md text-center animate-fade-in">
+          <div className="text-6xl text-green-500 mb-4">✅</div>
+          <h2 className="text-3xl font-bold text-gray-800">Registration Successful!</h2>
+          <p className="text-lg text-gray-700 mt-3">
+            Thank you for signing up! Please check your email 📩 for further instructions.
+          </p>
+          <p className="text-sm text-gray-500 mt-2">Redirecting to checkout...</p>
+
+          <div className="flex justify-center mt-4">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </div>
+    )
   }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 py-32">
       <Toaster position="top-right" />
@@ -253,33 +334,53 @@ const verifyOtp = async () => {
               <option value="Student">Student</option>
             </select>
           </div>
-
+          {/* ✅ Username & Password Fields */}
+          <div className="col-span-2 md:col-span-1">
+            <label className="block text-gray-700 font-medium">Username *</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="mb-4 w-full relative">
+            <label className="block text-gray-700 font-medium">Password *</label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+            <div
+              className="absolute right-4 top-[55%] text-gray-500 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
+            </div>
+          </div>
           {/* ✅ Student Age Field (Only Show If "Student" is Selected) */}
-          {formData.userType === 'Student' && (
+          {/* {formData.userType === 'Student' && (
             <div className="col-span-2">
               <label className="block text-gray-700 font-medium">Student Age *</label>
               <input
                 type="number"
                 name="studentAge"
                 value={formData.studentAge}
-                onChange={handleChange}
+                onChange={name === 'studentAge' ? handleNumStudentsChange : handleChange}
                 required
                 className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
-          )}
-
+          )} */}
           {/* ✅ Always Show These Inputs */}
           {[
             { name: 'adultName', label: 'Name of Adult *' },
             { name: 'numStudents', label: 'Number of Students *', type: 'number' },
-            { name: 'studentNames', label: 'Name of Student(s) *' },
-            { name: 'studentGrades', label: 'Grade of Student(s) *' },
-            { name: 'studentMathLevels', label: 'Level of Math for Student(s) *' },
-            { name: 'billingEmail', label: 'Email for Billing *', type: 'email' },
-            { name: 'schedulingEmails', label: 'Email(s) for Scheduling *', type: 'email' },
-            { name: 'phone', label: 'Phone Number *' },
-            { name: 'goals', label: 'Your Goals & Expectations *' },
           ].map(({ name, label, type = 'text' }) => (
             <div key={name} className="col-span-2 md:col-span-1">
               <label className="block text-gray-700 font-medium">{label}</label>
@@ -294,9 +395,110 @@ const verifyOtp = async () => {
               />
             </div>
           ))}
-
+          {/* ✅ Student Age Field (Show only when numStudents === 1) */}
+          {formData.numStudents === 1 && (
+            <div className="col-span-2">
+              <label className="block text-gray-700 font-medium">Student Age *</label>
+              <input
+                type="number"
+                name="studentAge"
+                value={formData.studentAge}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value, 10)
+                  setFormData((prev) => ({
+                    ...prev,
+                    studentAge: isNaN(value) ? '' : Math.max(0, value), // ✅ Prevent negative value
+                  }))
+                }}
+                required
+                className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          )}
+          {/* ✅ These Fields Will Only Show If numStudents === 1 */}
+          {formData.numStudents === 1 && (
+            <>
+              {[
+                { name: 'studentNames', label: 'Name of Student(s) *' },
+                { name: 'studentGrades', label: 'Grade of Student(s) *' },
+                { name: 'studentMathLevels', label: 'Level of Math for Student(s) *' },
+              ].map(({ name, label }) => (
+                <div key={name} className="col-span-2 md:col-span-1">
+                  <label className="block text-gray-700 font-medium">{label}</label>
+                  <input
+                    type="text"
+                    name={name}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              ))}
+            </>
+          )}
+          {[
+            { name: 'billingEmail', label: 'Email for Billing *', type: 'email' },
+            { name: 'schedulingEmails', label: 'Email(s) for Scheduling *', type: 'email' },
+            { name: 'phone', label: 'Phone Number *' },
+            { name: 'goals', label: 'Your Goals & Expectations *' },
+          ].map(({ name, label, type = 'text' }) => (
+            <div key={name} className="col-span-2 md:col-span-1">
+              <label className="block text-gray-700 font-medium">{label}</label>
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                required
+                className="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          ))}
+          {/* ✅ Show Student Fields Only If `numStudents > 1` */}
+          {formData.numStudents > 1 &&
+            formData.students.map((student, index) => (
+              <div key={index} className="col-span-2 grid grid-cols-1 md:grid-cols-4 gap-4">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder={`Student ${index + 1} Name`}
+                  value={student.name}
+                  onChange={(e) => handleStudentChange(index, e)}
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                />
+                <input
+                  type="text"
+                  name="grade"
+                  placeholder="Grade"
+                  value={student.grade}
+                  onChange={(e) => handleStudentChange(index, e)}
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                />
+                <input
+                  type="text"
+                  name="mathLevel"
+                  placeholder="Math Level"
+                  value={student.mathLevel}
+                  onChange={(e) => handleStudentChange(index, e)}
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                />
+                <input
+                  type="number"
+                  name="age"
+                  placeholder="Age"
+                  value={student.age}
+                  onChange={(e) => handleStudentChange(index, e)}
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            ))}
           {/* ✅ Conditionally Show Parent Fields Only If Student Age < 18 */}
-          {formData.userType === 'Student' &&
+          {/* {formData.userType === 'Student' &&
             formData.studentAge &&
             parseInt(formData.studentAge) < 18 && (
               <>
@@ -323,11 +525,10 @@ const verifyOtp = async () => {
                   />
                 </div>
               </>
-            )}
-
+            )} */}
           {/* ✅ Checkboxes */}
           <div className="col-span-2 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
               <input
                 type="checkbox"
                 name="didUserApproveSMS"
@@ -349,7 +550,7 @@ const verifyOtp = async () => {
                 checked={formData.didUserApproveWebcam}
                 onChange={handleChange}
               />
-               <Link
+              <Link
                 to="#"
                 onClick={openWebcamPopup}
                 className="text-gray-700 text-sm underline  text-blue-700"
@@ -358,7 +559,6 @@ const verifyOtp = async () => {
               </Link>
             </div>
           </div>
-
           <button
             type="submit"
             className="col-span-2 w-full py-3 bg-blue-600 text-white font-semibold rounded-lg"
@@ -368,8 +568,8 @@ const verifyOtp = async () => {
         </form>
       </div>
 
- {/* ✅ Webcam Agreement Popup */}
- {isWebcamPopupOpen && (
+      {/* ✅ Webcam Agreement Popup */}
+      {isWebcamPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
           <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
             <h3 className="text-2xl font-bold text-gray-800">Webcam Attendance Agreement</h3>
@@ -377,8 +577,14 @@ const verifyOtp = async () => {
               Rockstar Math Webcam Attendance & Identity Verification Policy
             </p>
             <ul className="text-left text-gray-600 text-sm mt-2">
-              <li>✅ Attendance Verification – Ensuring students are present for their scheduled sessions.</li>
-              <li>✅ Identity Confirmation – Preventing unauthorized individuals from joining sessions.</li>
+              <li>
+                ✅ Attendance Verification – Ensuring students are present for their scheduled
+                sessions.
+              </li>
+              <li>
+                ✅ Identity Confirmation – Preventing unauthorized individuals from joining
+                sessions.
+              </li>
               <li>✅ Engagement & Participation – Encouraging active participation in lessons.</li>
             </ul>
             <p className="text-left text-gray-600 text-sm mt-2">
@@ -387,8 +593,8 @@ const verifyOtp = async () => {
               ● Students must have their webcam turned on during all live sessions.
               <br />
               ● Failure to comply may result in removal from the session.
-              <br />
-              ● Exceptions may be granted for documented technical difficulties or special accommodations.
+              <br />● Exceptions may be granted for documented technical difficulties or special
+              accommodations.
             </p>
             <button
               onClick={handleAgreeWebcam}
@@ -400,28 +606,24 @@ const verifyOtp = async () => {
         </div>
       )}
 
-  {/* ✅ SMS Agreement Popup */}
-  {isSmsPopupOpen && (
+      {/* ✅ SMS Agreement Popup */}
+      {isSmsPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 pt-14">
           <div className="bg-white p-8 rounded-lg shadow-2xl w-96 text-center">
-            <h3 className="text-2xl font-bold text-gray-800">
-              SMS Text Agreement
-            </h3>
+            <h3 className="text-2xl font-bold text-gray-800">SMS Text Agreement</h3>
             <p className="text-sm text-gray-600 mt-4 text-left">
               Rockstar Math SMS Notification & Alerts Agreement
             </p>
             <p className="text-left text-gray-600 text-sm mt-2">
-              By providing your phone number during registration, you consent to
-              receive SMS notifications, updates, and alerts related to your
-              tutoring sessions, payment confirmations, and important
-              announcements from Rockstar Math.
+              By providing your phone number during registration, you consent to receive SMS
+              notifications, updates, and alerts related to your tutoring sessions, payment
+              confirmations, and important announcements from Rockstar Math.
             </p>
             <p className="text-left text-gray-600 text-sm mt-2">
               <strong>Opt-Out Instructions:</strong>
               <br />
               ● To stop SMS notifications, reply STOP to any message.
-              <br />
-              ● For further assistance, contact us at x@gmail.com.
+              <br />● For further assistance, contact us at x@gmail.com.
             </p>
             <button
               onClick={handleAgreeSms}

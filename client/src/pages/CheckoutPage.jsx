@@ -52,11 +52,10 @@ const createPaymentIntent = async () => {
         console.log("🔹 Sending Payment Request:", { amount: total, currency, userId, orderId });
 
         const response = await fetch("https://rockstar-math-production.up.railway.app/api/stripe/create-payment-intent", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: total, currency, userId, orderId }),
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: total, currency, userId, orderId }),
         });
-
         if (!response.ok) {
             console.error("❌ Failed to create payment intent. Status:", response.status);
             throw new Error(`Payment Intent creation failed. Server responded with ${response.status}`);
@@ -84,27 +83,54 @@ const createPaymentIntent = async () => {
 
 // ✅ Handle Payment Success (Stripe & PayPal)
 const handlePaymentSuccess = async () => {
-    try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || !user.id) {
-            toast.error("User not logged in!");
-            return;
-        }
-
-        const response = await fetch("https://rockstar-math-production.up.railway.app/api/users/purchase", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId: user.id, classData: cartItems }),
-        });
-
-        if (!response.ok) throw new Error("Failed to save purchased class");
-
-        toast.success("Payment Successful! Class added to dashboard.");
-        setTimeout(() => navigate("/dashboard"), 2000);
-    } catch (error) {
-        console.error("Error saving purchased class:", error);
-        toast.error("Error saving purchased class.");
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user._id) {
+      toast.error("User not logged in!");
+      return;
     }
+
+    // ✅ Format purchased classes correctly
+    const formattedClasses = cartItems.map(item => ({
+      name: item.name || item.title,
+      description: item.description || "No description available",
+      purchaseDate: new Date().toISOString(), // ✅ Ensure proper timestamp
+    }));
+
+    console.log("🛒 Sending Purchased Classes Data:", JSON.stringify({
+      userId: user._id,  // ✅ Use `_id` instead of `id`
+      purchasedClasses: formattedClasses
+    }, null, 2));
+
+    // ✅ Send purchase data to backend
+    const response = await fetch("https://rockstar-math-production.up.railway.app/api/add-purchased-class", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user._id, // ✅ Ensure correct user ID
+        purchasedClasses: formattedClasses  
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to save purchased class");
+    }
+
+    console.log("✅ Server Response:", data);
+
+    toast.success("Payment Successful! Class added to your account.");
+    
+    // ✅ Clear the cart after successful purchase
+    localStorage.removeItem("cartItems");
+
+    // ✅ Redirect to the dashboard after 2 seconds
+    setTimeout(() => navigate("/dashboard"), 2000);
+  } catch (error) {
+    console.error("❌ Error saving purchased class:", error);
+    toast.error(error.message || "Error saving purchased class.");
+  }
 };
 
 return (

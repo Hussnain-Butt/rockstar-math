@@ -1,38 +1,28 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, Suspense, lazy } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { toast } from "react-toastify";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Auth Context for global state
-import axiosInstance from "../utils/axiosInstance";
+import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
 
-// Lazy Load Components
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+
+// ✅ Configure Toast globally
+
+// Lazy Load Forgot Password Component
 const ForgotPassword = lazy(() => import("../components/ForgotPassword.jsx"));
 
 function LoginPage() {
-  const { login } = useAuth(); // Access login function from Auth Context
-  const navigate = useNavigate();
-
-  // ✅ Load stored credentials from localStorage (if user registered before)
-  const savedUsername = localStorage.getItem("savedUsername") || "";
-  const savedPassword = localStorage.getItem("savedPassword") || "";
-
-  // ✅ Set state with stored credentials
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: savedUsername,
-    password: savedPassword,
-    rememberMe: true, // Auto-check Remember Me
+    username: "",
+    password: "",
+    rememberMe: false,
   });
 
-  useEffect(() => {
-    setFormData({
-      username: savedUsername,
-      password: savedPassword,
-      rememberMe: true, // ✅ Set Remember Me as true
-    });
-  }, []);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // Handle Input Change
+  // ✅ Handle Input Changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -41,50 +31,52 @@ function LoginPage() {
     });
   };
 
-  // Handle Login Submission
+  // ✅ Handle Login Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // ✅ Send username instead of email
-      const response = await axiosInstance.post("auth/login", {
+      const response = await axios.post("https://rockstar-math-production.up.railway.app/api/auth/login", {
         username: formData.username,
         password: formData.password,
       });
-
+  
       console.log("✅ Server Response:", response.data);
-
-      if (!response.data || !response.data.token || !response.data.user || !response.data.user._id) {
-        console.error("❌ Error: JWT Token or User ID missing in the response!", response.data);
+  
+      if (!response.data || !response.data.token || !response.data.user) {
+        toast.error("❌ Invalid server response!", { position: "top-center" });
         return;
       }
-
+  
       const { token, user } = response.data;
-
+  
+      // ✅ Store token & user
       if (formData.rememberMe) {
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify({ id: user._id, username: user.username, fullName: user.fullName }));
+        localStorage.setItem("user", JSON.stringify(user));
       } else {
         sessionStorage.setItem("token", token);
-        sessionStorage.setItem("user", JSON.stringify({ id: user._id, username: user.username, fullName: user.fullName }));
+        sessionStorage.setItem("user", JSON.stringify(user));
       }
-
-      console.log("✅ User Data Stored:", { id: user._id, username: user.username, fullName: user.fullName });
-
+  
+      // ✅ Update Auth Context
       login(user);
-      toast.success("Login successful! Redirecting...");
-
+      toast.success("🎉 Login successful! Redirecting...", { position: "top-center" });
+  
+      // ✅ Redirect to dashboard after 1 second
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Invalid credentials");
+      toast.error(error.response?.data?.message || "❌ Invalid credentials!", { position: "top-center" });
     }
   };
 
   return (
     <div className="flex">
       {/* Left Side (Image Section) */}
+              <Toaster position="right" /> {/* ✅ Toast Notifications */}
+      
       <div className="hidden w-1/2 bg-white xl:flex">
         <img src="/images/login.jpg" loading="lazy" alt="Login Image" className="w-full" />
       </div>
@@ -96,7 +88,7 @@ function LoginPage() {
         <p className="text-gray-600 mb-6">Welcome back! Please log in to access your account.</p>
 
         <form className="w-full" onSubmit={handleSubmit}>
-          {/* Username Input (Instead of Email) */}
+          {/* Username Input */}
           <div className="mb-4 w-full">
             <label className="block text-sm font-bold text-black mb-2" htmlFor="username">
               Username
@@ -158,10 +150,7 @@ function LoginPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={!formData.username || !formData.password}
-            className={`w-full text-white py-2 rounded transition-all duration-500 ${
-              !formData.username || !formData.password ? "bg-gray-400 cursor-not-allowed" : "bg-deepBlue hover:bg-sky-600"
-            }`}
+            className="w-full bg-deepBlue text-white py-2 rounded hover:bg-sky-600 transition-all duration-500"
           >
             Login
           </button>

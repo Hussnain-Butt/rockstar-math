@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
-import { toast } from 'react-toastify';
+import { toast, Toaster } from "react-hot-toast"; // ✅ FIXED IMPORT
+
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -22,6 +23,8 @@ const ForgotPassword = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 ">
+              <Toaster position="top-right" /> {/* ✅ Toast Notifications */}
+      
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg py-16">
         {/* Logo */}
         <div className="text-center ">

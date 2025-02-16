@@ -4,15 +4,21 @@ import ClassCard from '../components/ClassCard.jsx';
 import Header from '../components/Header.jsx';
 import AnimatedSection from "../components/AnimatedSection.jsx";
 import { useAuth } from '../context/AuthContext';
-
+import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user")) || { name: 'Guest', id: null };
   const [currentClasses, setCurrentClasses] = useState([]);
   const [zoomMeeting, setZoomMeeting] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const { users } = useAuth();
+
+  useEffect(() => {
+    if (!users) {
+      navigate("/login"); // 🚀 Redirect if not logged in
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!users || !users._id) return;

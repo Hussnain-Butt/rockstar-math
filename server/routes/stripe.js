@@ -3,7 +3,7 @@ const router = express.Router();
 require("dotenv").config();  // Ensure environment variables are loaded
 const { updatePaymentStatus } = require("../controller/paymentController");
 const { createZoomMeeting } = require('../controller/zoomController');
-// ✅ Use Stripe Secret Key from environment variable
+const Register = require('../models/registerModel') // ✅ Using Register Model
 const stripe = require("stripe")("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");
 
 const ZOOM_LINKS = [
@@ -297,12 +297,12 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                 zoomMeetingData = await createZoomMeeting(user.email, productName);
                 if (zoomMeetingData) {
                     user.zoomMeetings.push({
-                        meetingLink: zoomMeetingData.join_url,
+                        meetingLink: ZOOM_LINKS,
                         topic: productName,
                         createdAt: new Date(),
                     });
 
-                    console.log(`✅ Zoom Meeting Created for ${user.username}: ${zoomMeetingData.join_url}`);
+                    console.log(`✅ Zoom Meeting Created for ${user.username}: ${ZOOM_LINKS}`);
 
                     // ✅ Save updated user data
                     await user.save();
@@ -313,7 +313,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
                         <p>Hello ${user.username},</p>
                         <p>Here is your Zoom link for your sessions:</p>
                         <ul>
-                            <li><a href="${zoomMeetingData.join_url}">${zoomMeetingData.join_url}</a></li>
+                            <li><a href="${ZOOM_LINKS}">${ZOOM_LINKS}</a></li>
                         </ul>
                         <p>We look forward to seeing you in the sessions!</p>
                     `;

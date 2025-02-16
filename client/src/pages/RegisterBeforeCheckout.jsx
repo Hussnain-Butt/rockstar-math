@@ -36,7 +36,7 @@ const RegisterBeforeCheckout = () => {
   useEffect(() => {
     // ✅ If user is logged in, redirect to checkout
     if (users) {
-      navigate("/checkout");
+      navigate("/checkout")
     }
   }, [users, navigate]);
 
@@ -283,7 +283,7 @@ const RegisterBeforeCheckout = () => {
         setShowConfirmation(true);
   
         setTimeout(() => {
-          navigate("/checkout");
+          window.location.href = "/checkout";
         }, 3000);
       }
     } catch (error) {

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast, { Toaster } from 'react-hot-toast'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import { useAuth } from "../context/AuthContext";
 
 const RegisterBeforeCheckout = () => {
   
@@ -29,8 +30,15 @@ const RegisterBeforeCheckout = () => {
   const [generatedOtp, setGeneratedOtp] = useState('') // Store received OTP for comparison
   const [isWebcamPopupOpen, setIsWebcamPopupOpen] = useState(false)
   const [isSmsPopupOpen, setIsSmsPopupOpen] = useState(false)
-
+  const { users } = useAuth();
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // ✅ If user is logged in, redirect to checkout
+    if (users) {
+      navigate("/checkout");
+    }
+  }, [users, navigate]);
 
   // ✅ Handle Input Change
   const handleChange = (e) => {
